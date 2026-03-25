@@ -67,9 +67,9 @@ import { buildApiUrl } from '@/services/api'
 
 const router = useRouter()
 
-// כרגע נשאיר את השם phone כדי לא לשבור לך CSS.
-// אבל בפועל – אנחנו משתמשים בזה בתור "participant id" בשביל הבדיקה.
-const phone = ref('')
+// נשאיר את השם phone כדי לא לשבור CSS.
+// בפועל כאן המשתמש מתחבר עם מספר טלפון,
+// וה-backend מחזיר participantId פנימי לניווט.const phone = ref('')
 const phoneTouched = ref(false)
 
 const LANG_KEY = 'harmony_lang'
@@ -116,15 +116,13 @@ const t = computed(() => TEXTS[lang.value] ?? TEXTS.en)
 const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
 
 // מוציא רק ספרות (כדי שאם כתבו רווח/תו זה לא יפיל)
-function normalizeId(raw) {
-  const s = (raw || '').trim()
-  const digitsOnly = s.replace(/[^\d]/g, '')
-  return digitsOnly
+function normalizePhone(raw) {
+  return String(raw || '').replace(/[^\d]/g, '').trim()
 }
 
-function isValidId(raw) {
-  const id = normalizeId(raw)
-  return /^\d+$/.test(id)
+function isValidPhone(raw) {
+  const normalized = normalizePhone(raw)
+  return normalized.length >= 7
 }
 
 function logout() {
@@ -132,8 +130,7 @@ function logout() {
   router.push('/login')
 }
 
-const isIdValid = computed(() => isValidId(phone.value))
-
+const isIdValid = computed(() => isValidPhone(phone.value))
 function onPhoneInput() {
   phoneTouched.value = true
 }
@@ -141,8 +138,7 @@ function onPhoneInput() {
 async function continueLogin() {
   if (!isIdValid.value) return
 
-  const enteredPhone = normalizeId(phone.value)
-
+const enteredPhone = normalizePhone(phone.value)
   try {
     const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
       method: 'POST',
@@ -172,8 +168,7 @@ async function continueLogin() {
 async function newParticipant() {
   if (!isIdValid.value) return
 
-  const enteredPhone = normalizeId(phone.value)
-
+const enteredPhone = normalizePhone(phone.value)
   try {
     const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
       method: 'POST',
