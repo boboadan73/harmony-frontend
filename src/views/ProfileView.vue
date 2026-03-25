@@ -10,7 +10,6 @@
         <!-- TOP NAV (hamburger + centered logo) -->
         <TopNav :lang="lang" :pid="pid" />
 
-
         <!-- header + language -->
         <div class="headerRow">
           <div class="titles">
@@ -42,19 +41,17 @@
           <div class="hint">
             {{ t.hint }}
           </div>
+
           <div class="profileAvatarWrap">
-  <img
-    class="profileAvatar"
-    :src="profileAvatar"
-    alt="Profile avatar"
-    @error="onAvatarError"
-  />
-</div>
-
-
+            <img
+              class="profileAvatar"
+              :src="profileAvatar"
+              alt="Profile avatar"
+              @error="onAvatarError"
+            />
+          </div>
         </div>
 
-        <!-- tiny spacer -->
         <div class="spacerBottom"></div>
       </div>
     </div>
@@ -64,21 +61,24 @@
 <script setup>
 import { API_BASE_URL, buildApiUrl } from '@/services/api'
 import defaultAvatar from '@/assets/default-avatar.png'
-
 import { computed, ref, watch, onMounted } from 'vue'
-
-import { useRouter, useRoute } from 'vue-router'
-
+import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-import { authStore } from '@/store/authStore' // אם אצלך זה ../store/authStore תעדכני את הנתיב
-import { buildSystemApiUrl } from '@/services/api'
-const res = await fetch(buildSystemApiUrl(`/api/match/${pid}`))
-const router = useRouter()
+import { authStore } from '@/store/authStore'
+
 const route = useRoute()
-const pid = computed(() => String(route.params.id || localStorage.getItem('harmony_pid') || '').trim())
-watch(pid, v => { if (v) localStorage.setItem('harmony_pid', v) }, { immediate: true })
 
+const pid = computed(() =>
+  String(route.params.id || localStorage.getItem('harmony_pid') || '').trim()
+)
 
+watch(
+  pid,
+  v => {
+    if (v) localStorage.setItem('harmony_pid', v)
+  },
+  { immediate: true }
+)
 
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
@@ -120,10 +120,8 @@ const TEXTS = {
   },
 }
 
-
 const t = computed(() => TEXTS[lang.value] ?? TEXTS.en)
 const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
-
 
 const userPhone = computed(() => authStore?.phone || '')
 const API_BASE = API_BASE_URL
@@ -139,7 +137,6 @@ function toAbsoluteUrl(url) {
 }
 
 function extractAvatar(data) {
-  // מחפש בכל השמות הנפוצים שה-backend יכול להחזיר
   const raw =
     data?.image_url ||
     data?.imageUrl ||
@@ -162,7 +159,6 @@ async function loadProfileAvatar() {
   }
 
   try {
-    // ⚠️ שימי לב: זה endpoint שצריך להחזיר נתוני משתמש (כולל תמונה)
     const res = await fetch(buildApiUrl(`/profile/${id}`))
     if (!res.ok) throw new Error('profile endpoint failed')
 
@@ -177,20 +173,11 @@ async function loadProfileAvatar() {
 
 onMounted(loadProfileAvatar)
 watch(pid, () => loadProfileAvatar(), { immediate: true })
-
-
-
-
-
-onMounted(loadProfileAvatar)
-
-watch(pid, () => loadProfileAvatar(), { immediate: true })
-
-
 </script>
 
 <style scoped>
 .container { width: 100%; padding: 0; margin: 0; }
+
 .profileAvatarWrap{
   display:flex;
   justify-content:center;
@@ -208,13 +195,13 @@ watch(pid, () => loadProfileAvatar(), { immediate: true })
     0 14px 30px rgba(31,63,50,0.18),
     0 0 0 4px rgba(207,227,216,0.70);
 }
+
 .shell {
   min-height: 100vh;
   padding: 18px 16px 70px;
   font-family: Arial, sans-serif;
   color: var(--h-text);
 
-  /* ✅ אותו רקע כמו LOGIN */
   background: linear-gradient(
     180deg,
     #e6f2ec 0%,
@@ -229,26 +216,23 @@ watch(pid, () => loadProfileAvatar(), { immediate: true })
 .btn{
   padding: 10px 14px;
   border-radius: 12px;
-
   border: 2.5px solid #2f6b4f;
   background: rgba(233, 243, 238, 0.85);
   color: #1f3f32;
-
   font-weight: 800;
 }
+
 .btn:hover{
   border-color: #24513f;
   background: rgba(233, 243, 238, 1);
 }
-/* Skip – SAME as Save (green border + light green bg) */
+
 .btnOutline{
   padding: 10px 14px;
   border-radius: 12px;
-
   border: 2.5px solid #2f6b4f;
   background: rgba(233, 243, 238, 0.85);
   color: #1f3f32;
-
   font-weight: 800;
 }
 
@@ -257,8 +241,6 @@ watch(pid, () => loadProfileAvatar(), { immediate: true })
   background: rgba(233, 243, 238, 1);
 }
 
-
-/* blobs (צבעים בלבד -> tokens) */
 .blob { position:absolute; filter: blur(18px); opacity:.55; border-radius:999px; pointer-events:none; }
 .blob1 { width:360px; height:360px; left:-140px; top:-140px;
   background: radial-gradient(circle at 30% 30%, rgba(var(--h-green-600-rgb),0.45), rgba(var(--h-green-600-rgb),0.08));}
@@ -284,35 +266,31 @@ watch(pid, () => loadProfileAvatar(), { immediate: true })
   font-weight:900;
   color: var(--h-green-700);
 }
+
 .subtitle{ margin:0; color: var(--h-text-muted); }
 
-/* language */
 .langBox{
   display:flex;
   align-items:center;
   gap:8px;
   padding:10px 12px;
   border-radius:14px;
-
   background: linear-gradient(180deg, rgba(255,255,255,0.70), rgba(255,255,255,0.40));
   border: 1px solid var(--h-border);
   box-shadow: var(--h-shadow-soft);
   backdrop-filter: blur(10px);
 }
+
 .langIcon{ opacity:0.8; }
 .langSelect{ border:none; outline:none; background:transparent; font-weight:800; color: var(--h-text); cursor:pointer; }
 
-/* content card */
 .card{
   position:relative;
   border-radius: 18px;
   padding: 18px;
   overflow:hidden;
-
-  /* ✅ רק צבעים: שימוש במשתנים קיימים מה-BASE */
   background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.52));
   border: 2.5px solid #2f6b4f;
-
   box-shadow: var(--h-shadow);
   backdrop-filter: blur(10px);
 }
@@ -354,12 +332,9 @@ watch(pid, () => loadProfileAvatar(), { immediate: true })
 
 .spacerBottom{ height: 10px; }
 
-/* mobile */
 @media (max-width: 420px) {
   .shell { padding: 12px 10px 60px; }
   .h1 { font-size: 34px; }
   .card { padding: 12px; border-radius: 16px; }
 }
-
-
 </style>

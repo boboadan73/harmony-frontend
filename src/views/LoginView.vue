@@ -39,9 +39,10 @@
         <p v-if="phoneTouched && phone.trim() && !isIdValid" class="errorText">
           {{ t.phoneError }}
         </p>
+
         <p class="privacy-note">
-  {{ privacyText[lang] }}
-</p>
+          {{ privacyText[lang] }}
+        </p>
 
         <!-- BUTTONS -->
         <div class="btnBar">
@@ -62,10 +63,8 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '@/store/authStore'
-import { buildSystemApiUrl } from '@/services/api'
 
 const router = useRouter()
-const res = await fetch(buildSystemApiUrl(`/api/match/${pid}`))
 
 // כרגע נשאיר את השם phone כדי לא לשבור לך CSS.
 // אבל בפועל – אנחנו משתמשים בזה בתור "participant id" בשביל הבדיקה.
@@ -75,6 +74,7 @@ const phoneTouched = ref(false)
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 watch(lang, v => localStorage.setItem(LANG_KEY, v), { immediate: true })
+
 const privacyText = {
   en: 'By continuing, you agree to the Privacy Policy. Your data will only be used for networking recommendations during the event.',
   he: 'בהמשך השימוש במערכת, את/ה מסכימ/ה למדיניות הפרטיות. המידע שלך ישמש רק ליצירת התאמות נטוורקינג במהלך האירוע.',
@@ -83,6 +83,7 @@ const privacyText = {
 
 const TEXTS = {
   en: {
+    subtitle: 'Sign in to view your matches',
     language: 'Language',
     phone: 'Participant Phone Number',
     phonePlaceholder: '',
@@ -91,16 +92,20 @@ const TEXTS = {
     newParticipant: 'New participant',
   },
   ar: {
+    subtitle: 'سجّل/ي الدخول لعرض المطابقات',
     language: 'اللغة',
     phone: 'رقم الهاتف',
     phonePlaceholder: '',
+    phoneError: 'يرجى إدخال رقم صحيح.',
     continue: 'متابعة',
     newParticipant: 'مشارك جديد',
   },
   he: {
+    subtitle: 'התחבר/י כדי לראות את ההתאמות שלך',
     language: 'שפה',
     phone: 'מספר טלפון',
     phonePlaceholder: '',
+    phoneError: 'נא להזין מזהה מספרי תקין.',
     continue: 'המשך',
     newParticipant: 'משתתף חדש',
   },
@@ -118,14 +123,13 @@ function normalizeId(raw) {
 
 function isValidId(raw) {
   const id = normalizeId(raw)
-  // מאפשר גם מספר שמתחיל ב-0 (טלפון)
   return /^\d+$/.test(id)
 }
+
 function logout() {
   localStorage.removeItem('harmony_pid')
   router.push('/login')
 }
-
 
 const isIdValid = computed(() => isValidId(phone.value))
 
@@ -145,7 +149,6 @@ function continueLogin() {
   router.push(`/matches/${id}`)
 }
 
-
 function newParticipant() {
   const id = normalizeId(phone.value)
   if (!id) return
@@ -156,8 +159,6 @@ function newParticipant() {
 
   router.push(`/profile/${id}`)
 }
-
-
 </script>
 
 <style scoped>
@@ -187,14 +188,12 @@ function newParticipant() {
   padding: 26px 22px;
   border-radius: 26px;
 
-  /* glass ירקרק (לא לבן מדי) */
   background: linear-gradient(
     180deg,
     rgba(233,243,238,0.92),
     rgba(255,255,255,0.80)
   );
 
-  /* מסגרת ירוקה כמו בלוגו */
   border: 2.5px solid #2f6b4f;
 
   box-shadow:
@@ -234,7 +233,6 @@ function newParticipant() {
   height: 52px;
   box-sizing: border-box;
 
-  /* מסגרת ירקרקה עדינה */
   border: 2px solid rgba(47,107,79,0.25);
   background: rgba(255,255,255,0.94);
   color: var(--h-text);
@@ -248,12 +246,14 @@ function newParticipant() {
   border-color: #2f6b4f;
   box-shadow: 0 0 0 4px rgba(47,107,79,0.18), 0 12px 26px rgba(31,63,50,0.10);
 }
+
 .field{
   width: 100%;
+  position: relative;
 }
 
 .selectInput{
-  padding-right: 44px; /* נשאיר מקום לחץ שלך */
+  padding-right: 44px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -261,11 +261,13 @@ function newParticipant() {
 
 .arrow{
   pointer-events: none;
-  right: 16px;
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
 }
 
-
-.arrow{ position:absolute; right:16px; top:50%; transform: translateY(-50%); opacity: 0.6; }
 .ltrNum{ direction:ltr; unicode-bidi: plaintext; }
 
 .errorText{
@@ -296,7 +298,7 @@ function newParticipant() {
   -webkit-backdrop-filter: blur(10px);
 }
 
-/* ===== BUTTONS (מסגרת ירוקה כמו Matches) ===== */
+/* ===== BUTTONS ===== */
 .primaryBtn,
 .secondaryBtn{
   width: 100%;
@@ -314,12 +316,10 @@ function newParticipant() {
 }
 
 .primaryBtn{
-  /* Continue קצת יותר "premium" */
   background: linear-gradient(135deg, rgba(233,243,238,0.98), rgba(206,232,221,0.98));
 }
 
 .secondaryBtn{
-  /* New participant — אותו סגנון, קצת יותר לבן */
   background: rgba(233,243,238,0.88);
 }
 
@@ -362,11 +362,11 @@ function newParticipant() {
     border-bottom-right-radius: 18px;
   }
 }
+
 .privacy-note {
   margin-top: 14px;
   font-size: 12px;
   text-align: center;
   color: #4b5f52;
 }
-
 </style>

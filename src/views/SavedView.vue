@@ -40,17 +40,20 @@
 
             <div class="cardHeader">
               <div class="info">
-                <!-- ✅ שם לפי שפה (match_name) -->
                 <div class="name">{{ getName(m) }}</div>
                 <div class="role">{{ pick(m.role) }}</div>
               </div>
 
-              <img class="avatar" :src="m.avatar" alt="avatar" />
+              <img
+                class="avatar"
+                :src="m.avatar"
+                alt="avatar"
+                @error="onAvatarError"
+              />
             </div>
 
             <div class="why">
               <strong>{{ t.why }}</strong>
-              <!-- ✅ סיבה לפי שפה -->
               {{ getWhy(m) }}
             </div>
 
@@ -73,8 +76,8 @@ import { buildApiUrl } from '@/services/api'
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-import { buildSystemApiUrl } from '@/services/api'
-const res = await fetch(buildSystemApiUrl(`/api/match/${pid}`))
+import defaultAvatar from '@/assets/default-avatar.png'
+
 const route = useRoute()
 
 /* ===== Language ===== */
@@ -118,7 +121,6 @@ function pick(field) {
   return field[lang.value] || field.en || field.he || field.ar || ''
 }
 
-/* ✅ שם לפי שפה (match_name כמו ב-Matches) */
 function getName(m) {
   if (!m) return ''
 
@@ -132,7 +134,6 @@ function getName(m) {
   return original || en || he || ''
 }
 
-/* ✅ סיבת התאמה לפי שפה */
 function getWhy(m) {
   if (!m) return ''
   if (lang.value === 'en') return m.whyMatched_en || m.whyMatched || m.whyMatched_he || ''
@@ -159,7 +160,6 @@ function loadSavedIds() {
 
 /* ===== Data ===== */
 const allSavedMatches = ref([])
-import defaultAvatar from '@/assets/default-avatar.png'
 const placeholderAvatar = defaultAvatar
 
 function normalizeResponse(data) {
@@ -186,19 +186,13 @@ async function fetchSavedMatches() {
     allSavedMatches.value = raw
       .map(r => ({
         id: r?.id,
-
-        // ✅ שם + תרגומים לשם
         name: r?.name ?? '',
         match_name: r?.match_name ?? null,
-
         role: r?.role ?? '',
-
-        // ✅ סיבה בכל השפות
         whyMatched: r?.reason ?? '',
         whyMatched_en: r?.reason_en ?? '',
         whyMatched_he: r?.reason_he ?? '',
-
-        avatar: r?.imageUrl || placeholderAvatar,
+        avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
       }))
       .filter(m => savedIds.has(String(m.id)))
   } catch {
@@ -208,8 +202,6 @@ async function fetchSavedMatches() {
 
 onMounted(fetchSavedMatches)
 watch(() => route.params.id, () => fetchSavedMatches())
-
-// ✅ כשמשנים שפה – נטען מחדש (אם השרת מחזיר reason לפי שפה)
 watch(lang, () => fetchSavedMatches())
 
 const savedMatches = computed(() => allSavedMatches.value)
@@ -219,6 +211,10 @@ function unsave(m) {
   ids.delete(String(m.id))
   localStorage.setItem(savedKey(), JSON.stringify([...ids]))
   allSavedMatches.value = allSavedMatches.value.filter(x => String(x.id) !== String(m.id))
+}
+
+function onAvatarError(e) {
+  e.target.src = placeholderAvatar
 }
 </script>
 
@@ -231,7 +227,6 @@ function unsave(m) {
   font-family: Arial, sans-serif;
   color: var(--h-text);
 
-  /* ✅ אותו רקע כמו LOGIN */
   background: linear-gradient(
     180deg,
     #e6f2ec 0%,
@@ -243,7 +238,6 @@ function unsave(m) {
   overflow: hidden;
 }
 
-/* blobs (צבעים בלבד) */
 .blob { position:absolute; filter: blur(18px); opacity:.55; border-radius:999px; pointer-events:none; }
 .blob1 { width:360px; height:360px; left:-140px; top:-140px;
   background: radial-gradient(circle at 30% 30%, rgba(63,127,99,0.45), rgba(63,127,99,0.08));}
@@ -261,7 +255,6 @@ function unsave(m) {
 .h1{ margin:0 0 6px; font-size:44px; letter-spacing:-0.8px; font-weight:900; color: var(--h-green-700); }
 .subtitle{ margin:0; color: var(--h-text-muted); }
 
-/* language */
 .langBox{
   display:flex; align-items:center; gap:8px;
   padding: 10px 12px; border-radius: 14px;
@@ -281,11 +274,8 @@ function unsave(m) {
   border-radius: 18px;
   padding: 18px;
   overflow:hidden;
-
-  /* ✅ רק צבעים: משתמשים בטוקנים מה-BASE */
   background: var(--h-card-bg);
   border: 2.5px solid #2f6b4f;
-
   box-shadow: var(--h-shadow-soft);
   backdrop-filter: blur(10px);
 }
@@ -325,26 +315,22 @@ function unsave(m) {
 .btn{
   padding: 10px 14px;
   border-radius: 12px;
-
   border: 2.5px solid #2f6b4f;
   background: rgba(233, 243, 238, 0.85);
   color: #1f3f32;
-
   font-weight: 800;
 }
 .btn:hover{
   border-color: #24513f;
   background: rgba(233, 243, 238, 1);
 }
-/* Skip – SAME as Save (green border + light green bg) */
+
 .btnOutline{
   padding: 10px 14px;
   border-radius: 12px;
-
   border: 2.5px solid #2f6b4f;
   background: rgba(233, 243, 238, 0.85);
   color: #1f3f32;
-
   font-weight: 800;
 }
 
@@ -356,11 +342,8 @@ function unsave(m) {
 .empty{
   display:flex; gap:14px; align-items:center;
   padding: 18px; border-radius: 18px;
-
-  /* ✅ רק צבעים: כמו card */
   background: var(--h-card-bg);
   border: 1px dashed var(--h-border-strong);
-
   box-shadow: var(--h-shadow-soft);
   backdrop-filter: blur(10px);
 }

@@ -7,7 +7,6 @@
       <div class="blob blob3" aria-hidden="true"></div>
 
       <div class="page">
-        <!-- אם TopNav אצלך תקין, תשאירי. אם זה גורם לקריסה, תמחקי את השורה הזו -->
         <TopNav :lang="lang" />
 
         <div class="headerRow">
@@ -68,7 +67,6 @@
 
             <div class="cardHeader">
               <div class="info">
-                <!-- ✅ שינוי: במקום m.name -->
                 <div class="name">{{ getName(m) }}</div>
 
                 <div class="role">{{ m.role }}</div>
@@ -89,7 +87,6 @@
 
             <div class="why">
               <strong>{{ t.why }}</strong>
-              <!-- ✅ כבר אצלך: שינוי יחיד בטמפלייט: במקום m.whyMatched -->
               {{ getWhy(m) }}
             </div>
 
@@ -127,23 +124,24 @@ import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
 import { buildMatchApiUrl } from '@/services/api'
+import defaultAvatar from '@/assets/default-avatar.png'
+
 const route = useRoute()
-const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
+
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
+
 watch(
   lang,
   (v, prev) => {
     localStorage.setItem(LANG_KEY, v)
 
-    // ✅ אם השפה השתנתה בפועל — רענני נתונים כדי לקבל reason בשפה החדשה
     if (v !== prev) {
       fetchMatches()
     }
   },
   { immediate: true }
 )
-
 
 const TEXTS = {
   en: {
@@ -216,15 +214,16 @@ const loading = ref(false)
 const errorMsg = ref('')
 const matches = ref([])
 
-import defaultAvatar from '@/assets/default-avatar.png'
 const placeholderAvatar = defaultAvatar
 
 function participantId() {
   return String(route.params.id || '').trim()
 }
+
 function savedKey() {
   return `harmony_saved_${participantId()}`
 }
+
 function metKey() {
   return `harmony_met_${participantId()}`
 }
@@ -259,7 +258,6 @@ function normalizeResponse(data) {
   return []
 }
 
-/* ✅ חדש: פונקציה שמחזירה reason לפי השפה (נשאר כמו אצלך – גם אם לא בשימוש) */
 function pickReasonByLang(raw) {
   const ar = raw?.reason ?? ''
   const en = raw?.reason_en ?? ''
@@ -270,7 +268,6 @@ function pickReasonByLang(raw) {
   return ar || en || he || ''
 }
 
-/* ✅ פונקציה ל-Why בהתאם לשפה */
 function getWhy(m) {
   if (!m) return ''
   if (lang.value === 'en') return m.whyMatched_en || m.whyMatched || m.whyMatched_he || ''
@@ -278,7 +275,6 @@ function getWhy(m) {
   return m.whyMatched || m.whyMatched_en || m.whyMatched_he || ''
 }
 
-/* ✅ חדש: פונקציה לשם בהתאם לשפה (לפי match_name מה-backend) */
 function getName(m) {
   if (!m) return ''
 
@@ -298,22 +294,14 @@ function toUiMatch(raw) {
 
   return {
     id: raw?.id ?? Math.random().toString(16).slice(2),
-
     name: raw?.name ?? '',
-
-    // ✅ הוספה בלבד: שומר את match_name שמגיע מה-API
     match_name: raw?.match_name ?? null,
-
-    role: '', // לא מגיע מה-API כרגע
+    role: '',
     matchPercent,
-
-    // ✅ שמירה של כל השפות ל-why
     whyMatched: raw?.reason ?? '',
     whyMatched_en: raw?.reason_en ?? '',
     whyMatched_he: raw?.reason_he ?? '',
-
     avatar: (raw?.imageUrl && String(raw.imageUrl).trim()) ? raw.imageUrl : placeholderAvatar,
-
     saved: false,
     met: false,
   }
@@ -327,14 +315,11 @@ async function fetchMatches() {
   errorMsg.value = ''
 
   try {
-    // ✅ עם proxy:
-    const res = await fetch(`/api/match/${pid}`)
+    const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
+
     const data = await res.json()
-
     const rawMatches = normalizeResponse(data)
-
-    // ✅ אותו דבר שלך, רק הוספתי applySavedMetFlags (היה אצלך אבל לא השתמשת)
     matches.value = applySavedMetFlags(rawMatches.map(toUiMatch))
   } catch (e) {
     errorMsg.value = e?.message || 'Failed to fetch'
@@ -367,6 +352,7 @@ function save(m) {
     setObj.add(id)
     m.saved = true
   }
+
   saveSet(key, setObj)
 }
 
@@ -382,6 +368,7 @@ function markMet(m) {
     setObj.add(id)
     m.met = true
   }
+
   saveSet(key, setObj)
 }
 
@@ -395,7 +382,6 @@ function onAvatarError(e) {
 </script>
 
 <style scoped>
-/* זה ה-CSS שלך 그대로 (רק הוספתי refreshRow). */
 .container { width: 100%; padding: 0; margin: 0; }
 
 .shell {
@@ -446,7 +432,6 @@ function onAvatarError(e) {
 
 .cardGlow{ position:absolute; inset:-2px; background: radial-gradient(700px 240px at 15% 0%, rgba(63,127,99,0.18), transparent 60%); pointer-events:none; }
 
-/* ⭐ Best match: highlight the whole card */
 .topMatch{
   border-color: #1e5a43;
   box-shadow: 0 22px 60px rgba(31,63,50,0.22);
@@ -458,48 +443,36 @@ function onAvatarError(e) {
   inset: 0;
   border-radius: 18px;
   pointer-events: none;
-
-  /* glow + subtle fill on the whole card */
   background:
     radial-gradient(900px 320px at 20% 0%, rgba(79,154,120,0.18), transparent 60%),
     linear-gradient(180deg, rgba(233,243,238,0.35), rgba(233,243,238,0.08));
 }
 
-/* ⭐ BEST MATCH – fixed top corner, no overlap, no height change */
 .bestBadge{
   position: absolute;
-  top: 8px;          /* בתוך הכרטיס, לא שלילי */
-  right: 12px;       /* פינה ימנית */
+  top: 8px;
+  right: 12px;
   left: auto;
-
   padding: 6px 14px;
   border-radius: 999px;
-
   background: linear-gradient(90deg, #2f6b4f, #4a8a6d);
   color: #ffffff;
-
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.4px;
-
   border: 1.5px solid #2f6b4f;
   box-shadow: 0 10px 28px rgba(31,63,50,0.28);
-
   z-index: 5;
-  white-space: nowrap;   /* מונע שבירת טקסט */
-  max-width: 90%; 
+  white-space: nowrap;
+  max-width: 90%;
 }
 
-
-
-/* ⭐ RTL – move badge to the right side */
 :dir(rtl) .bestBadge{
   left: 12px;
   right: auto;
   direction: rtl;
   text-align: center;
 }
-
 
 .cardHeader { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
 .name { font-size:24px; font-weight:900; color: var(--h-text); margin-bottom:2px; }

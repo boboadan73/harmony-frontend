@@ -44,12 +44,11 @@
                 <div class="role">{{ pick(m.role) }}</div>
               </div>
 
-              <img class="avatar" :src="m.avatar" alt="avatar" />
+              <img class="avatar" :src="m.avatar" alt="avatar" @error="onAvatarError" />
             </div>
 
             <div class="why">
               <strong>{{ t.why }}</strong>
-              <!-- ✅ תיקון: למה-התאמה לפי שפה (לא pick על שדה בודד) -->
               {{ getWhy(m) }}
             </div>
 
@@ -71,8 +70,9 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-import { buildSystemApiUrl } from '@/services/api'
-const res = await fetch(buildSystemApiUrl(`/api/match/${pid}`))
+import { buildMatchApiUrl } from '@/services/api'
+import defaultAvatar from '@/assets/default-avatar.png'
+
 const route = useRoute()
 
 /* ===== Language ===== */
@@ -116,6 +116,7 @@ function pick(field) {
   if (typeof field === 'string') return field
   return field[lang.value] || field.en || field.he || field.ar || ''
 }
+
 function getName(m) {
   if (!m) return ''
 
@@ -129,8 +130,6 @@ function getName(m) {
   return original || en || he || ''
 }
 
-
-/* ✅ חדש: מחזיר סיבת התאמה לפי שפה (כמו ב-Matches) */
 function getWhy(m) {
   if (!m) return ''
   if (lang.value === 'en') return m.whyMatched_en || m.whyMatched || m.whyMatched_he || ''
@@ -157,7 +156,6 @@ function loadMetIds() {
 
 /* ===== Data ===== */
 const allMetMatches = ref([])
-import defaultAvatar from '@/assets/default-avatar.png'
 const placeholderAvatar = defaultAvatar
 
 function normalizeResponse(data) {
@@ -174,7 +172,7 @@ async function fetchMetMatches() {
   }
 
   try {
-    const res = await fetch(`/api/match/${pid}`)
+    const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
 
@@ -186,15 +184,11 @@ async function fetchMetMatches() {
         id: r?.id,
         name: r?.name ?? '',
         match_name: r?.match_name ?? null,
-
         role: r?.role ?? '',
-
-        // ✅ תיקון חשוב: לשמור את כל השפות
         whyMatched: r?.reason ?? '',
         whyMatched_en: r?.reason_en ?? '',
         whyMatched_he: r?.reason_he ?? '',
-
-        avatar: r?.imageUrl || placeholderAvatar,
+        avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
       }))
       .filter(m => metIds.has(String(m.id)))
   } catch {
@@ -204,10 +198,7 @@ async function fetchMetMatches() {
 
 onMounted(fetchMetMatches)
 
-// אם עוברים למשתמש אחר (route param משתנה) – טוענים מחדש
 watch(() => route.params.id, () => fetchMetMatches())
-
-// ✅ חשוב: כשמחליפים שפה – טוענים מחדש כדי לקבל reason בשפה הנכונה (אם השרת מחזיר לפי שפה)
 watch(lang, () => fetchMetMatches())
 
 const metMatches = computed(() => allMetMatches.value)
@@ -216,9 +207,11 @@ function unmarkMet(m) {
   const ids = loadMetIds()
   ids.delete(String(m.id))
   localStorage.setItem(metKey(), JSON.stringify([...ids]))
-
-  // להסיר מיד מהמסך
   allMetMatches.value = allMetMatches.value.filter(x => String(x.id) !== String(m.id))
+}
+
+function onAvatarError(e) {
+  e.target.src = placeholderAvatar
 }
 </script>
 
@@ -231,7 +224,6 @@ function unmarkMet(m) {
   font-family: Arial, sans-serif;
   color: var(--h-text);
 
-  /* ✅ אותו רקע כמו LOGIN */
   background: linear-gradient(
     180deg,
     #e6f2ec 0%,
@@ -243,7 +235,6 @@ function unmarkMet(m) {
   overflow: hidden;
 }
 
-/* blobs (צבעים בלבד) */
 .blob { position:absolute; filter: blur(18px); opacity:.55; border-radius:999px; pointer-events:none; }
 .blob1 { width:360px; height:360px; left:-140px; top:-140px;
   background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--h-page-bg-mid) 55%, transparent), rgba(63,127,99,0.08));}
@@ -261,7 +252,6 @@ function unmarkMet(m) {
 .h1{ margin:0 0 6px; font-size:44px; letter-spacing:-0.8px; font-weight:900; color: var(--h-green-700); }
 .subtitle{ margin:0; color: var(--h-text-muted); }
 
-/* language */
 .langBox{
   display:flex; align-items:center; gap:8px;
   padding: 10px 12px; border-radius: 14px;
@@ -281,11 +271,8 @@ function unmarkMet(m) {
   border-radius: 18px;
   padding: 18px;
   overflow:hidden;
-
-  /* ✅ כרטיס דרך טוקנים */
   background: var(--h-card-bg);
   border: 2.5px solid #2f6b4f;
-
   box-shadow: var(--h-shadow-soft);
   backdrop-filter: blur(10px);
 }
@@ -323,15 +310,12 @@ function unmarkMet(m) {
 
 .actions{ display:flex; gap:8px; flex-wrap:wrap; }
 
-/* ✅ כפתור: “חיזוק + מסגרת ירוקה חזקה” כמו בלוגין */
 .btn{
   padding: 10px 14px;
   border-radius: 12px;
-
   border: 2.5px solid #2f6b4f;
   background: rgba(233, 243, 238, 0.85);
   color: #1f3f32;
-
   font-weight: 800;
 }
 .btn:hover{
@@ -339,16 +323,12 @@ function unmarkMet(m) {
   background: rgba(233, 243, 238, 1);
 }
 
-/* outline: נשאר לבן עם מסגרת ירוקה חזקה */
-/* Skip – SAME as Save (green border + light green bg) */
 .btnOutline{
   padding: 10px 14px;
   border-radius: 12px;
-
   border: 2.5px solid #2f6b4f;
   background: rgba(233, 243, 238, 0.85);
   color: #1f3f32;
-
   font-weight: 800;
 }
 
@@ -360,11 +340,8 @@ function unmarkMet(m) {
 .empty{
   display:flex; gap:14px; align-items:center;
   padding: 18px; border-radius: 18px;
-
-  /* ✅ דרך טוקנים */
   background: var(--h-card-bg);
   border: 1px dashed var(--h-border-strong);
-
   box-shadow: var(--h-shadow-soft);
   backdrop-filter: blur(10px);
 }
