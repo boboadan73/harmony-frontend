@@ -71,7 +71,8 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-
+import { buildSystemApiUrl } from '@/services/api'
+const res = await fetch(buildSystemApiUrl(`/api/match/${pid}`))
 const route = useRoute()
 
 /* ===== Language ===== */

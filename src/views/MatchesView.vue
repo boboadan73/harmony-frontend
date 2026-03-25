@@ -328,6 +328,7 @@ async function fetchMatches() {
 
   try {
     // ✅ עם proxy:
+    const res = await fetch(`/api/match/${pid}`)
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
 

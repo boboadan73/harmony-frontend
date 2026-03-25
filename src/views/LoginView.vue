@@ -62,8 +62,10 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '@/store/authStore'
+import { buildSystemApiUrl } from '@/services/api'
 
 const router = useRouter()
+const res = await fetch(buildSystemApiUrl(`/api/match/${pid}`))
 
 // כרגע נשאיר את השם phone כדי לא לשבור לך CSS.
 // אבל בפועל – אנחנו משתמשים בזה בתור "participant id" בשביל הבדיקה.

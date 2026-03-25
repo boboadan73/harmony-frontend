@@ -71,7 +71,8 @@ import { useRouter, useRoute } from 'vue-router'
 
 import TopNav from '@/components/TopNav.vue'
 import { authStore } from '@/store/authStore' // אם אצלך זה ../store/authStore תעדכני את הנתיב
-
+import { buildSystemApiUrl } from '@/services/api'
+const res = await fetch(buildSystemApiUrl(`/api/match/${pid}`))
 const router = useRouter()
 const route = useRoute()
 const pid = computed(() => String(route.params.id || localStorage.getItem('harmony_pid') || '').trim())
