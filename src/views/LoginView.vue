@@ -67,11 +67,11 @@ import { buildApiUrl } from '@/services/api'
 
 const router = useRouter()
 
-// נשאיר את השם phone כדי לא לשבור CSS.
-// בפועל כאן המשתמש מתחבר עם מספר טלפון,
-// וה-backend מחזיר participantId פנימי לניווט.const phone = ref('')
+// 👇 הגדרה אחת בלבד!
+const phone = ref('')
 const phoneTouched = ref(false)
 
+// 🌐 Language
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 watch(lang, v => localStorage.setItem(LANG_KEY, v), { immediate: true })
@@ -115,7 +115,7 @@ const TEXTS = {
 const t = computed(() => TEXTS[lang.value] ?? TEXTS.en)
 const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
 
-// מוציא רק ספרות (כדי שאם כתבו רווח/תו זה לא יפיל)
+// ניקוי קלט
 function normalizePhone(raw) {
   return String(raw || '').replace(/[^\d]/g, '').trim()
 }
@@ -125,20 +125,18 @@ function isValidPhone(raw) {
   return normalized.length >= 7
 }
 
-function logout() {
-  localStorage.removeItem('harmony_pid')
-  router.push('/login')
-}
-
 const isIdValid = computed(() => isValidPhone(phone.value))
+
 function onPhoneInput() {
   phoneTouched.value = true
 }
 
+// 🚀 LOGIN
 async function continueLogin() {
   if (!isIdValid.value) return
 
-const enteredPhone = normalizePhone(phone.value)
+  const enteredPhone = normalizePhone(phone.value)
+
   try {
     const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
       method: 'POST',
@@ -146,9 +144,7 @@ const enteredPhone = normalizePhone(phone.value)
       body: JSON.stringify({ phone: enteredPhone }),
     })
 
-    if (!res.ok) {
-      throw new Error('Login failed')
-    }
+    if (!res.ok) throw new Error('Login failed')
 
     const data = await res.json()
     const pid = String(data.participantId || '').trim()
@@ -165,10 +161,12 @@ const enteredPhone = normalizePhone(phone.value)
   }
 }
 
+// 🆕 NEW USER
 async function newParticipant() {
   if (!isIdValid.value) return
 
-const enteredPhone = normalizePhone(phone.value)
+  const enteredPhone = normalizePhone(phone.value)
+
   try {
     const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
       method: 'POST',
@@ -176,9 +174,7 @@ const enteredPhone = normalizePhone(phone.value)
       body: JSON.stringify({ phone: enteredPhone }),
     })
 
-    if (!res.ok) {
-      throw new Error('Login failed')
-    }
+    if (!res.ok) throw new Error('Login failed')
 
     const data = await res.json()
     const pid = String(data.participantId || '').trim()
