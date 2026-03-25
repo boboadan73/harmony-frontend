@@ -35,6 +35,9 @@
             @keyup.enter="continueLogin"
           />
         </div>
+        <p v-if="errorMessage" class="errorText">
+  {{ errorMessage }}
+</p>
 
         <p v-if="phoneTouched && phone.trim() && !isIdValid" class="errorText">
           {{ t.phoneError }}
@@ -66,12 +69,10 @@ import { authStore } from '@/store/authStore'
 import { buildApiUrl } from '@/services/api'
 
 const router = useRouter()
-
-// 👇 הגדרה אחת בלבד!
 const phone = ref('')
 const phoneTouched = ref(false)
+const errorMessage = ref('')
 
-// 🌐 Language
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 watch(lang, v => localStorage.setItem(LANG_KEY, v), { immediate: true })
@@ -88,7 +89,8 @@ const TEXTS = {
     language: 'Language',
     phone: 'Participant Phone Number',
     phonePlaceholder: '',
-    phoneError: 'Please enter a valid numeric ID (e.g. 15).',
+    phoneError: 'Please enter a valid phone number.',
+    loginError: 'Login failed. Please check the phone number and try again.',
     continue: 'Continue',
     newParticipant: 'New participant',
   },
@@ -97,7 +99,8 @@ const TEXTS = {
     language: 'اللغة',
     phone: 'رقم الهاتف',
     phonePlaceholder: '',
-    phoneError: 'يرجى إدخال رقم صحيح.',
+    phoneError: 'يرجى إدخال رقم هاتف صحيح.',
+    loginError: 'فشل تسجيل الدخول. يرجى التحقق من رقم الهاتف والمحاولة مرة أخرى.',
     continue: 'متابعة',
     newParticipant: 'مشارك جديد',
   },
@@ -106,7 +109,8 @@ const TEXTS = {
     language: 'שפה',
     phone: 'מספר טלפון',
     phonePlaceholder: '',
-    phoneError: 'נא להזין מזהה מספרי תקין.',
+    phoneError: 'נא להזין מספר טלפון תקין.',
+    loginError: 'ההתחברות נכשלה. נא לבדוק את מספר הטלפון ולנסות שוב.',
     continue: 'המשך',
     newParticipant: 'משתתף חדש',
   },
@@ -115,7 +119,6 @@ const TEXTS = {
 const t = computed(() => TEXTS[lang.value] ?? TEXTS.en)
 const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
 
-// ניקוי קלט
 function normalizePhone(raw) {
   return String(raw || '').replace(/[^\d]/g, '').trim()
 }
@@ -129,66 +132,68 @@ const isIdValid = computed(() => isValidPhone(phone.value))
 
 function onPhoneInput() {
   phoneTouched.value = true
+  errorMessage.value = ''
 }
 
-// 🚀 LOGIN
+async function loginAndRoute(targetRoute) {
+  phoneTouched.value = true
+  errorMessage.value = ''
+
+  if (!isIdValid.value) {
+    errorMessage.value = t.value.phoneError
+    return
+  }
+
+  const enteredPhone = normalizePhone(phone.value)
+
+  try {
+    const url = buildApiUrl('/api/auth/phone-login')
+    console.log('POST URL:', url)
+    console.log('PHONE:', enteredPhone)
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: enteredPhone }),
+    })
+
+    const rawText = await res.text()
+    console.log('STATUS:', res.status)
+    console.log('RESPONSE TEXT:', rawText)
+
+    let data = {}
+    try {
+      data = rawText ? JSON.parse(rawText) : {}
+    } catch {
+      data = {}
+    }
+
+    if (!res.ok) {
+      throw new Error(data?.error || data?.message || `HTTP ${res.status}`)
+    }
+
+    const pid = String(data.participantId || '').trim()
+    if (!pid) {
+      throw new Error('Missing participantId in response')
+    }
+
+    authStore.phone = enteredPhone
+    authStore.isLoggedIn = true
+    localStorage.setItem('harmony_pid', pid)
+
+    router.push(`/${targetRoute}/${pid}`)
+  } catch (err) {
+    console.error('LOGIN ERROR:', err)
+    errorMessage.value = err.message || t.value.loginError
+  }
+}
+
 async function continueLogin() {
-  if (!isIdValid.value) return
-
-  const enteredPhone = normalizePhone(phone.value)
-
-  try {
-    const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: enteredPhone }),
-    })
-
-    if (!res.ok) throw new Error('Login failed')
-
-    const data = await res.json()
-    const pid = String(data.participantId || '').trim()
-
-    if (!pid) throw new Error('Missing participant id')
-
-    authStore.phone = enteredPhone
-    authStore.isLoggedIn = true
-    localStorage.setItem('harmony_pid', pid)
-
-    router.push(`/matches/${pid}`)
-  } catch (e) {
-    alert(t.value.phoneError)
-  }
+  await loginAndRoute('matches')
 }
 
-// 🆕 NEW USER
 async function newParticipant() {
-  if (!isIdValid.value) return
-
-  const enteredPhone = normalizePhone(phone.value)
-
-  try {
-    const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: enteredPhone }),
-    })
-
-    if (!res.ok) throw new Error('Login failed')
-
-    const data = await res.json()
-    const pid = String(data.participantId || '').trim()
-
-    if (!pid) throw new Error('Missing participant id')
-
-    authStore.phone = enteredPhone
-    authStore.isLoggedIn = true
-    localStorage.setItem('harmony_pid', pid)
-
-    router.push(`/profile/${pid}`)
-  } catch (e) {
-    alert(t.value.phoneError)
-  }
+  await loginAndRoute('profile')
 }
 </script>
 
