@@ -126,10 +126,9 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-
+import { buildMatchApiUrl } from '@/services/api'
 const route = useRoute()
-
-/* ===== Language ===== */
+const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 watch(
@@ -329,7 +328,6 @@ async function fetchMatches() {
 
   try {
     // ✅ עם proxy:
-    const res = await fetch(`/api/match/${pid}`)
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
 
