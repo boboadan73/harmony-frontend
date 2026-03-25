@@ -172,11 +172,15 @@ async function fetchMetMatches() {
   }
 
   try {
+    // 🔥 מביא met IDs מה-system backend
+    const metRes = await fetch(buildApiUrl(`/api/met/${pid}`))
+    const metIds = await metRes.json()
+
+    // 🔥 מביא matches כרגיל
     const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
 
-    const metIds = loadMetIds()
     const raw = normalizeResponse(data)
 
     allMetMatches.value = raw
@@ -190,7 +194,7 @@ async function fetchMetMatches() {
         whyMatched_he: r?.reason_he ?? '',
         avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
       }))
-      .filter(m => metIds.has(String(m.id)))
+      .filter(m => metIds.includes(String(m.id)))
   } catch {
     allMetMatches.value = []
   }
@@ -203,10 +207,21 @@ watch(lang, () => fetchMetMatches())
 
 const metMatches = computed(() => allMetMatches.value)
 
-function unmarkMet(m) {
-  const ids = loadMetIds()
-  ids.delete(String(m.id))
-  localStorage.setItem(metKey(), JSON.stringify([...ids]))
+async function unmarkMet(m) {
+  const pid = participantId()
+
+  await fetch(buildApiUrl('/api/met'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      userId: pid,
+      targetId: m.id,
+      remove: true
+    })
+  })
+
   allMetMatches.value = allMetMatches.value.filter(x => String(x.id) !== String(m.id))
 }
 

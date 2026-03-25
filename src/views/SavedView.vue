@@ -176,11 +176,15 @@ async function fetchSavedMatches() {
   }
 
   try {
+    // 🔥 מביא IDs מה-system backend
+    const savedRes = await fetch(buildApiUrl(`/api/saved/${pid}`))
+    const savedIds = await savedRes.json()
+
+    // 🔥 מביא matches כרגיל
     const res = await fetch(buildApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
 
-    const savedIds = loadSavedIds()
     const raw = normalizeResponse(data)
 
     allSavedMatches.value = raw
@@ -194,7 +198,7 @@ async function fetchSavedMatches() {
         whyMatched_he: r?.reason_he ?? '',
         avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
       }))
-      .filter(m => savedIds.has(String(m.id)))
+      .filter(m => savedIds.includes(String(m.id)))
   } catch {
     allSavedMatches.value = []
   }
@@ -206,10 +210,21 @@ watch(lang, () => fetchSavedMatches())
 
 const savedMatches = computed(() => allSavedMatches.value)
 
-function unsave(m) {
-  const ids = loadSavedIds()
-  ids.delete(String(m.id))
-  localStorage.setItem(savedKey(), JSON.stringify([...ids]))
+async function unsave(m) {
+  const pid = participantId()
+
+  await fetch(buildApiUrl('/api/save'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      userId: pid,
+      targetId: m.id,
+      remove: true
+    })
+  })
+
   allSavedMatches.value = allSavedMatches.value.filter(x => String(x.id) !== String(m.id))
 }
 
