@@ -7,7 +7,7 @@
       <div class="blob blob3" aria-hidden="true"></div>
 
       <div class="page">
-        <TopNav :lang="lang" />
+        <TopNav :lang="lang" :pid="participantId()" />
 
         <div class="headerRow">
           <div class="titles">
@@ -123,7 +123,7 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-import { buildMatchApiUrl } from '@/services/api'
+import { buildApiUrl, buildMatchApiUrl } from '@/services/api'
 import defaultAvatar from '@/assets/default-avatar.png'
 
 const route = useRoute()
@@ -220,52 +220,10 @@ function participantId() {
   return String(route.params.id || '').trim()
 }
 
-function savedKey() {
-  return `harmony_saved_${participantId()}`
-}
-
-function metKey() {
-  return `harmony_met_${participantId()}`
-}
-
-function loadSet(key) {
-  try {
-    const arr = JSON.parse(localStorage.getItem(key) || '[]')
-    return new Set(arr.map(String))
-  } catch {
-    return new Set()
-  }
-}
-
-function saveSet(key, setObj) {
-  localStorage.setItem(key, JSON.stringify([...setObj]))
-}
-
-function applySavedMetFlags(list) {
-  const saved = loadSet(savedKey())
-  const met = loadSet(metKey())
-
-  return list.map(x => ({
-    ...x,
-    saved: saved.has(String(x.id)),
-    met: met.has(String(x.id)),
-  }))
-}
-
 function normalizeResponse(data) {
   if (Array.isArray(data)) return data
   if (data && Array.isArray(data.matches)) return data.matches
   return []
-}
-
-function pickReasonByLang(raw) {
-  const ar = raw?.reason ?? ''
-  const en = raw?.reason_en ?? ''
-  const he = raw?.reason_he ?? ''
-
-  if (lang.value === 'en') return en || ar || he || ''
-  if (lang.value === 'he') return he || en || ar || ''
-  return ar || en || he || ''
 }
 
 function getWhy(m) {
@@ -315,12 +273,35 @@ async function fetchMatches() {
   errorMsg.value = ''
 
   try {
-    const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
-    if (!res.ok) throw new Error(`API error: ${res.status}`)
+    const [matchRes, savedRes, metRes] = await Promise.all([
+      fetch(buildMatchApiUrl(`/api/match/${pid}`)),
+      fetch(buildApiUrl(`/api/saved/${pid}`)),
+      fetch(buildApiUrl(`/api/met/${pid}`)),
+    ])
 
-    const data = await res.json()
-    const rawMatches = normalizeResponse(data)
-    matches.value = applySavedMetFlags(rawMatches.map(toUiMatch))
+    if (!matchRes.ok) throw new Error(`API error: ${matchRes.status}`)
+    if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
+    if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
+
+    const [matchData, savedIdsRaw, metIdsRaw] = await Promise.all([
+      matchRes.json(),
+      savedRes.json(),
+      metRes.json(),
+    ])
+
+    const savedIds = new Set((savedIdsRaw || []).map(String))
+    const metIds = new Set((metIdsRaw || []).map(String))
+
+    const rawMatches = normalizeResponse(matchData)
+
+    matches.value = rawMatches.map(raw => {
+      const m = toUiMatch(raw)
+      return {
+        ...m,
+        saved: savedIds.has(String(m.id)),
+        met: metIds.has(String(m.id)),
+      }
+    })
   } catch (e) {
     errorMsg.value = e?.message || 'Failed to fetch'
     matches.value = []
@@ -340,36 +321,52 @@ const sortedMatches = computed(() =>
   [...matches.value].sort((a, b) => (b.matchPercent ?? 0) - (a.matchPercent ?? 0))
 )
 
-function save(m) {
-  const key = savedKey()
-  const setObj = loadSet(key)
-  const id = String(m.id)
+async function save(m) {
+  const pid = participantId()
 
-  if (setObj.has(id)) {
-    setObj.delete(id)
-    m.saved = false
-  } else {
-    setObj.add(id)
-    m.saved = true
+  try {
+    const res = await fetch(buildApiUrl('/api/save'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId: pid,
+        targetId: String(m.id),
+        remove: !!m.saved,
+      })
+    })
+
+    if (!res.ok) throw new Error(`API error: ${res.status}`)
+
+    m.saved = !m.saved
+  } catch (e) {
+    errorMsg.value = e?.message || 'Save failed'
   }
-
-  saveSet(key, setObj)
 }
 
-function markMet(m) {
-  const key = metKey()
-  const setObj = loadSet(key)
-  const id = String(m.id)
+async function markMet(m) {
+  const pid = participantId()
 
-  if (setObj.has(id)) {
-    setObj.delete(id)
-    m.met = false
-  } else {
-    setObj.add(id)
-    m.met = true
+  try {
+    const res = await fetch(buildApiUrl('/api/met'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId: pid,
+        targetId: String(m.id),
+        remove: !!m.met,
+      })
+    })
+
+    if (!res.ok) throw new Error(`API error: ${res.status}`)
+
+    m.met = !m.met
+  } catch (e) {
+    errorMsg.value = e?.message || 'Met failed'
   }
-
-  saveSet(key, setObj)
 }
 
 function skip(m) {

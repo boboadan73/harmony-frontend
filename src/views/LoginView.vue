@@ -63,6 +63,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '@/store/authStore'
+import { buildApiUrl } from '@/services/api'
 
 const router = useRouter()
 
@@ -137,27 +138,66 @@ function onPhoneInput() {
   phoneTouched.value = true
 }
 
-function continueLogin() {
+async function continueLogin() {
   if (!isIdValid.value) return
-  const id = normalizeId(phone.value)
 
-  authStore.phone = id
-  authStore.isLoggedIn = true
+  const enteredPhone = normalizeId(phone.value)
 
-  localStorage.setItem('harmony_pid', id)
+  try {
+    const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: enteredPhone }),
+    })
 
-  router.push(`/matches/${id}`)
+    if (!res.ok) {
+      throw new Error('Login failed')
+    }
+
+    const data = await res.json()
+    const pid = String(data.participantId || '').trim()
+
+    if (!pid) throw new Error('Missing participant id')
+
+    authStore.phone = enteredPhone
+    authStore.isLoggedIn = true
+    localStorage.setItem('harmony_pid', pid)
+
+    router.push(`/matches/${pid}`)
+  } catch (e) {
+    alert(t.value.phoneError)
+  }
 }
 
-function newParticipant() {
-  const id = normalizeId(phone.value)
-  if (!id) return
+async function newParticipant() {
+  if (!isIdValid.value) return
 
-  authStore.phone = id
-  authStore.isLoggedIn = true
-  localStorage.setItem('harmony_pid', id)
+  const enteredPhone = normalizeId(phone.value)
 
-  router.push(`/profile/${id}`)
+  try {
+    const res = await fetch(buildApiUrl('/api/auth/phone-login'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: enteredPhone }),
+    })
+
+    if (!res.ok) {
+      throw new Error('Login failed')
+    }
+
+    const data = await res.json()
+    const pid = String(data.participantId || '').trim()
+
+    if (!pid) throw new Error('Missing participant id')
+
+    authStore.phone = enteredPhone
+    authStore.isLoggedIn = true
+    localStorage.setItem('harmony_pid', pid)
+
+    router.push(`/profile/${pid}`)
+  } catch (e) {
+    alert(t.value.phoneError)
+  }
 }
 </script>
 

@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { buildApiUrl } from '@/services/api'
+import { buildApiUrl, buildMatchApiUrl } from '@/services/api'
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
@@ -176,12 +176,12 @@ async function fetchSavedMatches() {
   }
 
   try {
-    // 🔥 מביא IDs מה-system backend
     const savedRes = await fetch(buildApiUrl(`/api/saved/${pid}`))
+    if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
     const savedIds = await savedRes.json()
+    const savedIdsSet = new Set((savedIds || []).map(String))
 
-    // 🔥 מביא matches כרגיל
-    const res = await fetch(buildApiUrl(`/api/match/${pid}`))
+    const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
 
@@ -198,7 +198,7 @@ async function fetchSavedMatches() {
         whyMatched_he: r?.reason_he ?? '',
         avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
       }))
-      .filter(m => savedIds.includes(String(m.id)))
+      .filter(m => savedIdsSet.has(String(m.id)))
   } catch {
     allSavedMatches.value = []
   }
@@ -220,7 +220,7 @@ async function unsave(m) {
     },
     body: JSON.stringify({
       userId: pid,
-      targetId: m.id,
+      targetId: String(m.id),
       remove: true
     })
   })

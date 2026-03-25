@@ -70,7 +70,7 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-import { buildMatchApiUrl } from '@/services/api'
+import { buildApiUrl, buildMatchApiUrl } from '@/services/api'
 import defaultAvatar from '@/assets/default-avatar.png'
 
 const route = useRoute()
@@ -172,11 +172,11 @@ async function fetchMetMatches() {
   }
 
   try {
-    // 🔥 מביא met IDs מה-system backend
     const metRes = await fetch(buildApiUrl(`/api/met/${pid}`))
+    if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
     const metIds = await metRes.json()
+    const metIdsSet = new Set((metIds || []).map(String))
 
-    // 🔥 מביא matches כרגיל
     const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
@@ -194,7 +194,7 @@ async function fetchMetMatches() {
         whyMatched_he: r?.reason_he ?? '',
         avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
       }))
-      .filter(m => metIds.includes(String(m.id)))
+      .filter(m => metIdsSet.has(String(m.id)))
   } catch {
     allMetMatches.value = []
   }
@@ -217,7 +217,7 @@ async function unmarkMet(m) {
     },
     body: JSON.stringify({
       userId: pid,
-      targetId: m.id,
+      targetId: String(m.id),
       remove: true
     })
   })
