@@ -290,6 +290,7 @@ const deleting = ref(false)
 const isEditing = ref(false)
 const errorMsg = ref('')
 const successMsg = ref('')
+const imageVersion = ref(Date.now())
 
 const profile = ref({
   id: '',
@@ -312,7 +313,15 @@ const form = ref({
   image: '',
 })
 
-const profileAvatar = computed(() => profile.value.image || defaultAvatar)
+const profileAvatar = computed(() => {
+  const imageUrl = isEditing.value
+    ? (form.value.image || profile.value.image)
+    : profile.value.image
+
+  if (!imageUrl) return defaultAvatar
+
+  return `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}t=${imageVersion.value}`
+})
 
 function onAvatarError(event) {
   event.target.src = defaultAvatar
@@ -354,6 +363,7 @@ async function loadProfile() {
     }
 
     fillFormFromProfile()
+    imageVersion.value = Date.now()
   } catch (error) {
     errorMsg.value = t.value.loadError
   } finally {
@@ -365,13 +375,22 @@ function startEdit() {
   successMsg.value = ''
   errorMsg.value = ''
   fillFormFromProfile()
+  imageVersion.value = Date.now()
   isEditing.value = true
 }
 
 function cancelEdit() {
   fillFormFromProfile()
+  imageVersion.value = Date.now()
   isEditing.value = false
 }
+
+watch(
+  () => form.value.image,
+  () => {
+    imageVersion.value = Date.now()
+  }
+)
 
 async function saveProfile() {
   saving.value = true
@@ -405,6 +424,7 @@ async function saveProfile() {
     }
 
     fillFormFromProfile()
+    imageVersion.value = Date.now()
     isEditing.value = false
     successMsg.value = t.value.saveSuccess
 
@@ -468,6 +488,7 @@ async function deleteMyData() {
     }
 
     fillFormFromProfile()
+    imageVersion.value = Date.now()
     isEditing.value = false
     successMsg.value = t.value.deleteSuccess
     localStorage.setItem('harmony_matches_refresh_needed', '1')
