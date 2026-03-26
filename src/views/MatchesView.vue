@@ -295,6 +295,7 @@ async function fetchMatches() {
     const metIds = new Set((metIdsRaw || []).map(String))
 
     const rawMatches = normalizeResponse(matchData)
+    console.log('RAW MATCHES:', rawMatches)
 
     matches.value = rawMatches.map(raw => {
       const m = toUiMatch(raw)
