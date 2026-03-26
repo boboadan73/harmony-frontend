@@ -385,9 +385,19 @@ async function saveProfile() {
       body: JSON.stringify(form.value),
     })
 
-    if (!res.ok) throw new Error('save failed')
+    const raw = await res.text()
+    let data = {}
 
-    const data = await res.json()
+    try {
+      data = raw ? JSON.parse(raw) : {}
+    } catch {
+      data = { message: raw || 'Save failed' }
+    }
+
+    if (!res.ok) {
+      throw new Error(data.message || `Save failed (${res.status})`)
+    }
+
     profile.value = {
       ...profile.value,
       ...(data.participant || {}),
