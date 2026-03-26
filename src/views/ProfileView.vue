@@ -379,24 +379,25 @@ async function saveProfile() {
   successMsg.value = ''
 
   try {
-    const res = await fetch(buildSystemApiUrl(`/api/participants/p${pid.value}`), {
+    const url = buildSystemApiUrl(`/api/participants/p${pid.value}`)
+    console.log('SAVE URL:', url)
+    console.log('SAVE BODY:', form.value)
+
+    const res = await fetch(url, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form.value),
     })
 
-    const raw = await res.text()
-    let data = {}
-
-    try {
-      data = raw ? JSON.parse(raw) : {}
-    } catch {
-      data = { message: raw || 'Save failed' }
-    }
+    const text = await res.text()
+    console.log('SAVE STATUS:', res.status)
+    console.log('SAVE RESPONSE:', text)
 
     if (!res.ok) {
-      throw new Error(data.message || `Save failed (${res.status})`)
+      throw new Error(`Update failed: ${res.status} ${text}`)
     }
+
+    const data = text ? JSON.parse(text) : {}
 
     profile.value = {
       ...profile.value,
@@ -410,6 +411,7 @@ async function saveProfile() {
     localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
     localStorage.setItem('harmony_matches_refresh_needed', '1')
   } catch (error) {
+    console.error('SAVE ERROR:', error)
     errorMsg.value = error?.message || 'Save failed'
   } finally {
     saving.value = false
