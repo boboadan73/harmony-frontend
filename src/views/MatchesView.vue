@@ -1,118 +1,118 @@
 <template>
-  <div class="container">
-    <div class="shell" :dir="isRtl ? 'rtl' : 'ltr'">
-      <!-- background decorations -->
-      <div class="blob blob1" aria-hidden="true"></div>
-      <div class="blob blob2" aria-hidden="true"></div>
-      <div class="blob blob3" aria-hidden="true"></div>
+  <div class="matches-page" :dir="isRtl ? 'rtl' : 'ltr'">
+    <TopNav :lang="lang" :pid="participantId()" />
 
-      <div class="page">
-        <TopNav :lang="lang" :pid="participantId()" />
-
-        <div class="headerRow">
-          <div class="titles">
-            <h1 class="h1">{{ t.title }}</h1>
-            <p class="subtitle">{{ t.subtitle }}</p>
-          </div>
-
-          <div class="langBox">
-            <span class="langIcon" aria-hidden="true">🌐</span>
-            <select class="langSelect" v-model="lang">
-              <option value="en">English</option>
-              <option value="ar">Arabic</option>
-              <option value="he">Hebrew</option>
-            </select>
-          </div>
+    <div class="matches-shell">
+      <div class="header-row">
+        <div class="titles">
+          <h1 class="page-title">{{ t.title }}</h1>
+          <p class="page-subtitle">{{ t.subtitle }}</p>
         </div>
 
-        <!-- LOADING / ERROR -->
-        <div v-if="loading" class="empty">
-          <div class="emptyIcon" aria-hidden="true">⏳</div>
-          <div class="emptyText">
-            <div class="emptyTitle">{{ t.loadingTitle }}</div>
-            <div class="emptySub">{{ t.loadingSub }}</div>
-          </div>
+        <div class="language-box">
+          <span class="language-icon">🌐</span>
+          <select class="language-select" v-model="lang">
+            <option value="en">English</option>
+            <option value="ar">Arabic</option>
+            <option value="he">Hebrew</option>
+          </select>
         </div>
+      </div>
 
-        <div v-else-if="errorMsg" class="empty">
-          <div class="emptyIcon" aria-hidden="true">⚠️</div>
-          <div class="emptyText">
-            <div class="emptyTitle">{{ t.errorTitle }}</div>
-            <div class="emptySub">{{ errorMsg }}</div>
-          </div>
+      <!-- LOADING -->
+      <div v-if="loading" class="state-box">
+        <div class="state-icon">⏳</div>
+        <div>
+          <div class="state-title">{{ t.loadingTitle }}</div>
+          <div class="state-sub">{{ t.loadingSub }}</div>
         </div>
+      </div>
 
-        <!-- EMPTY -->
-        <div v-else-if="sortedMatches.length === 0" class="empty">
-          <div class="emptyIcon" aria-hidden="true">✨</div>
-          <div class="emptyText">
-            <div class="emptyTitle">{{ t.emptyTitle }}</div>
-            <div class="emptySub">{{ t.emptySub }}</div>
-          </div>
+      <!-- ERROR -->
+      <div v-else-if="errorMsg" class="state-box">
+        <div class="state-icon">⚠️</div>
+        <div>
+          <div class="state-title">{{ t.errorTitle }}</div>
+          <div class="state-sub">{{ errorMsg }}</div>
         </div>
+      </div>
 
-        <!-- LIST -->
-        <div v-else class="list">
-          <div
-            v-for="(m, idx) in sortedMatches"
-            :key="m.id"
-            class="card"
-            :class="{ topMatch: idx === 0 }"
-          >
-            <div class="cardGlow" aria-hidden="true"></div>
+      <!-- EMPTY -->
+      <div v-else-if="sortedMatches.length === 0" class="state-box">
+        <div class="state-icon">✨</div>
+        <div>
+          <div class="state-title">{{ t.emptyTitle }}</div>
+          <div class="state-sub">{{ t.emptySub }}</div>
+        </div>
+      </div>
 
-            <div v-if="idx === 0" class="bestBadge">
-              {{ t.bestMatch }}
+      <!-- LIST -->
+      <div v-else class="matches-list">
+        <div
+          v-for="(m, idx) in sortedMatches"
+          :key="m.id"
+          class="match-card"
+        >
+          <div class="card-top">
+            <div class="card-main">
+              <div class="name-row">
+                <h2 class="match-name">{{ getName(m) }}</h2>
+
+                <span v-if="idx === 0" class="best-badge">
+                  {{ t.bestMatch }}
+                </span>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="why-section">
+                <div class="why-title">{{ t.why }}</div>
+                <div class="why-text">{{ getWhy(m) }}</div>
+              </div>
+
+              <div class="status-row" v-if="m.saved || m.met">
+                <span v-if="m.saved" class="status-pill">{{ t.saved }}</span>
+                <span v-if="m.met" class="status-pill">{{ t.met }}</span>
+              </div>
             </div>
 
-            <div class="cardHeader">
-              <div class="info">
-                <div class="name">{{ getName(m) }}</div>
-
-                <div class="role">{{ m.role }}</div>
-
-                <div class="matchPercent ltrNum">
+            <div class="avatar-side">
+              <div class="avatar-wrap">
+                <img
+                  class="avatar"
+                  :src="m.avatar"
+                  alt="avatar"
+                  loading="lazy"
+                  @error="onAvatarError"
+                />
+                <div class="percent-badge ltrNum">
                   {{ m.matchPercent }}% {{ t.matchSuffix }}
                 </div>
               </div>
-
-              <img
-                class="avatar"
-                :src="m.avatar"
-                alt="avatar"
-                loading="lazy"
-                @error="onAvatarError"
-              />
-            </div>
-
-            <div class="why">
-              <strong>{{ t.why }}</strong>
-              {{ getWhy(m) }}
-            </div>
-
-            <div class="status">
-              <span v-if="m.saved">{{ t.saved }}</span>
-              <span v-if="m.met">{{ t.met }}</span>
-            </div>
-
-            <div class="actions">
-              <button class="btn" @click="save(m)">
-                {{ m.saved ? t.unsave : t.save }}
-              </button>
-
-              <button class="btn btnDark" @click="markMet(m)">
-                {{ m.met ? t.unmetBtn : t.metBtn }}
-              </button>
-
-              <button class="btn btnOutline" @click="skip(m)">
-                {{ t.skip }}
-              </button>
             </div>
           </div>
 
-          <div class="refreshRow">
-            <button class="btn" @click="fetchMatches()">{{ t.refresh }}</button>
+          <div class="divider card-divider"></div>
+
+          <div class="actions-row">
+            <button class="action-btn" @click="save(m)">
+              {{ m.saved ? t.unsave : t.save }}
+            </button>
+
+            <button class="action-btn" @click="markMet(m)">
+              {{ m.met ? t.unmetBtn : t.metBtn }}
+            </button>
+
+            <button class="action-btn" @click="skip(m)">
+              {{ t.skip }}
+            </button>
           </div>
+        </div>
+
+        <div class="refresh-row">
+          <button class="refresh-btn" @click="fetchMatches()">
+            {{ t.refresh }}
+          </button>
         </div>
       </div>
     </div>
@@ -379,161 +379,340 @@ function onAvatarError(e) {
 </script>
 
 <style scoped>
-.container { width: 100%; padding: 0; margin: 0; }
-
-.shell {
+.matches-page {
   min-height: 100vh;
-  padding: 18px 16px 70px;
+  background: #f4f4f2;
   font-family: Arial, sans-serif;
-  color: var(--h-text);
-  background: linear-gradient(180deg, #e6f2ec 0%, #d6e8df 55%, #c8ded3 100%);
-  position: relative;
-  overflow: hidden;
+  color: #31443b;
 }
 
-.blob { position:absolute; filter: blur(18px); opacity:.55; border-radius:999px; pointer-events:none; }
-.blob1 { width:360px; height:360px; left:-140px; top:-140px;
-  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--h-page-bg-mid) 55%, transparent), rgba(63,127,99,0.08));}
-.blob2 { width:460px; height:460px; right:-210px; top:50px;
-  background: radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--h-page-bg-start) 35%, transparent), rgba(233,243,238,0.14));}
-.blob3 { width:420px; height:420px; left:50%; bottom:-250px; transform: translateX(-50%);
-  background: radial-gradient(circle at 40% 40%, rgba(233,243,238,0.80), color-mix(in srgb, var(--h-page-bg-start) 6%, transparent));}
-
-.page { max-width: 980px; margin: 0 auto; }
-
-.headerRow { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; margin: 8px 0 18px; }
-.h1 { margin:0 0 6px; font-size:44px; letter-spacing:-0.8px; font-weight:900; color: var(--h-green-700); }
-.subtitle { margin:0; color: var(--h-text-muted); }
-
-.langBox {
-  display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:14px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.70), rgba(255,255,255,0.40));
-  border: 1px solid var(--h-border);
-  box-shadow: var(--h-shadow-soft);
-  backdrop-filter: blur(10px);
+.matches-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 18px 14px 40px;
 }
 
-.list { display:grid; gap:12px; grid-template-columns:1fr; }
-@media (min-width: 900px){ .list{ grid-template-columns: 1fr 1fr; } }
-
-.card {
-  position: relative; border-radius: 18px; padding: 16px; overflow: hidden;
-  background: var(--h-card-bg); border: 2.5px solid #2f6b4f;
-  box-shadow: var(--h-shadow-soft); backdrop-filter: blur(10px);
-  transition:
-   transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-}
-.card > * { position: relative; z-index: 1; }
-
-.card:hover { transform: translateY(-2px); border-color:  #24513f; box-shadow: 0 18px 45px rgba(31, 63, 50, 0.16); }
-
-.cardGlow{ position:absolute; inset:-2px; background: radial-gradient(700px 240px at 15% 0%, rgba(63,127,99,0.18), transparent 60%); pointer-events:none; }
-
-.topMatch{
-  border-color: #1e5a43;
-  box-shadow: 0 22px 60px rgba(31,63,50,0.22);
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 14px 0 18px;
 }
 
-.topMatch::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  pointer-events: none;
-  background:
-    radial-gradient(900px 320px at 20% 0%, rgba(79,154,120,0.18), transparent 60%),
-    linear-gradient(180deg, rgba(233,243,238,0.35), rgba(233,243,238,0.08));
+.titles {
+  min-width: 0;
 }
 
-.bestBadge{
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  left: auto;
-  padding: 6px 14px;
+.page-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: #42554b;
+}
+
+.page-subtitle {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: #7c8c84;
+}
+
+.language-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #d7ddd9;
+  border-radius: 22px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+
+.language-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.language-select {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #53665d;
+  outline: none;
+  cursor: pointer;
+}
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.match-card {
+  background: #ffffff;
+  border: 1px solid #d9dfdb;
+  border-radius: 16px;
+  padding: 14px 14px 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.match-name {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: #45584f;
+}
+
+.best-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #2f6b4f, #4a8a6d);
+  background: #86b08f;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.divider {
+  height: 1px;
+  background: #e5e9e6;
+  margin: 10px 0;
+}
+
+.why-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.why-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #5a7567;
+}
+
+.why-text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #5b6c64;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.avatar-side {
+  flex-shrink: 0;
+}
+
+.avatar-wrap {
+  position: relative;
+  width: 92px;
+  padding-bottom: 26px;
+}
+
+.avatar {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin-inline-start: auto;
+  border: 3px solid #f3f5f3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.percent-badge {
+  position: absolute;
+  bottom: 0;
+  inset-inline-end: 0;
+  background: #6f9f78;
   color: #ffffff;
   font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.4px;
-  border: 1.5px solid #2f6b4f;
-  box-shadow: 0 10px 28px rgba(31,63,50,0.28);
-  z-index: 5;
-  white-space: nowrap;
-  max-width: 90%;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 6px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-:dir(rtl) .bestBadge{
-  left: 12px;
-  right: auto;
+.status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.status-pill {
+  background: #eef3ef;
+  color: #51635a;
+  border: 1px solid #d5ddd8;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.card-divider {
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+.actions-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid #d6ddd9;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f7f8f7;
+  max-width: 310px;
+}
+
+.action-btn {
+  border: none;
+  background: transparent;
+  padding: 10px 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #5a6b63;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.action-btn:not(:last-child) {
+  border-inline-end: 1px solid #d6ddd9;
+}
+
+.action-btn:hover {
+  background: #edf2ee;
+}
+
+.refresh-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.refresh-btn {
+  border: 1px solid #cfd8d2;
+  background: #ffffff;
+  color: #53665d;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.state-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #d9dfdb;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.state-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #eef3ef;
+  font-size: 18px;
+}
+
+.state-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #46594f;
+}
+
+.state-sub {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #6f8077;
+}
+
+.ltrNum {
+  direction: ltr;
+  unicode-bidi: plaintext;
+}
+
+:dir(rtl) .header-row {
+  flex-direction: row-reverse;
+}
+
+:dir(rtl) .card-top {
+  flex-direction: row-reverse;
+}
+
+:dir(rtl) .name-row {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+:dir(rtl) .actions-row {
   direction: rtl;
-  text-align: center;
 }
 
-.cardHeader { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
-.name { font-size:24px; font-weight:900; color: var(--h-text); margin-bottom:2px; }
-.role { color: var(--h-text-muted); margin-bottom:10px; }
+@media (max-width: 640px) {
+  .header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.matchPercent{
-  display: inline-flex; align-items: center; gap: 8px; width: fit-content;
-  padding: 6px 12px; border-radius: 999px;
-  background: rgba(233, 243, 238, 0.85);
-  border: 2px solid #2f6b4f;
-  color: #1f3f32; font-weight: 900; font-size: 13px;
+  .language-box {
+    align-self: flex-end;
+  }
+
+  :dir(rtl) .language-box {
+    align-self: flex-start;
+  }
+
+  .card-top {
+    gap: 10px;
+  }
+
+  .avatar-wrap {
+    width: 82px;
+  }
+
+  .avatar {
+    width: 70px;
+    height: 70px;
+  }
+
+  .percent-badge {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .actions-row {
+    max-width: 100%;
+  }
 }
-.ltrNum { direction:ltr; unicode-bidi: plaintext; }
-.matchPercent::before{
-  content:""; width:8px; height:8px; border-radius:999px;
-  background: var(--h-green-600);
-  box-shadow: 0 0 0 4px rgba(79,154,120,0.16);
-}
-
-.avatar{
-  width:130px; height:130px; object-fit:cover;
-  border: 3px solid rgba(255,255,255,0.90);
-  border-radius: 50%;
-  box-shadow: 0 14px 30px rgba(31,63,50,0.18), 0 0 0 3px rgba(207,227,216,0.70);
-}
-
-.why{
-  margin: 12px 0; padding: 10px 12px; border-radius: 12px;
-  background: var(--h-soft-2); border: 1px solid var(--h-border);
-  font-size: 14px; line-height: 1.35;
-}
-.why strong{ color: var(--h-green-800); }
-
-.status{ margin-bottom:12px; display:flex; gap:10px; flex-wrap:wrap; color: var(--h-text); }
-.status span{
-  background: rgba(233,243,238,0.60); border: 1px solid var(--h-border);
-  padding:6px 10px; border-radius:999px; font-size:13px;
-}
-
-.actions{ display:flex; gap:8px; flex-wrap:wrap; }
-
-.btn{
-  padding: 10px 14px; border-radius: 12px;
-  border: 2.5px solid #2f6b4f;
-  background: rgba(233, 243, 238, 0.85);
-  color: #1f3f32;
-  font-weight: 800;
-}
-.btn:hover{ border-color: #24513f; background: rgba(233, 243, 238, 1); }
-
-.btnDark{ font-weight: 900; letter-spacing: 0.3px; }
-.btnOutline{ font-weight: 800; }
-
-.empty{
-  display:flex; gap:14px; align-items:center; padding: 18px; border-radius: 18px;
-  background: var(--h-card-bg); border: 1px dashed var(--h-border-strong);
-  box-shadow: var(--h-shadow-soft); backdrop-filter: blur(10px);
-}
-.emptyIcon{
-  width:44px; height:44px; border-radius:14px; display:grid; place-items:center;
-  background: var(--h-btn-bg); border: 1px solid var(--h-border); font-size: 18px;
-}
-.emptyTitle{ font-weight:900; color: var(--h-text); }
-.emptySub{ margin-top:2px; color: var(--h-text-muted); font-size:13px; }
-
-.refreshRow{ margin-top: 12px; display:flex; justify-content:center; }
 </style>
