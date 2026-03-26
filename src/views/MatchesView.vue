@@ -131,17 +131,9 @@ const route = useRoute()
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 
-watch(
-  lang,
-  (v, prev) => {
-    localStorage.setItem(LANG_KEY, v)
-
-    if (v !== prev) {
-      fetchMatches()
-    }
-  },
-  { immediate: true }
-)
+watch(lang, (v) => {
+  localStorage.setItem(LANG_KEY, v)
+})
 
 const TEXTS = {
   en: {
@@ -209,7 +201,6 @@ const TEXTS = {
 const t = computed(() => TEXTS[lang.value] ?? TEXTS.en)
 const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
 
-/* ===== Data ===== */
 const loading = ref(false)
 const errorMsg = ref('')
 const matches = ref([])
@@ -228,21 +219,32 @@ function normalizeResponse(data) {
 
 function getWhy(m) {
   if (!m) return ''
-  if (lang.value === 'en') return m.whyMatched_en || m.whyMatched || m.whyMatched_he || ''
-  if (lang.value === 'he') return m.whyMatched_he || m.whyMatched_en || m.whyMatched || ''
+
+  if (lang.value === 'en') {
+    return m.whyMatched_en || m.whyMatched || m.whyMatched_he || ''
+  }
+
+  if (lang.value === 'he') {
+    return m.whyMatched_he || m.whyMatched || m.whyMatched_en || ''
+  }
+
   return m.whyMatched || m.whyMatched_en || m.whyMatched_he || ''
 }
 
 function getName(m) {
   if (!m) return ''
 
-  const mn = m.match_name || {}
+  const mn = m.match_name
+
+  if (!mn) return m.name || ''
+  if (typeof mn === 'string') return mn
+
   const original = mn.original || m.name || ''
   const en = mn.en || ''
   const he = mn.he || ''
 
   if (lang.value === 'en') return en || original || he || ''
-  if (lang.value === 'he') return he || en || original || ''
+  if (lang.value === 'he') return he || original || en || ''
   return original || en || he || ''
 }
 
