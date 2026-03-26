@@ -221,14 +221,14 @@ function getWhy(m) {
   if (!m) return ''
 
   if (lang.value === 'en') {
-    return m.whyMatched_en || m.whyMatched || m.whyMatched_he || ''
+    return m.whyMatched_en
   }
 
   if (lang.value === 'he') {
-    return m.whyMatched_he || m.whyMatched || m.whyMatched_en || ''
+    return m.whyMatched_he
   }
 
-  return m.whyMatched || m.whyMatched_en || m.whyMatched_he || ''
+  return m.whyMatched
 }
 
 function getName(m) {
