@@ -226,7 +226,12 @@ function normalizeResponse(data) {
   return []
 }
 
-console.log('RAW MATCH:', raw)
+function getWhy(m) {
+  if (!m) return ''
+  if (lang.value === 'en') return m.whyMatched_en || m.whyMatched || m.whyMatched_he || ''
+  if (lang.value === 'he') return m.whyMatched_he || m.whyMatched_en || m.whyMatched || ''
+  return m.whyMatched || m.whyMatched_en || m.whyMatched_he || ''
+}
 
 function getName(m) {
   if (!m) return ''
@@ -245,44 +250,16 @@ function toUiMatch(raw) {
   const score = Number(raw?.score)
   const matchPercent = Number.isFinite(score) ? Math.round(score * 100) : 0
 
-  const explanation = raw?.explanation || {}
-
   return {
-    id: raw?.id ?? raw?.match?.id ?? Math.random().toString(16).slice(2),
-    name: raw?.name ?? raw?.match?.name ?? '',
+    id: raw?.id ?? Math.random().toString(16).slice(2),
+    name: raw?.name ?? '',
     match_name: raw?.match_name ?? null,
     role: '',
     matchPercent,
-
-    whyMatched:
-      raw?.reason ??
-      raw?.whyMatched ??
-      explanation?.ar ??
-      '',
-
-    whyMatched_ar:
-      raw?.reason_ar ??
-      raw?.whyMatched_ar ??
-      explanation?.ar ??
-      '',
-
-    whyMatched_en:
-      raw?.reason_en ??
-      raw?.whyMatched_en ??
-      explanation?.en ??
-      '',
-
-    whyMatched_he:
-      raw?.reason_he ??
-      raw?.whyMatched_he ??
-      explanation?.he ??
-      '',
-
-    avatar:
-      (raw?.imageUrl && String(raw.imageUrl).trim())
-        ? raw.imageUrl
-        : placeholderAvatar,
-
+    whyMatched: raw?.reason ?? '',
+    whyMatched_en: raw?.reason_en ?? '',
+    whyMatched_he: raw?.reason_he ?? '',
+    avatar: (raw?.imageUrl && String(raw.imageUrl).trim()) ? raw.imageUrl : placeholderAvatar,
     saved: false,
     met: false,
   }
@@ -556,16 +533,7 @@ function onAvatarError(e) {
   background: var(--h-btn-bg); border: 1px solid var(--h-border); font-size: 18px;
 }
 .emptyTitle{ font-weight:900; color: var(--h-text); }
-.emptySub{ color: var(--h-text-muted); }
+.emptySub{ margin-top:2px; color: var(--h-text-muted); font-size:13px; }
 
-.refreshRow{ margin-top: 6px; display:flex; justify-content:center; }
-
-.langIcon{ font-size: 16px; }
-.langSelect{
-  border: none;
-  background: transparent;
-  outline: none;
-  font-weight: 700;
-  color: var(--h-text);
-}
+.refreshRow{ margin-top: 12px; display:flex; justify-content:center; }
 </style>
