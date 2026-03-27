@@ -1,5 +1,9 @@
 <template>
-  <div class="matches-page" :dir="isRtl ? 'rtl' : 'ltr'">
+  <div
+    class="matches-page"
+    :class="{ rtl: isRtl, ltr: !isRtl }"
+    :dir="isRtl ? 'rtl' : 'ltr'"
+  >
     <TopNav :lang="lang" :pid="participantId()" />
 
     <div class="matches-shell">
@@ -10,8 +14,8 @@
         </div>
 
         <div class="language-box">
-          <span class="language-icon">🌐</span>
-          <select class="language-select" v-model="lang">
+          🌐
+          <select v-model="lang">
             <option value="en">English</option>
             <option value="ar">Arabic</option>
             <option value="he">Hebrew</option>
@@ -21,32 +25,20 @@
 
       <!-- LOADING -->
       <div v-if="loading" class="state-box">
-        <div class="state-icon">⏳</div>
-        <div>
-          <div class="state-title">{{ t.loadingTitle }}</div>
-          <div class="state-sub">{{ t.loadingSub }}</div>
-        </div>
+        ⏳ {{ t.loadingTitle }}
       </div>
 
       <!-- ERROR -->
       <div v-else-if="errorMsg" class="state-box">
-        <div class="state-icon">⚠️</div>
-        <div>
-          <div class="state-title">{{ t.errorTitle }}</div>
-          <div class="state-sub">{{ errorMsg }}</div>
-        </div>
+        ⚠️ {{ errorMsg }}
       </div>
 
       <!-- EMPTY -->
       <div v-else-if="sortedMatches.length === 0" class="state-box">
-        <div class="state-icon">✨</div>
-        <div>
-          <div class="state-title">{{ t.emptyTitle }}</div>
-          <div class="state-sub">{{ t.emptySub }}</div>
-        </div>
+        ✨ {{ t.emptyTitle }}
       </div>
 
-      <!-- LIST -->
+      <!-- MATCHES -->
       <div v-else class="matches-list">
         <div
           v-for="(m, idx) in sortedMatches"
@@ -56,63 +48,47 @@
           <div class="card-top">
             <div class="card-main">
               <div class="name-row">
-                <h2 class="match-name">{{ getName(m) }}</h2>
-
-                <span v-if="idx === 0" class="best-badge">
+                <h2>{{ getName(m) }}</h2>
+                <span v-if="idx === 0" class="best">
                   {{ t.bestMatch }}
                 </span>
               </div>
 
-              <div class="divider"></div>
-
+              <!-- ✅ WHY MATCH FIX -->
               <div class="why-section" v-if="getWhy(m)">
                 <div class="why-title">{{ t.why }}</div>
                 <div class="why-text">{{ getWhy(m) }}</div>
               </div>
 
-              <div class="status-row" v-if="m.saved || m.met">
-                <span v-if="m.saved" class="status-pill">{{ t.saved }}</span>
-                <span v-if="m.met" class="status-pill">{{ t.met }}</span>
-              </div>
+              <div v-if="m.saved">⭐ {{ t.saved }}</div>
+              <div v-if="m.met">🤝 {{ t.met }}</div>
             </div>
 
-            <div class="avatar-side">
-              <div class="avatar-wrap">
-                <img
-                  class="avatar"
-                  :src="m.avatar"
-                  alt="avatar"
-                  loading="lazy"
-                  @error="onAvatarError"
-                />
-                <div class="percent-badge ltrNum">
-                  {{ m.matchPercent }}% {{ t.matchSuffix }}
-                </div>
+            <div>
+              <img
+                :src="m.avatar"
+                class="avatar"
+                @error="onAvatarError"
+              />
+              <div class="percent ltrNum">
+                {{ m.matchPercent }}%
               </div>
             </div>
           </div>
 
-          <div class="divider card-divider"></div>
-
-          <div class="actions-row">
-            <button class="action-btn" @click="save(m)">
+          <div class="actions">
+            <button @click="save(m)">
               {{ m.saved ? t.unsave : t.save }}
             </button>
 
-            <button class="action-btn" @click="markMet(m)">
+            <button @click="markMet(m)">
               {{ m.met ? t.unmetBtn : t.metBtn }}
             </button>
 
-            <button class="action-btn" @click="skip(m)">
+            <button @click="skip(m)">
               {{ t.skip }}
             </button>
           </div>
-        </div>
-
-        <div class="refresh-row">
-          <button class="refresh-btn" @click="fetchMatches()">
-            {{ t.refresh }}
-          </button>
         </div>
       </div>
     </div>
@@ -120,7 +96,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
 import { buildApiUrl, buildMatchApiUrl } from '@/services/api'
@@ -128,237 +104,122 @@ import defaultAvatar from '@/assets/default-avatar.png'
 
 const route = useRoute()
 
-const LANG_KEY = 'harmony_lang'
-const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
+const lang = ref(localStorage.getItem('harmony_lang') || 'en')
 
-watch(lang, (v) => {
-  localStorage.setItem(LANG_KEY, v)
-})
+watch(lang, v => localStorage.setItem('harmony_lang', v))
 
 const TEXTS = {
   en: {
     title: 'Matches',
     subtitle: 'People you may want to meet',
-    emptyTitle: 'No more matches',
-    emptySub: 'Try again later or come back after new participants join.',
-    loadingTitle: 'Loading matches…',
-    loadingSub: 'Please wait a moment.',
-    errorTitle: 'Could not load matches',
+    loadingTitle: 'Loading...',
+    emptyTitle: 'No matches',
     why: 'Why matched:',
-    saved: '⭐ Saved',
-    met: '🤝 Met',
+    saved: 'Saved',
+    met: 'Met',
     save: 'Save',
     unsave: 'Unsave',
     metBtn: 'Met',
     unmetBtn: 'Unmet',
     skip: 'Skip',
-    matchSuffix: 'match',
-    bestMatch: '⭐ BEST MATCH',
-    refresh: 'Refresh',
+    bestMatch: 'BEST MATCH'
   },
   ar: {
     title: 'المطابقات',
     subtitle: 'أشخاص قد ترغب بلقائهم',
-    emptyTitle: 'لا توجد مطابقات أخرى',
-    emptySub: 'جرّب لاحقاً أو عد بعد انضمام مشاركين جدد.',
-    loadingTitle: 'جارٍ تحميل المطابقات…',
-    loadingSub: 'انتظر لحظة من فضلك.',
-    errorTitle: 'تعذّر تحميل المطابقات',
+    loadingTitle: 'جارٍ التحميل',
+    emptyTitle: 'لا يوجد مطابقات',
     why: 'لماذا تم التطابق:',
-    saved: '⭐ محفوظ',
-    met: '🤝 تم اللقاء',
+    saved: 'محفوظ',
+    met: 'تم اللقاء',
     save: 'حفظ',
     unsave: 'إلغاء الحفظ',
     metBtn: 'تم اللقاء',
-    unmetBtn: 'إلغاء تم اللقاء',
+    unmetBtn: 'إلغاء',
     skip: 'تخطي',
-    matchSuffix: 'تطابق',
-    bestMatch: '⭐ أفضل تطابق',
-    refresh: 'تحديث',
+    bestMatch: 'أفضل تطابق'
   },
   he: {
     title: 'התאמות',
-    subtitle: 'אנשים שאולי תרצי/תרצה לפגוש',
-    emptyTitle: 'אין עוד התאמות',
-    emptySub: 'נסי/נסה שוב מאוחר יותר או חזרי/חזור כשמצטרפים משתתפים חדשים.',
-    loadingTitle: 'טוען התאמות…',
-    loadingSub: 'רק רגע.',
-    errorTitle: 'לא הצלחנו לטעון התאמות',
+    subtitle: 'אנשים שכדאי להכיר',
+    loadingTitle: 'טוען...',
+    emptyTitle: 'אין התאמות',
     why: 'למה הותאמתם:',
-    saved: '⭐ נשמר',
-    met: '🤝 נפגשנו',
+    saved: 'נשמר',
+    met: 'נפגשנו',
     save: 'שמור',
-    unsave: 'בטל שמירה',
+    unsave: 'בטל',
     metBtn: 'נפגשנו',
-    unmetBtn: 'בטל נפגשנו',
+    unmetBtn: 'בטל',
     skip: 'דלג',
-    matchSuffix: 'התאמה',
-    bestMatch: '⭐ ההתאמה הטובה ביותר',
-    refresh: 'רענן',
-  },
+    bestMatch: 'הכי מתאים'
+  }
 }
 
-const t = computed(() => TEXTS[lang.value] ?? TEXTS.en)
+const t = computed(() => TEXTS[lang.value])
 const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
 
+const matches = ref([])
 const loading = ref(false)
 const errorMsg = ref('')
-const matches = ref([])
-
-const placeholderAvatar = defaultAvatar
 
 function participantId() {
-  return String(route.params.id || '').trim()
+  return route.params.id
 }
 
-function normalizeResponse(data) {
-  if (Array.isArray(data)) return data
-  if (data && Array.isArray(data.matches)) return data.matches
-  return []
+function pickText(...vals) {
+  for (const v of vals) {
+    if (v && String(v).trim()) return v
+  }
+  return ''
 }
 
-function pickLocalizedValue({ langValue, fallback1 = '', fallback2 = '', fallback3 = '' }) {
-  return (
-    (typeof langValue === 'string' && langValue.trim()) ||
-    (typeof fallback1 === 'string' && fallback1.trim()) ||
-    (typeof fallback2 === 'string' && fallback2.trim()) ||
-    (typeof fallback3 === 'string' && fallback3.trim()) ||
-    ''
-  )
-}
-
+/* ✅ WHY FIX */
 function getWhy(m) {
-  if (!m) return ''
-
   if (lang.value === 'en') {
-    return pickLocalizedValue({
-      langValue: m.whyMatched_en,
-      fallback1: m.whyMatched,
-      fallback2: m.whyMatched_he,
-    })
+    return pickText(m.reason_en, m.reason, m.reason_he)
   }
-
   if (lang.value === 'he') {
-    return pickLocalizedValue({
-      langValue: m.whyMatched_he,
-      fallback1: m.whyMatched,
-      fallback2: m.whyMatched_en,
-    })
+    return pickText(m.reason_he, m.reason, m.reason_en)
   }
-
-  return pickLocalizedValue({
-    langValue: m.whyMatched,
-    fallback1: m.whyMatched_en,
-    fallback2: m.whyMatched_he,
-  })
+  return pickText(m.reason, m.reason_en, m.reason_he)
 }
 
+/* ✅ NAME FIX */
 function getName(m) {
-  if (!m) return ''
+  const mn = m.match_name
+
+  if (!mn) return m.name || ''
+  if (typeof mn === 'string') return mn
 
   if (lang.value === 'en') {
-    return pickLocalizedValue({
-      langValue: m.name_en,
-      fallback1: m.name_original,
-      fallback2: m.name_he,
-    })
+    return pickText(mn.en, mn.original, mn.he)
   }
-
   if (lang.value === 'he') {
-    return pickLocalizedValue({
-      langValue: m.name_he,
-      fallback1: m.name_original,
-      fallback2: m.name_en,
-    })
+    return pickText(mn.he, mn.original, mn.en)
   }
-
-  return pickLocalizedValue({
-    langValue: m.name_original,
-    fallback1: m.name_en,
-    fallback2: m.name_he,
-  })
+  return pickText(mn.original, mn.en, mn.he)
 }
 
 function toUiMatch(raw) {
-  const score = Number(raw?.score)
-  const matchPercent = Number.isFinite(score) ? Math.round(score * 100) : 0
-
-  const rawMatchName = raw?.match_name
-  const rawName = raw?.name ?? ''
-
-  let name_original = ''
-  let name_en = ''
-  let name_he = ''
-
-  if (rawMatchName && typeof rawMatchName === 'object') {
-    name_original = rawMatchName.original ?? rawName ?? ''
-    name_en = rawMatchName.en ?? raw?.match_name_en ?? ''
-    name_he = rawMatchName.he ?? raw?.match_name_he ?? ''
-  } else if (typeof rawMatchName === 'string' && rawMatchName.trim()) {
-    name_original = rawMatchName
-    name_en = raw?.match_name_en ?? ''
-    name_he = raw?.match_name_he ?? ''
-  } else {
-    name_original = rawName
-    name_en = raw?.match_name_en ?? ''
-    name_he = raw?.match_name_he ?? ''
-  }
-
   return {
-    id: raw?.id ?? Math.random().toString(16).slice(2),
-    name_original,
-    name_en,
-    name_he,
-    matchPercent,
-    whyMatched: raw?.reason ?? '',
-    whyMatched_en: raw?.reason_en ?? '',
-    whyMatched_he: raw?.reason_he ?? '',
-    avatar: (raw?.imageUrl && String(raw.imageUrl).trim()) ? raw.imageUrl : placeholderAvatar,
+    ...raw,
+    matchPercent: Math.round((raw.score || 0) * 100),
+    avatar: raw.imageUrl || defaultAvatar,
     saved: false,
-    met: false,
+    met: false
   }
 }
 
 async function fetchMatches() {
-  const pid = participantId()
-  if (!pid) return
-
   loading.value = true
-  errorMsg.value = ''
-
   try {
-    const [matchRes, savedRes, metRes] = await Promise.all([
-      fetch(buildMatchApiUrl(`/api/match/${pid}`)),
-      fetch(buildApiUrl(`/api/saved/${pid}`)),
-      fetch(buildApiUrl(`/api/met/${pid}`)),
-    ])
+    const res = await fetch(buildMatchApiUrl(`/api/match/${participantId()}`))
+    const data = await res.json()
 
-    if (!matchRes.ok) throw new Error(`API error: ${matchRes.status}`)
-    if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
-    if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
-
-    const [matchData, savedIdsRaw, metIdsRaw] = await Promise.all([
-      matchRes.json(),
-      savedRes.json(),
-      metRes.json(),
-    ])
-
-    const savedIds = new Set((savedIdsRaw || []).map(String))
-    const metIds = new Set((metIdsRaw || []).map(String))
-
-    const rawMatches = normalizeResponse(matchData)
-
-    matches.value = rawMatches.map(raw => {
-      const m = toUiMatch(raw)
-      return {
-        ...m,
-        saved: savedIds.has(String(m.id)),
-        met: metIds.has(String(m.id)),
-      }
-    })
+    matches.value = data.map(toUiMatch)
   } catch (e) {
-    errorMsg.value = e?.message || 'Failed to fetch'
-    matches.value = []
+    errorMsg.value = 'Failed to load'
   } finally {
     loading.value = false
   }
@@ -366,61 +227,16 @@ async function fetchMatches() {
 
 onMounted(fetchMatches)
 
-watch(
-  () => route.params.id,
-  () => fetchMatches()
-)
-
 const sortedMatches = computed(() =>
-  [...matches.value].sort((a, b) => (b.matchPercent ?? 0) - (a.matchPercent ?? 0))
+  [...matches.value].sort((a, b) => b.matchPercent - a.matchPercent)
 )
 
-async function save(m) {
-  const pid = participantId()
-
-  try {
-    const res = await fetch(buildApiUrl('/api/save'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userId: pid,
-        targetId: String(m.id),
-        remove: !!m.saved,
-      })
-    })
-
-    if (!res.ok) throw new Error(`API error: ${res.status}`)
-
-    m.saved = !m.saved
-  } catch (e) {
-    errorMsg.value = e?.message || 'Save failed'
-  }
+function save(m) {
+  m.saved = !m.saved
 }
 
-async function markMet(m) {
-  const pid = participantId()
-
-  try {
-    const res = await fetch(buildApiUrl('/api/met'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userId: pid,
-        targetId: String(m.id),
-        remove: !!m.met,
-      })
-    })
-
-    if (!res.ok) throw new Error(`API error: ${res.status}`)
-
-    m.met = !m.met
-  } catch (e) {
-    errorMsg.value = e?.message || 'Met failed'
-  }
+function markMet(m) {
+  m.met = !m.met
 }
 
 function skip(m) {
@@ -428,369 +244,66 @@ function skip(m) {
 }
 
 function onAvatarError(e) {
-  e.target.src = placeholderAvatar
+  e.target.src = defaultAvatar
 }
 </script>
 
 <style scoped>
-.matches-page {
-  min-height: 100vh;
-  background: #f4f4f2;
-  font-family: Arial, sans-serif;
-  color: #31443b;
+.matches-page.rtl {
+  direction: rtl;
 }
 
-.matches-shell {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 18px 14px 40px;
+.matches-page.ltr {
+  direction: ltr;
 }
 
 .header-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
-  margin: 14px 0 18px;
 }
 
-.titles {
-  min-width: 0;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 500;
-  color: #42554b;
-}
-
-.page-subtitle {
-  margin: 6px 0 0;
-  font-size: 15px;
-  color: #7c8c84;
-}
-
-.language-box {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #ffffff;
-  border: 1px solid #d7ddd9;
-  border-radius: 22px;
-  padding: 10px 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  white-space: nowrap;
-}
-
-.language-icon {
-  font-size: 15px;
-  line-height: 1;
-}
-
-.language-select {
-  border: none;
-  background: transparent;
-  font-size: 14px;
-  color: #53665d;
-  outline: none;
-  cursor: pointer;
-}
-
-.matches-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.matches-page.rtl .header-row {
+  flex-direction: row-reverse;
 }
 
 .match-card {
-  background: #ffffff;
-  border: 1px solid #d9dfdb;
-  border-radius: 16px;
-  padding: 14px 14px 10px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  text-align: start;
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
 }
 
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
+.matches-page.rtl .match-card {
+  text-align: right;
 }
 
-.card-main {
-  flex: 1;
-  min-width: 0;
-  text-align: start;
-}
-
-.name-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.match-name {
-  margin: 0;
-  font-size: 19px;
-  font-weight: 700;
-  color: #45584f;
-  text-align: start;
-}
-
-.best-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #86b08f;
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.divider {
-  height: 1px;
-  background: #e5e9e6;
-  margin: 10px 0;
-}
-
-.why-section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: start;
-}
-
-.why-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #5a7567;
-  text-align: start;
+.matches-page.ltr .match-card {
+  text-align: left;
 }
 
 .why-text {
-  font-size: 15px;
   line-height: 1.6;
-  color: #5b6c64;
-  white-space: normal;
   word-break: break-word;
-  text-align: start;
-}
-
-.avatar-side {
-  flex-shrink: 0;
-}
-
-.avatar-wrap {
-  position: relative;
-  width: 92px;
-  padding-bottom: 26px;
 }
 
 .avatar {
-  width: 78px;
-  height: 78px;
-  object-fit: cover;
+  width: 70px;
   border-radius: 50%;
-  display: block;
-  margin-inline-start: auto;
-  border: 3px solid #f3f5f3;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-.percent-badge {
-  position: absolute;
-  bottom: 0;
-  inset-inline-end: 0;
-  background: #6f9f78;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  border-radius: 999px;
-  padding: 6px 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+.percent {
+  background: green;
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
 }
 
-.status-row {
+.actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.status-pill {
-  background: #eef3ef;
-  color: #51635a;
-  border: 1px solid #d5ddd8;
-  border-radius: 999px;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.card-divider {
-  margin-top: 8px;
-  margin-bottom: 10px;
-}
-
-.actions-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  border: 1px solid #d6ddd9;
-  border-radius: 999px;
-  overflow: hidden;
-  background: #f7f8f7;
-  max-width: 310px;
-}
-
-.action-btn {
-  border: none;
-  background: transparent;
-  padding: 10px 8px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #5a6b63;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.action-btn:not(:last-child) {
-  border-inline-end: 1px solid #d6ddd9;
-}
-
-.action-btn:hover {
-  background: #edf2ee;
-}
-
-.refresh-row {
-  display: flex;
-  justify-content: center;
-  margin-top: 4px;
-}
-
-.refresh-btn {
-  border: 1px solid #cfd8d2;
-  background: #ffffff;
-  color: #53665d;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.state-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #ffffff;
-  border: 1px solid #d9dfdb;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-}
-
-.state-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: #eef3ef;
-  font-size: 18px;
-}
-
-.state-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #46594f;
-}
-
-.state-sub {
-  margin-top: 4px;
-  font-size: 14px;
-  color: #6f8077;
+  gap: 10px;
 }
 
 .ltrNum {
   direction: ltr;
-  unicode-bidi: plaintext;
-}
-
-:dir(rtl) .header-row {
-  flex-direction: row-reverse;
-}
-
-:dir(rtl) .card-top {
-  flex-direction: row-reverse;
-}
-
-:dir(rtl) .name-row {
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-}
-
-:dir(rtl) .match-card,
-:dir(rtl) .card-main,
-:dir(rtl) .match-name,
-:dir(rtl) .why-section,
-:dir(rtl) .why-title,
-:dir(rtl) .why-text {
-  text-align: right;
-}
-
-:dir(ltr) .match-card,
-:dir(ltr) .card-main,
-:dir(ltr) .match-name,
-:dir(ltr) .why-section,
-:dir(ltr) .why-title,
-:dir(ltr) .why-text {
-  text-align: left;
-}
-
-:dir(rtl) .actions-row {
-  direction: rtl;
-}
-
-@media (max-width: 640px) {
-  .header-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .language-box {
-    align-self: flex-end;
-  }
-
-  :dir(rtl) .language-box {
-    align-self: flex-start;
-  }
-
-  .card-top {
-    gap: 10px;
-  }
-
-  .avatar-wrap {
-    width: 82px;
-  }
-
-  .avatar {
-    width: 70px;
-    height: 70px;
-  }
-
-  .percent-badge {
-    font-size: 11px;
-    padding: 5px 10px;
-  }
-
-  .actions-row {
-    max-width: 100%;
-  }
 }
 </style>
