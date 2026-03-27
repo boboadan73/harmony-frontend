@@ -65,7 +65,7 @@
 
               <div class="divider"></div>
 
-              <div class="why-section">
+              <div class="why-section" v-if="getWhy(m)">
                 <div class="why-title">{{ t.why }}</div>
                 <div class="why-text">{{ getWhy(m) }}</div>
               </div>
@@ -217,46 +217,98 @@ function normalizeResponse(data) {
   return []
 }
 
+function pickLocalizedValue({ langValue, fallback1 = '', fallback2 = '', fallback3 = '' }) {
+  return (
+    (typeof langValue === 'string' && langValue.trim()) ||
+    (typeof fallback1 === 'string' && fallback1.trim()) ||
+    (typeof fallback2 === 'string' && fallback2.trim()) ||
+    (typeof fallback3 === 'string' && fallback3.trim()) ||
+    ''
+  )
+}
+
 function getWhy(m) {
   if (!m) return ''
 
   if (lang.value === 'en') {
-    return m.whyMatched_en
+    return pickLocalizedValue({
+      langValue: m.whyMatched_en,
+      fallback1: m.whyMatched,
+      fallback2: m.whyMatched_he,
+    })
   }
 
   if (lang.value === 'he') {
-    return m.whyMatched_he
+    return pickLocalizedValue({
+      langValue: m.whyMatched_he,
+      fallback1: m.whyMatched,
+      fallback2: m.whyMatched_en,
+    })
   }
 
-  return m.whyMatched
+  return pickLocalizedValue({
+    langValue: m.whyMatched,
+    fallback1: m.whyMatched_en,
+    fallback2: m.whyMatched_he,
+  })
 }
 
 function getName(m) {
   if (!m) return ''
 
-  const mn = m.match_name
+  if (lang.value === 'en') {
+    return pickLocalizedValue({
+      langValue: m.name_en,
+      fallback1: m.name_original,
+      fallback2: m.name_he,
+    })
+  }
 
-  if (!mn) return m.name || ''
-  if (typeof mn === 'string') return mn
+  if (lang.value === 'he') {
+    return pickLocalizedValue({
+      langValue: m.name_he,
+      fallback1: m.name_original,
+      fallback2: m.name_en,
+    })
+  }
 
-  const original = mn.original || m.name || ''
-  const en = mn.en || ''
-  const he = mn.he || ''
-
-  if (lang.value === 'en') return en || original || he || ''
-  if (lang.value === 'he') return he || original || en || ''
-  return original || en || he || ''
+  return pickLocalizedValue({
+    langValue: m.name_original,
+    fallback1: m.name_en,
+    fallback2: m.name_he,
+  })
 }
 
 function toUiMatch(raw) {
   const score = Number(raw?.score)
   const matchPercent = Number.isFinite(score) ? Math.round(score * 100) : 0
 
+  const rawMatchName = raw?.match_name
+  const rawName = raw?.name ?? ''
+
+  let name_original = ''
+  let name_en = ''
+  let name_he = ''
+
+  if (rawMatchName && typeof rawMatchName === 'object') {
+    name_original = rawMatchName.original ?? rawName ?? ''
+    name_en = rawMatchName.en ?? raw?.match_name_en ?? ''
+    name_he = rawMatchName.he ?? raw?.match_name_he ?? ''
+  } else if (typeof rawMatchName === 'string' && rawMatchName.trim()) {
+    name_original = rawMatchName
+    name_en = raw?.match_name_en ?? ''
+    name_he = raw?.match_name_he ?? ''
+  } else {
+    name_original = rawName
+    name_en = raw?.match_name_en ?? ''
+    name_he = raw?.match_name_he ?? ''
+  }
+
   return {
     id: raw?.id ?? Math.random().toString(16).slice(2),
-    name: raw?.name ?? '',
-    match_name: raw?.match_name ?? null,
-    role: '',
+    name_original,
+    name_en,
+    name_he,
     matchPercent,
     whyMatched: raw?.reason ?? '',
     whyMatched_en: raw?.reason_en ?? '',
@@ -295,7 +347,6 @@ async function fetchMatches() {
     const metIds = new Set((metIdsRaw || []).map(String))
 
     const rawMatches = normalizeResponse(matchData)
-    console.log('RAW MATCHES:', rawMatches)
 
     matches.value = rawMatches.map(raw => {
       const m = toUiMatch(raw)
@@ -458,6 +509,7 @@ function onAvatarError(e) {
   border-radius: 16px;
   padding: 14px 14px 10px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  text-align: start;
 }
 
 .card-top {
@@ -470,6 +522,7 @@ function onAvatarError(e) {
 .card-main {
   flex: 1;
   min-width: 0;
+  text-align: start;
 }
 
 .name-row {
@@ -484,6 +537,7 @@ function onAvatarError(e) {
   font-size: 19px;
   font-weight: 700;
   color: #45584f;
+  text-align: start;
 }
 
 .best-badge {
@@ -508,20 +562,23 @@ function onAvatarError(e) {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  text-align: start;
 }
 
 .why-title {
   font-size: 16px;
   font-weight: 700;
   color: #5a7567;
+  text-align: start;
 }
 
 .why-text {
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.6;
   color: #5b6c64;
   white-space: normal;
   word-break: break-word;
+  text-align: start;
 }
 
 .avatar-side {
@@ -676,6 +733,24 @@ function onAvatarError(e) {
 :dir(rtl) .name-row {
   flex-direction: row-reverse;
   justify-content: flex-start;
+}
+
+:dir(rtl) .match-card,
+:dir(rtl) .card-main,
+:dir(rtl) .match-name,
+:dir(rtl) .why-section,
+:dir(rtl) .why-title,
+:dir(rtl) .why-text {
+  text-align: right;
+}
+
+:dir(ltr) .match-card,
+:dir(ltr) .card-main,
+:dir(ltr) .match-name,
+:dir(ltr) .why-section,
+:dir(ltr) .why-title,
+:dir(ltr) .why-text {
+  text-align: left;
 }
 
 :dir(rtl) .actions-row {
