@@ -226,19 +226,7 @@ function normalizeResponse(data) {
   return []
 }
 
-function getWhy(m) {
-  if (!m) return ''
-
-  if (lang.value === 'en') {
-    return m.whyMatched_en || m.whyMatched || m.whyMatched_he || m.whyMatched_ar || ''
-  }
-
-  if (lang.value === 'he') {
-    return m.whyMatched_he || m.whyMatched_en || m.whyMatched || m.whyMatched_ar || ''
-  }
-
-  return m.whyMatched_ar || m.whyMatched || m.whyMatched_en || m.whyMatched_he || ''
-}
+console.log('RAW MATCH:', raw)
 
 function getName(m) {
   if (!m) return ''
