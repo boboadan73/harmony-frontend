@@ -70,14 +70,14 @@ import { authStore } from '@/store/authStore'
 import { buildApiUrl } from '@/services/api'
 
 
-function goToRegister() {
-  router.push('/register')
-}
+
 
 const router = useRouter()
 const phone = ref('')
 const phoneTouched = ref(false)
 const errorMessage = ref('')
+
+
 
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
