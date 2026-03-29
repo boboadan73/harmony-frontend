@@ -162,6 +162,7 @@
             <div v-if="successMsg" class="statusText successText">
               {{ successMsg }}
             </div>
+            <div v-if="!isNewParticipant" class="privacyCard"></div>
           </template>
         </div>
 
@@ -180,9 +181,13 @@ import TopNav from '@/components/TopNav.vue'
 
 const route = useRoute()
 const isNewParticipant = computed(() => String(route.params.id || '').trim() === 'new')
-const pid = computed(() =>
-  String(route.params.id || localStorage.getItem('harmony_pid') || '').trim()
-)
+const pid = computed(() => {
+  const routeId = String(route.params.id || '').trim()
+
+  if (routeId === 'new') return ''
+
+  return String(routeId || localStorage.getItem('harmony_pid') || '').trim()
+})
 
 watch(
   pid,
@@ -344,8 +349,7 @@ function fillFormFromProfile() {
     personal: profile.value.personal || '',
     image: profile.value.image || '',
   }
-}
-async function loadProfile() {
+}async function loadProfile() {
   if (isNewParticipant.value) {
     profile.value = {
       id: '',
@@ -360,6 +364,7 @@ async function loadProfile() {
     }
 
     fillFormFromProfile()
+    imageVersion.value = Date.now()
     isEditing.value = true
     loading.value = false
     errorMsg.value = ''
@@ -398,7 +403,6 @@ async function loadProfile() {
     loading.value = false
   }
 }
-
 function startEdit() {
   successMsg.value = ''
   errorMsg.value = ''
@@ -419,13 +423,16 @@ watch(
     imageVersion.value = Date.now()
   }
 )
-
 async function saveProfile() {
   saving.value = true
   errorMsg.value = ''
   successMsg.value = ''
 
   try {
+    if (!form.value.name.trim() || !form.value.phone.trim()) {
+      throw new Error('Name and phone are required')
+    }
+
     const isNew = isNewParticipant.value
 
     const url = isNew
@@ -466,17 +473,15 @@ async function saveProfile() {
     isEditing.value = false
     successMsg.value = t.value.saveSuccess
 
+    localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
+    localStorage.setItem('harmony_matches_refresh_needed', '1')
+
     if (isNew && participant.id) {
       const cleanId = String(participant.id).replace(/^p/, '')
       localStorage.setItem('harmony_pid', cleanId)
-      localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
-      localStorage.setItem('harmony_matches_refresh_needed', '1')
-      window.location.href = `/profile/${cleanId}`
+      window.location.href = `/matches/${cleanId}`
       return
     }
-
-    localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
-    localStorage.setItem('harmony_matches_refresh_needed', '1')
   } catch (error) {
     errorMsg.value = error?.message || 'Save failed'
   } finally {
