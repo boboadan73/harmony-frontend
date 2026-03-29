@@ -730,4 +730,8 @@ function onAvatarError(e) {
     font-size: 14px;
   }
 }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> 142eea8d5e5743ba853da3e3e068ec27c0208c69
