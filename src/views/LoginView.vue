@@ -49,15 +49,15 @@
 
         <!-- BUTTONS -->
         <div class="btnBar">
-          <button type="button" class="primaryBtn" :disabled="!isIdValid" @click="continueLogin">
-            {{ t.continue }}
-          </button>
+  <button class="primaryBtn" :disabled="!phone" @click="continueLogin">
+    {{ t.continue }}
+  </button>
 
-          <button class="secondary-btn" @click="goToRegister">
-  {{ t.newParticipant }}
-</button>
+  <button class="secondaryBtn" @click="goToRegister">
+    {{ t.newParticipant }}
+  </button>
+</div>
 
-        </div>
       </div>
     </div>
   </div>
@@ -362,7 +362,7 @@ async function newParticipant() {
 }
 
 .secondaryBtn{
-  background: rgba(233,243,238,0.88);
+  background: linear-gradient(135deg, rgba(233,243,238,0.98), rgba(206,232,221,0.98));
 }
 
 .primaryBtn:hover,
