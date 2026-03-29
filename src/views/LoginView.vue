@@ -198,9 +198,7 @@ async function continueLogin() {
   await loginAndRoute('matches')
 }
 
-async function newParticipant() {
-  await loginAndRoute('profile')
-}
+
 </script>
 
 <style scoped>
@@ -334,6 +332,21 @@ async function newParticipant() {
   display: block;
   box-sizing: border-box;
   margin: 0;
+}
+
+/* חשוב: זה הבלוק שהיה חסר */
+.primaryBtn,
+.secondaryBtn{
+  width: 100%;
+  min-height: 54px;
+  border-radius: 18px;
+  font-weight: 900;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2.5px solid #2f6b4f;
+  color: #1f3f32;
+  box-shadow: 0 14px 30px rgba(31,63,50,0.12);
+  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
 }
 
 .primaryBtn{
