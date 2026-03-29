@@ -53,7 +53,7 @@
     {{ t.continue }}
   </button>
 
-  <button class="secondaryBtn" @click="goToRegister">
+  <button class="secondaryBtn" type="button" @click="goToRegister">
     {{ t.newParticipant }}
   </button>
 </div>
@@ -341,8 +341,8 @@ async function newParticipant() {
 }
 
 /* ===== BUTTONS ===== */
-.primaryBtn,
-.secondaryBtn{
+.btnBar .primaryBtn,
+.btnBar .secondaryBtn{
   width: 100%;
   min-height: 54px;
   border-radius: 18px;
