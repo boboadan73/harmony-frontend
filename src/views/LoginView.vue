@@ -320,41 +320,20 @@ async function newParticipant() {
 }
 
 /* ===== BUTTONS BAR ===== */
-.btnBar{
-  position: sticky;
-  bottom: 0;
-  padding-top: 12px;
-  display: grid;
+.btnBar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-
-  margin-left: -22px;
-  margin-right: -22px;
-  padding-left: 22px;
-  padding-right: 22px;
-
-  border-bottom-left-radius: 26px;
-  border-bottom-right-radius: 26px;
-
-  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(233,243,238,0.95));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  margin-top: 18px;
 }
 
-/* ===== BUTTONS ===== */
 .btnBar .primaryBtn,
-.btnBar .secondaryBtn{
+.btnBar .secondaryBtn {
   width: 100%;
-  min-height: 54px;
-  border-radius: 18px;
-  font-weight: 900;
-  font-size: 16px;
-  cursor: pointer;
-
-  border: 2.5px solid #2f6b4f;
-  color: #1f3f32;
-
-  box-shadow: 0 14px 30px rgba(31,63,50,0.12);
-  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .primaryBtn{
