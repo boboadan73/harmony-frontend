@@ -51,8 +51,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const pid = getStoredPid()
 
-  const publicPages = ['/login']
-  const isPublicPage = publicPages.includes(to.path)
+  const isPublicPage =
+    to.path === '/login' ||
+    to.path === '/register' ||
+    to.path === '/profile/new'
 
   if (!isPublicPage && !pid) {
     return next('/login')
