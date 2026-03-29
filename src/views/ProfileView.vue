@@ -58,16 +58,16 @@
 
           <template v-else>
             <div class="fieldsGrid">
-              <div class="fieldBlock">
-                <label class="fieldLabel">{{ t.name }}</label>
-                <input
-                  v-if="isEditing"
-                  v-model="form.name"
-                  class="input"
-                  type="text"
-                />
-                <div v-else class="fieldValue">{{ profile.name || t.empty }}</div>
-              </div>
+             <div class="fieldBlock">
+  <label class="fieldLabel">{{ t.phone }}</label>
+  <input
+    v-if="isEditing"
+    v-model="form.phone"
+    class="input ltrNum"
+    type="text"
+  />
+  <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
+</div>
 
               <div class="fieldBlock">
                 <label class="fieldLabel">{{ t.phone }}</label>
@@ -173,6 +173,7 @@ import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
 
 const route = useRoute()
+const isNewParticipant = computed(() => String(route.params.id || '') === 'new')
 
 const pid = computed(() =>
   String(route.params.id || localStorage.getItem('harmony_pid') || '').trim()
@@ -306,6 +307,7 @@ const profile = ref({
 
 const form = ref({
   name: '',
+  phone: '',
   job: '',
   academic: '',
   professional: '',
@@ -330,6 +332,7 @@ function onAvatarError(event) {
 function fillFormFromProfile() {
   form.value = {
     name: profile.value.name || '',
+    phone: profile.value.phone || '',
     job: profile.value.job || '',
     academic: profile.value.academic || '',
     professional: profile.value.professional || '',
@@ -337,8 +340,28 @@ function fillFormFromProfile() {
     image: profile.value.image || '',
   }
 }
-
 async function loadProfile() {
+  if (isNewParticipant.value) {
+    profile.value = {
+      id: '',
+      name: '',
+      phone: '',
+      job: '',
+      academic: '',
+      professional: '',
+      personal: '',
+      image: '',
+      hidden: false,
+    }
+
+    fillFormFromProfile()
+    isEditing.value = true
+    loading.value = false
+    errorMsg.value = ''
+    successMsg.value = ''
+    return
+  }
+
   if (!pid.value) return
 
   loading.value = true
@@ -398,29 +421,39 @@ async function saveProfile() {
   successMsg.value = ''
 
   try {
-    const url = buildSystemApiUrl(`/api/participants/p${pid.value}`)
-    console.log('SAVE URL:', url)
-    console.log('SAVE BODY:', form.value)
+    const isNew = isNewParticipant.value
+
+    const url = isNew
+      ? buildSystemApiUrl('/api/participants')
+      : buildSystemApiUrl(`/api/participants/p${pid.value}`)
+
+    const method = isNew ? 'POST' : 'PUT'
 
     const res = await fetch(url, {
-      method: 'PUT',
+      method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form.value),
     })
 
     const text = await res.text()
-    console.log('SAVE STATUS:', res.status)
-    console.log('SAVE RESPONSE:', text)
 
     if (!res.ok) {
-      throw new Error(`Update failed: ${res.status} ${text}`)
+      throw new Error(`Save failed: ${res.status} ${text}`)
     }
 
     const data = text ? JSON.parse(text) : {}
+    const participant = data.participant || data || {}
 
     profile.value = {
-      ...profile.value,
-      ...(data.participant || {}),
+      id: participant.id || profile.value.id || '',
+      name: participant.name || '',
+      phone: participant.phone || '',
+      job: participant.job || '',
+      academic: participant.academic || '',
+      professional: participant.professional || '',
+      personal: participant.personal || '',
+      image: participant.image || participant.imageUrl || '',
+      hidden: Boolean(participant.hidden),
     }
 
     fillFormFromProfile()
@@ -428,10 +461,16 @@ async function saveProfile() {
     isEditing.value = false
     successMsg.value = t.value.saveSuccess
 
+    if (isNew && participant.id) {
+      const cleanId = String(participant.id).replace(/^p/, '')
+      localStorage.setItem('harmony_pid', cleanId)
+      window.location.href = `/profile/${cleanId}`
+      return
+    }
+
     localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
     localStorage.setItem('harmony_matches_refresh_needed', '1')
   } catch (error) {
-    console.error('SAVE ERROR:', error)
     errorMsg.value = error?.message || 'Save failed'
   } finally {
     saving.value = false
