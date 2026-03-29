@@ -336,7 +336,6 @@ async function goToRegister() {
   margin: 0;
 }
 
-/* חשוב: זה הבלוק שהיה חסר */
 .primaryBtn,
 .secondaryBtn{
   width: 100%;
