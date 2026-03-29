@@ -70,9 +70,15 @@
 </div>
 
               <div class="fieldBlock">
-                <label class="fieldLabel">{{ t.phone }}</label>
-                <div class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
-              </div>
+  <label class="fieldLabel">{{ t.phone }}</label>
+  <input
+    v-if="isEditing"
+    v-model="form.phone"
+    class="input ltrNum"
+    type="text"
+  />
+  <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
+</div>
 
               <div class="fieldBlock">
                 <label class="fieldLabel">{{ t.job }}</label>
@@ -173,8 +179,7 @@ import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
 
 const route = useRoute()
-const isNewParticipant = computed(() => String(route.params.id || '') === 'new')
-
+const isNewParticipant = computed(() => String(route.params.id || '').trim() === 'new')
 const pid = computed(() =>
   String(route.params.id || localStorage.getItem('harmony_pid') || '').trim()
 )
@@ -445,14 +450,14 @@ async function saveProfile() {
     const participant = data.participant || data || {}
 
     profile.value = {
-      id: participant.id || profile.value.id || '',
+      id: participant.id || '',
       name: participant.name || '',
       phone: participant.phone || '',
       job: participant.job || '',
       academic: participant.academic || '',
       professional: participant.professional || '',
       personal: participant.personal || '',
-      image: participant.image || participant.imageUrl || '',
+      image: participant.image || '',
       hidden: Boolean(participant.hidden),
     }
 
@@ -464,6 +469,8 @@ async function saveProfile() {
     if (isNew && participant.id) {
       const cleanId = String(participant.id).replace(/^p/, '')
       localStorage.setItem('harmony_pid', cleanId)
+      localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
+      localStorage.setItem('harmony_matches_refresh_needed', '1')
       window.location.href = `/profile/${cleanId}`
       return
     }
