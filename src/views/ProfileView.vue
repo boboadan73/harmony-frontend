@@ -6,8 +6,7 @@
       <div class="blob blob3" aria-hidden="true"></div>
 
       <div class="page">
-        <TopNav :lang="lang" :pid="pid" />
-
+<TopNav :lang="lang" :pid="pid || 'new'" />
         <div class="headerRow">
           <div class="titles">
             <h1 class="h1">{{ t.title }}</h1>
@@ -57,8 +56,18 @@
           <div v-else-if="errorMsg" class="statusText errorText">{{ errorMsg }}</div>
 
           <template v-else>
-            <div class="fieldsGrid">
-             <div class="fieldBlock">
+            <div class="fieldsGrid"><div class="fieldBlock">
+  <label class="fieldLabel">{{ t.name }}</label>
+  <input
+    v-if="isEditing"
+    v-model="form.name"
+    class="input"
+    type="text"
+  />
+  <div v-else class="fieldValue">{{ profile.name || t.empty }}</div>
+</div>
+
+<div class="fieldBlock">
   <label class="fieldLabel">{{ t.phone }}</label>
   <input
     v-if="isEditing"
@@ -69,16 +78,6 @@
   <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
 </div>
 
-              <div class="fieldBlock">
-  <label class="fieldLabel">{{ t.phone }}</label>
-  <input
-    v-if="isEditing"
-    v-model="form.phone"
-    class="input ltrNum"
-    type="text"
-  />
-  <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
-</div>
 
               <div class="fieldBlock">
                 <label class="fieldLabel">{{ t.job }}</label>
@@ -136,8 +135,8 @@
               </div>
             </div>
 
-            <div class="privacyCard">
-              <div class="privacyTitle">{{ t.privacyTitle }}</div>
+<div v-if="!isNewParticipant" class="privacyCard">             
+   <div class="privacyTitle">{{ t.privacyTitle }}</div>
               <div class="privacyText">
                 {{ profile.hidden ? t.hiddenNow : t.visibleNow }}
               </div>
@@ -162,7 +161,6 @@
             <div v-if="successMsg" class="statusText successText">
               {{ successMsg }}
             </div>
-            <div v-if="!isNewParticipant" class="privacyCard"></div>
           </template>
         </div>
 
@@ -349,7 +347,8 @@ function fillFormFromProfile() {
     personal: profile.value.personal || '',
     image: profile.value.image || '',
   }
-}async function loadProfile() {
+}
+async function loadProfile() {
   if (isNewParticipant.value) {
     profile.value = {
       id: '',
