@@ -53,9 +53,10 @@
             {{ t.continue }}
           </button>
 
-          <button type="button" class="secondaryBtn" @click="newParticipant">
-            {{ t.newParticipant }}
-          </button>
+          <button class="secondary-btn" @click="goToRegister">
+  {{ t.newParticipant }}
+</button>
+
         </div>
       </div>
     </div>
@@ -67,6 +68,11 @@ import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '@/store/authStore'
 import { buildApiUrl } from '@/services/api'
+
+
+function goToRegister() {
+  router.push('/register')
+}
 
 const router = useRouter()
 const phone = ref('')
