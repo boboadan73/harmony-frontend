@@ -5,7 +5,6 @@ import MatchesView from '../views/MatchesView.vue'
 import SavedView from '../views/SavedView.vue'
 import MetView from '../views/MetView.vue'
 import ProfileView from '../views/ProfileView.vue'
-import RegisterView from '@/views/RegisterView.vue'
 
 function getStoredPid() {
   if (typeof window === 'undefined') return ''
@@ -40,11 +39,7 @@ const router = createRouter({
     { path: '/saved/:id', component: SavedView },
     { path: '/met/:id', component: MetView },
     { path: '/profile/:id', component: ProfileView },
-    {
-  path: '/register',
-  name: 'register',
-  component: RegisterView,
-}
+    
   ],
 })
 
