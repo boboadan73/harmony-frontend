@@ -197,7 +197,7 @@ async function loginAndRoute(targetRoute) {
 async function continueLogin() {
   await loginAndRoute('matches')
 }
-function goToRegister() {
+async function goToRegister() {
   router.push('/profile/new')
 }
 
