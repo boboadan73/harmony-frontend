@@ -8,45 +8,8 @@
           <h1 class="page-title">{{ t.title }}</h1>
           <p class="page-subtitle">{{ t.subtitle }}</p>
         </div>
-        <section class="filters-box">
-  <div class="filters-title">{{ t.filtersTitle }}</div>
-
-  <div class="filters-grid">
-    <input
-      v-model="searchName"
-      class="filter-input"
-      type="text"
-      :placeholder="t.searchByName"
-    />
-
-    <input
-      v-model="searchCompany"
-      class="filter-input"
-      type="text"
-      :placeholder="t.searchByCompany"
-    />
-
-    <input
-      v-model="searchSkills"
-      class="filter-input"
-      type="text"
-      :placeholder="t.filterBySkills"
-    />
-
-    <input
-      v-model="searchInterests"
-      class="filter-input"
-      type="text"
-      :placeholder="t.filterByInterests"
-    />
-
-    <input
-      v-model="searchLanguages"
-      class="filter-input"
-      type="text"
-      :placeholder="t.filterByLanguages"
-    />
-  </div>
+   
+   
   <div class="filters-wrapper">
   <button class="filters-btn" @click="showFilters = !showFilters">
     🔍 Filters
@@ -73,14 +36,34 @@
     </div>
   </div>
 </div>
+<div class="filters-bar">
+  <button class="filters-toggle" @click="showFilters = !showFilters">
+    {{ t.filters }}
+  </button>
 
-  <div class="filters-actions">
-    <button class="clear-filters-btn" @click="clearFilters">
-      {{ t.clearFilters }}
-    </button>
+  <div v-if="showFilters" class="filters-dropdown">
+    <select v-model="filterType" class="filters-select">
+      <option value="name">{{ t.searchByName }}</option>
+      <option value="company">{{ t.searchByCompany }}</option>
+      <option value="skills">{{ t.filterBySkills }}</option>
+      <option value="interests">{{ t.filterByInterests }}</option>
+      <option value="languages">{{ t.filterByLanguages }}</option>
+    </select>
+
+    <input
+      v-model="filterValue"
+      class="filters-input"
+      type="text"
+      :placeholder="t.typeHere"
+    />
+
+    <div class="filters-actions">
+      <button class="filters-clear" @click="clearFilters">
+        {{ t.clearFilters }}
+      </button>
+    </div>
   </div>
-</section>
-
+</div>
         <div class="language-box">
           <span class="language-icon" aria-hidden="true">🌐</span>
           <select class="language-select" v-model="lang">
@@ -238,6 +221,8 @@ const TEXTS = {
     filterByInterests: 'Filter by interests',
     filterByLanguages: 'Filter by languages',
     clearFilters: 'Clear all filters',
+    filters: 'Filters',
+typeHere: 'Type here...',
     
     
   },
@@ -267,6 +252,8 @@ const TEXTS = {
     filterByInterests: 'تصفية حسب الاهتمامات',
     filterByLanguages: 'تصفية حسب اللغات',
     clearFilters: 'مسح جميع عوامل التصفية',
+    filters: 'عوامل التصفية',
+typeHere: 'اكتب هنا...',
   },
   he: {
     title: 'התאמות',
@@ -294,6 +281,8 @@ const TEXTS = {
     filterByInterests: 'סינון לפי תחומי עניין',
     filterByLanguages: 'סינון לפי שפות',
     clearFilters: 'נקה את כל הסינונים',
+    filters: 'סינון',
+typeHere: 'הקלד/י כאן...',
   },
 }
 
@@ -303,23 +292,12 @@ const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
 const loading = ref(false)
 const errorMsg = ref('')
 const matches = ref([])
-const searchName = ref('')
-const searchCompany = ref('')
-const searchSkills = ref('')
-const searchInterests = ref('')
-const searchLanguages = ref('')
+
 
 const placeholderAvatar = defaultAvatar
 
 function participantId() {
   return String(route.params.id || '').trim()
-}
-function clearFilters() {
-  searchName.value = ''
-  searchCompany.value = ''
-  searchSkills.value = ''
-  searchInterests.value = ''
-  searchLanguages.value = ''
 }
 
 function normalizeResponse(data) {
@@ -590,85 +568,68 @@ function onAvatarError(e) {
   color: #5a666b;
   cursor: pointer;
 }
-.filters-box {
-  background: #ffffff;
-  border: 1px solid #d8ddd8;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 18px;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
-}
-
-.filters-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: #56666b;
-  margin-bottom: 12px;
-}
-
-.filters-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.filter-input {
-  width: 100%;
-  height: 42px;
-  padding: 0 14px;
-  border: 1px solid #d3d9d3;
-  border-radius: 12px;
-  background: #fafbf9;
-  color: #4f5f65;
-  font-size: 14px;
-  outline: none;
-}
-
-.filter-input:focus {
-  border-color: #8fb89c;
-  background: #ffffff;
-}
-
-.filters-wrapper {
+.filters-bar {
   position: relative;
-  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 18px;
 }
 
-.filters-btn {
-  background: #6f9979;
-  color: white;
-  border: none;
+:dir(rtl) .filters-bar {
+  justify-content: flex-end;
+}
+
+.filters-toggle {
+  border: 1px solid #cfd6cf;
+  background: #ffffff;
+  color: #56656a;
   border-radius: 999px;
-  padding: 8px 16px;
-  font-weight: 600;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.filters-panel {
-  position: absolute;
-  top: 45px;
-  left: 0;
-  background: white;
-  border: 1px solid #d8ddd8;
-  border-radius: 12px;
-  padding: 14px;
-  width: 260px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  z-index: 10;
+.filters-toggle:hover {
+  background: #eef3ee;
 }
 
-:dir(rtl) .filters-panel {
+.filters-dropdown {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 280px;
+  background: #ffffff;
+  border: 1px solid #d8ddd8;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  z-index: 20;
+}
+
+:dir(rtl) .filters-dropdown {
   left: auto;
   right: 0;
 }
 
-.filter-select,
-.filter-input {
+.filters-select,
+.filters-input {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
+  height: 42px;
   border: 1px solid #d3d9d3;
-  border-radius: 8px;
+  border-radius: 12px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #4f5f65;
+  background: #fafbf9;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+.filters-select:focus,
+.filters-input:focus {
+  border-color: #8fb89c;
+  background: #ffffff;
 }
 
 .filters-actions {
@@ -676,25 +637,20 @@ function onAvatarError(e) {
   justify-content: flex-end;
 }
 
-:dir(rtl) .filters-actions {
-  justify-content: flex-end;
-}
-
-.clear-filters-btn {
+.filters-clear {
   border: 1px solid #cfd6cf;
   background: #ffffff;
   color: #56656a;
   border-radius: 999px;
-  padding: 9px 16px;
-  font-size: 14px;
+  padding: 8px 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
 
-.clear-filters-btn:hover {
+.filters-clear:hover {
   background: #eef3ee;
 }
-
 .matches-list {
   display: flex;
   flex-direction: column;
