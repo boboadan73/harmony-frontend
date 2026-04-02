@@ -8,6 +8,52 @@
           <h1 class="page-title">{{ t.title }}</h1>
           <p class="page-subtitle">{{ t.subtitle }}</p>
         </div>
+        <section class="filters-box">
+  <div class="filters-title">{{ t.filtersTitle }}</div>
+
+  <div class="filters-grid">
+    <input
+      v-model="searchName"
+      class="filter-input"
+      type="text"
+      :placeholder="t.searchByName"
+    />
+
+    <input
+      v-model="searchCompany"
+      class="filter-input"
+      type="text"
+      :placeholder="t.searchByCompany"
+    />
+
+    <input
+      v-model="searchSkills"
+      class="filter-input"
+      type="text"
+      :placeholder="t.filterBySkills"
+    />
+
+    <input
+      v-model="searchInterests"
+      class="filter-input"
+      type="text"
+      :placeholder="t.filterByInterests"
+    />
+
+    <input
+      v-model="searchLanguages"
+      class="filter-input"
+      type="text"
+      :placeholder="t.filterByLanguages"
+    />
+  </div>
+
+  <div class="filters-actions">
+    <button class="clear-filters-btn" @click="clearFilters">
+      {{ t.clearFilters }}
+    </button>
+  </div>
+</section>
 
         <div class="language-box">
           <span class="language-icon" aria-hidden="true">🌐</span>
@@ -35,8 +81,8 @@
         </div>
       </div>
 
-      <div v-else-if="sortedMatches.length === 0" class="state-box">
-        <div class="state-icon" aria-hidden="true">✨</div>
+<div v-else-if="filteredMatches.length === 0" class="state-box">
+          <div class="state-icon" aria-hidden="true">✨</div>
         <div>
           <div class="state-title">{{ t.emptyTitle }}</div>
           <div class="state-sub">{{ t.emptySub }}</div>
@@ -45,7 +91,7 @@
 
       <section v-else class="matches-list">
         <article
-          v-for="(m, idx) in sortedMatches"
+v-for="(m, idx) in filteredMatches"
           :key="m.id"
           class="match-card"
         >
@@ -122,6 +168,7 @@ const route = useRoute()
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 
+
 watch(
   lang,
   (v, prev) => {
@@ -154,6 +201,15 @@ const TEXTS = {
     matchSuffix: 'match',
     bestMatch: 'BEST MATCH',
     refresh: 'Refresh',
+    filtersTitle: 'Filters',
+    searchByName: 'Search by name',
+    searchByCompany: 'Search by company',
+    filterBySkills: 'Filter by skills',
+    filterByInterests: 'Filter by interests',
+    filterByLanguages: 'Filter by languages',
+    clearFilters: 'Clear all filters',
+    
+    
   },
   ar: {
     title: 'المطابقات',
@@ -174,6 +230,13 @@ const TEXTS = {
     matchSuffix: 'تطابق',
     bestMatch: 'أفضل تطابق',
     refresh: 'تحديث',
+    filtersTitle: 'عوامل التصفية',
+    searchByName: 'ابحث بالاسم',
+    searchByCompany: 'ابحث بالشركة',
+    filterBySkills: 'تصفية حسب المهارات',
+    filterByInterests: 'تصفية حسب الاهتمامات',
+    filterByLanguages: 'تصفية حسب اللغات',
+    clearFilters: 'مسح جميع عوامل التصفية',
   },
   he: {
     title: 'התאמות',
@@ -194,6 +257,13 @@ const TEXTS = {
     matchSuffix: 'התאמה',
     bestMatch: 'ההתאמה הטובה ביותר',
     refresh: 'רענן',
+    filtersTitle: 'סינון',
+    searchByName: 'חיפוש לפי שם',
+    searchByCompany: 'חיפוש לפי חברה',
+    filterBySkills: 'סינון לפי כישורים',
+    filterByInterests: 'סינון לפי תחומי עניין',
+    filterByLanguages: 'סינון לפי שפות',
+    clearFilters: 'נקה את כל הסינונים',
   },
 }
 
@@ -203,11 +273,23 @@ const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
 const loading = ref(false)
 const errorMsg = ref('')
 const matches = ref([])
+const searchName = ref('')
+const searchCompany = ref('')
+const searchSkills = ref('')
+const searchInterests = ref('')
+const searchLanguages = ref('')
 
 const placeholderAvatar = defaultAvatar
 
 function participantId() {
   return String(route.params.id || '').trim()
+}
+function clearFilters() {
+  searchName.value = ''
+  searchCompany.value = ''
+  searchSkills.value = ''
+  searchInterests.value = ''
+  searchLanguages.value = ''
 }
 
 function normalizeResponse(data) {
@@ -241,18 +323,22 @@ function toUiMatch(raw) {
   const matchPercent = Number.isFinite(score) ? Math.round(score * 100) : 0
 
   return {
-    id: raw?.id ?? Math.random().toString(16).slice(2),
-    name: raw?.name ?? '',
-    match_name: raw?.match_name ?? null,
-    role: '',
-    matchPercent,
-    whyMatched: raw?.reason ?? '',
-    whyMatched_en: raw?.reason_en ?? '',
-    whyMatched_he: raw?.reason_he ?? '',
-    avatar: (raw?.imageUrl && String(raw.imageUrl).trim()) ? raw.imageUrl : placeholderAvatar,
-    saved: false,
-    met: false,
-  }
+  id: raw?.id ?? Math.random().toString(16).slice(2),
+  name: raw?.name ?? '',
+  match_name: raw?.match_name ?? null,
+  role: '',
+  company: raw?.company ?? raw?.job ?? raw?.jobTitle ?? '',
+  skills: raw?.skills ?? raw?.professional ?? '',
+  interests: raw?.interests ?? raw?.personal ?? '',
+  languages: raw?.languages ?? '',
+  matchPercent,
+  whyMatched: raw?.reason ?? '',
+  whyMatched_en: raw?.reason_en ?? '',
+  whyMatched_he: raw?.reason_he ?? '',
+  avatar: (raw?.imageUrl && String(raw.imageUrl).trim()) ? raw.imageUrl : placeholderAvatar,
+  saved: false,
+  met: false,
+}
 }
 
 async function fetchMatches() {
@@ -310,6 +396,36 @@ watch(
 const sortedMatches = computed(() =>
   [...matches.value].sort((a, b) => (b.matchPercent ?? 0) - (a.matchPercent ?? 0))
 )
+
+const filteredMatches = computed(() => {
+  const nameQ = searchName.value.trim().toLowerCase()
+  const companyQ = searchCompany.value.trim().toLowerCase()
+  const skillsQ = searchSkills.value.trim().toLowerCase()
+  const interestsQ = searchInterests.value.trim().toLowerCase()
+  const languagesQ = searchLanguages.value.trim().toLowerCase()
+
+  return sortedMatches.value.filter((m) => {
+    const name = String(getName(m) || '').toLowerCase()
+    const company = String(m.company || '').toLowerCase()
+    const skills = String(m.skills || '').toLowerCase()
+    const interests = String(m.interests || '').toLowerCase()
+    const languages = String(m.languages || '').toLowerCase()
+
+    const matchName = !nameQ || name.includes(nameQ)
+    const matchCompany = !companyQ || company.includes(companyQ)
+    const matchSkills = !skillsQ || skills.includes(skillsQ)
+    const matchInterests = !interestsQ || interests.includes(interestsQ)
+    const matchLanguages = !languagesQ || languages.includes(languagesQ)
+
+    return (
+      matchName &&
+      matchCompany &&
+      matchSkills &&
+      matchInterests &&
+      matchLanguages
+    )
+  })
+})
 
 async function save(m) {
   const pid = participantId()
@@ -392,6 +508,8 @@ function onAvatarError(e) {
   border-bottom: 1px solid #d9ddd9;
 }
 
+
+
 :dir(rtl) .page-head {
   text-align: right;
 }
@@ -437,6 +555,69 @@ function onAvatarError(e) {
   font-size: 14px;
   color: #5a666b;
   cursor: pointer;
+}
+.filters-box {
+  background: #ffffff;
+  border: 1px solid #d8ddd8;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
+}
+
+.filters-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #56666b;
+  margin-bottom: 12px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.filter-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid #d3d9d3;
+  border-radius: 12px;
+  background: #fafbf9;
+  color: #4f5f65;
+  font-size: 14px;
+  outline: none;
+}
+
+.filter-input:focus {
+  border-color: #8fb89c;
+  background: #ffffff;
+}
+
+.filters-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+:dir(rtl) .filters-actions {
+  justify-content: flex-end;
+}
+
+.clear-filters-btn {
+  border: 1px solid #cfd6cf;
+  background: #ffffff;
+  color: #56656a;
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clear-filters-btn:hover {
+  background: #eef3ee;
 }
 
 .matches-list {
