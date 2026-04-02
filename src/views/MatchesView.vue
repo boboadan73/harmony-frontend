@@ -47,6 +47,32 @@
       :placeholder="t.filterByLanguages"
     />
   </div>
+  <div class="filters-wrapper">
+  <button class="filters-btn" @click="showFilters = !showFilters">
+    🔍 Filters
+  </button>
+
+  <div v-if="showFilters" class="filters-panel">
+    <select v-model="filterType" class="filter-select">
+      <option value="name">Name</option>
+      <option value="company">Company</option>
+      <option value="skills">Skills</option>
+      <option value="interests">Interests</option>
+      <option value="languages">Languages</option>
+    </select>
+
+    <input
+      v-model="filterValue"
+      type="text"
+      class="filter-input"
+      placeholder="Type to filter..."
+    />
+
+    <div class="filters-actions">
+      <button @click="clearFilters">Clear</button>
+    </div>
+  </div>
+</div>
 
   <div class="filters-actions">
     <button class="clear-filters-btn" @click="clearFilters">
@@ -81,7 +107,8 @@
         </div>
       </div>
 
-<div v-else-if="filteredMatches.length === 0" class="state-box">
+<div v-else-if="filteredMatches.length === 0" 
+class="state-box">
           <div class="state-icon" aria-hidden="true">✨</div>
         <div>
           <div class="state-title">{{ t.emptyTitle }}</div>
@@ -164,7 +191,10 @@ import { buildApiUrl, buildMatchApiUrl } from '@/services/api'
 import defaultAvatar from '@/assets/default-avatar.png'
 
 const route = useRoute()
+const showFilters = ref(false)
 
+const filterType = ref('name') // name | company | skills | interests | languages
+const filterValue = ref('')
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 
@@ -297,6 +327,10 @@ function normalizeResponse(data) {
   if (data && Array.isArray(data.matches)) return data.matches
   return []
 }
+function clearFilters() {
+  filterType.value = 'name'
+  filterValue.value = ''
+}
 
 function getWhy(m) {
   if (!m) return ''
@@ -398,32 +432,32 @@ const sortedMatches = computed(() =>
 )
 
 const filteredMatches = computed(() => {
-  const nameQ = searchName.value.trim().toLowerCase()
-  const companyQ = searchCompany.value.trim().toLowerCase()
-  const skillsQ = searchSkills.value.trim().toLowerCase()
-  const interestsQ = searchInterests.value.trim().toLowerCase()
-  const languagesQ = searchLanguages.value.trim().toLowerCase()
+  if (!filterValue.value) return sortedMatches.value
+
+  const q = filterValue.value.toLowerCase()
 
   return sortedMatches.value.filter((m) => {
-    const name = String(getName(m) || '').toLowerCase()
-    const company = String(m.company || '').toLowerCase()
-    const skills = String(m.skills || '').toLowerCase()
-    const interests = String(m.interests || '').toLowerCase()
-    const languages = String(m.languages || '').toLowerCase()
+    if (filterType.value === 'name') {
+      return getName(m).toLowerCase().includes(q)
+    }
 
-    const matchName = !nameQ || name.includes(nameQ)
-    const matchCompany = !companyQ || company.includes(companyQ)
-    const matchSkills = !skillsQ || skills.includes(skillsQ)
-    const matchInterests = !interestsQ || interests.includes(interestsQ)
-    const matchLanguages = !languagesQ || languages.includes(languagesQ)
+    if (filterType.value === 'company') {
+      return String(m.company || '').toLowerCase().includes(q)
+    }
 
-    return (
-      matchName &&
-      matchCompany &&
-      matchSkills &&
-      matchInterests &&
-      matchLanguages
-    )
+    if (filterType.value === 'skills') {
+      return String(m.skills || '').toLowerCase().includes(q)
+    }
+
+    if (filterType.value === 'interests') {
+      return String(m.interests || '').toLowerCase().includes(q)
+    }
+
+    if (filterType.value === 'languages') {
+      return String(m.languages || '').toLowerCase().includes(q)
+    }
+
+    return true
   })
 })
 
@@ -595,10 +629,51 @@ function onAvatarError(e) {
   background: #ffffff;
 }
 
+.filters-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.filters-btn {
+  background: #6f9979;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filters-panel {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  background: white;
+  border: 1px solid #d8ddd8;
+  border-radius: 12px;
+  padding: 14px;
+  width: 260px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+:dir(rtl) .filters-panel {
+  left: auto;
+  right: 0;
+}
+
+.filter-select,
+.filter-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #d3d9d3;
+  border-radius: 8px;
+}
+
 .filters-actions {
-  margin-top: 12px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 :dir(rtl) .filters-actions {
