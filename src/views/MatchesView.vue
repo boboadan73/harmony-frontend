@@ -9,33 +9,6 @@
           <p class="page-subtitle">{{ t.subtitle }}</p>
         </div>
    
-   
-  <div class="filters-wrapper">
-  <button class="filters-btn" @click="showFilters = !showFilters">
-    🔍 Filters
-  </button>
-
-  <div v-if="showFilters" class="filters-panel">
-    <select v-model="filterType" class="filter-select">
-      <option value="name">Name</option>
-      <option value="company">Company</option>
-      <option value="skills">Skills</option>
-      <option value="interests">Interests</option>
-      <option value="languages">Languages</option>
-    </select>
-
-    <input
-      v-model="filterValue"
-      type="text"
-      class="filter-input"
-      placeholder="Type to filter..."
-    />
-
-    <div class="filters-actions">
-      <button @click="clearFilters">Clear</button>
-    </div>
-  </div>
-</div>
 <div class="filters-bar">
   <button class="filters-toggle" @click="showFilters = !showFilters">
     {{ t.filters }}
