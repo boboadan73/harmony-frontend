@@ -9,11 +9,45 @@
           <p class="page-subtitle">{{ t.subtitle }}</p>
         </div>
    
-<div class="filters-bar">
-  <button class="filters-toggle" @click="showFilters = !showFilters">
-    {{ t.filters }}
-  </button>
+<div class="head-actions">
+  <div class="filters-bar">
+    <button class="filters-toggle" @click="showFilters = !showFilters">
+      {{ t.filters }}
+    </button>
 
+    <div v-if="showFilters" class="filters-dropdown">
+      <select v-model="filterType" class="filters-select">
+        <option value="name">{{ t.searchByName }}</option>
+        <option value="company">{{ t.searchByCompany }}</option>
+        <option value="skills">{{ t.filterBySkills }}</option>
+        <option value="interests">{{ t.filterByInterests }}</option>
+        <option value="languages">{{ t.filterByLanguages }}</option>
+      </select>
+
+      <input
+        v-model="filterValue"
+        class="filters-input"
+        type="text"
+        :placeholder="t.typeHere"
+      />
+
+      <div class="filters-actions">
+        <button class="filters-clear" @click="clearFilters">
+          {{ t.clearFilters }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="language-box">
+    <span class="language-icon" aria-hidden="true">🌐</span>
+    <select class="language-select" v-model="lang">
+      <option value="en">English</option>
+      <option value="ar">Arabic</option>
+      <option value="he">Hebrew</option>
+    </select>
+  </div>
+</div>
   <div v-if="showFilters" class="filters-dropdown">
     <select v-model="filterType" class="filters-select">
       <option value="name">{{ t.searchByName }}</option>
@@ -36,7 +70,6 @@
       </button>
     </div>
   </div>
-</div>
         <div class="language-box">
           <span class="language-icon" aria-hidden="true">🌐</span>
           <select class="language-select" v-model="lang">
@@ -502,6 +535,17 @@ function onAvatarError(e) {
 .title-box {
   min-width: 0;
 }
+.head-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-inline-start: auto;
+  position: relative;
+}
+
+:dir(rtl) .head-actions {
+  flex-direction: row-reverse;
+}
 
 .page-title {
   margin: 0;
@@ -543,13 +587,9 @@ function onAvatarError(e) {
 }
 .filters-bar {
   position: relative;
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 18px;
-}
-
-:dir(rtl) .filters-bar {
-  justify-content: flex-end;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 .filters-toggle {
@@ -569,15 +609,16 @@ function onAvatarError(e) {
 
 .filters-dropdown {
   position: absolute;
-  top: 50px;
+  top: calc(100% + 10px);
   left: 0;
-  width: 280px;
+  width: 320px;
   background: #ffffff;
   border: 1px solid #d8ddd8;
   border-radius: 16px;
   padding: 14px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   z-index: 20;
+  box-sizing: border-box;
 }
 
 :dir(rtl) .filters-dropdown {
@@ -587,7 +628,9 @@ function onAvatarError(e) {
 
 .filters-select,
 .filters-input {
+  display: block;
   width: 100%;
+  max-width: 100%;
   height: 42px;
   border: 1px solid #d3d9d3;
   border-radius: 12px;
@@ -597,6 +640,7 @@ function onAvatarError(e) {
   background: #fafbf9;
   margin-bottom: 10px;
   outline: none;
+  box-sizing: border-box;
 }
 
 .filters-select:focus,
@@ -913,6 +957,23 @@ function onAvatarError(e) {
   .action-btn {
     min-width: 82px;
     font-size: 14px;
+  }
+    .head-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-inline-start: 0;
+  }
+
+  .filters-dropdown {
+    width: 100%;
+    min-width: 260px;
+    left: 0;
+    right: auto;
+  }
+
+  :dir(rtl) .filters-dropdown {
+    right: 0;
+    left: auto;
   }
 }
 </style>
