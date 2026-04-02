@@ -48,36 +48,6 @@
     </select>
   </div>
 </div>
-  <div v-if="showFilters" class="filters-dropdown">
-    <select v-model="filterType" class="filters-select">
-      <option value="name">{{ t.searchByName }}</option>
-      <option value="company">{{ t.searchByCompany }}</option>
-      <option value="skills">{{ t.filterBySkills }}</option>
-      <option value="interests">{{ t.filterByInterests }}</option>
-      <option value="languages">{{ t.filterByLanguages }}</option>
-    </select>
-
-    <input
-      v-model="filterValue"
-      class="filters-input"
-      type="text"
-      :placeholder="t.typeHere"
-    />
-
-    <div class="filters-actions">
-      <button class="filters-clear" @click="clearFilters">
-        {{ t.clearFilters }}
-      </button>
-    </div>
-  </div>
-        <div class="language-box">
-          <span class="language-icon" aria-hidden="true">🌐</span>
-          <select class="language-select" v-model="lang">
-            <option value="en">English</option>
-            <option value="ar">Arabic</option>
-            <option value="he">Hebrew</option>
-          </select>
-        </div>
       </section>
 
       <div v-if="loading" class="state-box">
