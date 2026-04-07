@@ -228,6 +228,14 @@ const TEXTS = {
     privacyUpdated: 'Privacy updated successfully.',
     deleteSuccess: 'Your data was removed successfully.',
     loadError: 'Failed to load profile.',
+    generate: 'Generate Matches',
+    generating: 'Generating...',
+    generateRequiredTitle: 'Generate Matches Required',
+    generateRequiredText: 'Your profile was saved successfully. You must now generate matches to update your recommendations.',
+    generateNow: 'Generate Now',
+    generateSuccess: 'Matches generated successfully.',
+    generateError: 'Failed to generate matches.',
+              
   },
   ar: {
     title: 'الملف الشخصي',
@@ -257,6 +265,13 @@ const TEXTS = {
     privacyUpdated: 'تم تحديث الخصوصية بنجاح.',
     deleteSuccess: 'تم حذف بياناتك بنجاح.',
     loadError: 'فشل تحميل الملف.',
+     generate: 'إنشاء المطابقات',
+    generating: 'جارٍ إنشاء المطابقات...',
+    generateRequiredTitle: 'يجب إنشاء المطابقات',
+   generateRequiredText: 'تم حفظ الملف بنجاح. يجب الآن إنشاء المطابقات لتحديث التوصيات.',
+   generateNow: 'إنشاء الآن',
+   generateSuccess: 'تم إنشاء المطابقات بنجاح.',
+   generateError: 'فشل إنشاء المطابقات.',
   },
   he: {
     title: 'פרופיל',
@@ -286,6 +301,13 @@ const TEXTS = {
     privacyUpdated: 'הפרטיות עודכנה בהצלחה.',
     deleteSuccess: 'המידע שלך נמחק בהצלחה.',
     loadError: 'טעינת הפרופיל נכשלה.',
+    generate: 'צור התאמות מחדש',
+    generating: 'מחשב התאמות...',
+   generateRequiredTitle: 'חובה ליצור התאמות מחדש',
+  generateRequiredText: 'הפרופיל נשמר בהצלחה. עכשיו חייבים ליצור התאמות מחדש כדי לעדכן את ההמלצות.',
+  generateNow: 'צור עכשיו',
+  generateSuccess: 'ההתאמות נוצרו בהצלחה.',
+   generateError: 'יצירת ההתאמות נכשלה.',
   },
 }
 
