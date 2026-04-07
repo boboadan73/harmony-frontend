@@ -378,19 +378,19 @@ async function loadProfile() {
   successMsg.value = ''
 
   try {
-    const res = await fetch(buildSystemApiUrl(`/api/participants/p${pid.value}`))
+    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}`))
     if (!res.ok) throw new Error('load failed')
 
     const data = await res.json()
     profile.value = {
       id: data.id || '',
       name: data.name || '',
-      phone: data.phone || '',
-      job: data.job || '',
-      academic: data.academic || '',
-      professional: data.professional || '',
-      personal: data.personal || '',
-      image: data.image || '',
+      phone: data.phoneNumber || '',
+      job: data.jobTitle || '',
+      academic: data.academicResume || '',
+      professional: data.professionalResume || '',
+      personal: data.personalResume || '',
+      image: data.photoUrl || '',
       hidden: Boolean(data.hidden),
     }
 
@@ -435,15 +435,23 @@ async function saveProfile() {
     const isNew = isNewParticipant.value
 
     const url = isNew
-      ? buildSystemApiUrl('/api/participants')
-      : buildSystemApiUrl(`/api/participants/p${pid.value}`)
+      ? buildSystemApiUrl('/api/eventParticipants')
+      : buildSystemApiUrl(`/api/eventParticipants/${pid.value}`)
 
     const method = isNew ? 'POST' : 'PUT'
 
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form.value),
+      body: JSON.stringify({
+  name: form.value.name,
+  phoneNumber: form.value.phone,
+  jobTitle: form.value.job,
+  academicResume: form.value.academic,
+  professionalResume: form.value.professional,
+  personalResume: form.value.personal,
+  photoUrl: form.value.image,
+}),
     })
 
     const text = await res.text()
@@ -458,12 +466,12 @@ async function saveProfile() {
     profile.value = {
       id: participant.id || '',
       name: participant.name || '',
-      phone: participant.phone || '',
-      job: participant.job || '',
-      academic: participant.academic || '',
-      professional: participant.professional || '',
-      personal: participant.personal || '',
-      image: participant.image || '',
+      phone: participant.phoneNumber || '',
+job: participant.jobTitle || '',
+academic: participant.academicResume || '',
+professional: participant.professionalResume || '',
+personal: participant.personalResume || '',
+image: participant.photoUrl || '',
       hidden: Boolean(participant.hidden),
     }
 
@@ -494,7 +502,7 @@ async function togglePrivacy() {
   successMsg.value = ''
 
   try {
-    const res = await fetch(buildSystemApiUrl(`/api/participants/p${pid.value}/privacy`), {
+    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}/privacy`), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ hidden: !profile.value.hidden }),
@@ -525,7 +533,7 @@ async function deleteMyData() {
   successMsg.value = ''
 
   try {
-    const res = await fetch(buildSystemApiUrl(`/api/participants/p${pid.value}`), {
+    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}`), {
       method: 'DELETE',
     })
 
