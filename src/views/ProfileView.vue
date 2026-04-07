@@ -172,9 +172,13 @@
           <h3 class="popupTitle">{{ t.generateRequiredTitle }}</h3>
           <p class="popupText">{{ t.generateRequiredText }}</p>
 
-          <button class="btn" :disabled="generating" @click="generateMatches">
-            {{ generating ? t.generating : t.generateNow }}
-          </button>
+          <button
+  class="generateBtn"
+  :disabled="generating"
+  @click="generateMatches"
+>
+  {{ generating ? t.generating : t.generateNow }}
+</button>
         </div>
       </div>
     </div>
@@ -868,7 +872,7 @@ watch(pid, loadProfile, { immediate: true })
 
 .popupCard{
   width: 100%;
-  max-width: 460px;
+  max-width: 360px;
   border-radius: 18px;
   padding: 24px;
   background: white;
