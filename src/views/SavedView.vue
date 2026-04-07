@@ -176,11 +176,10 @@ async function fetchSavedMatches() {
   }
 
   try {
-    const savedRes = await fetch(buildApiUrl(`/api/saved/${pid}`))
+    const savedRes = await fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved`))
     if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
-    const savedIds = await savedRes.json()
-    const savedIdsSet = new Set((savedIds || []).map(String))
-
+   const savedData = await savedRes.json()
+const savedIdsSet = new Set(((savedData?.saved) || []).map(String))
     const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
@@ -196,8 +195,11 @@ async function fetchSavedMatches() {
         whyMatched: r?.reason ?? '',
         whyMatched_en: r?.reason_en ?? '',
         whyMatched_he: r?.reason_he ?? '',
-        avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
-      }))
+avatar:
+  (r?.image && String(r.image).trim()) ||
+  (r?.photoUrl && String(r.photoUrl).trim()) ||
+  (r?.imageUrl && String(r.imageUrl).trim()) ||
+  placeholderAvatar      }))
       .filter(m => savedIdsSet.has(String(m.id)))
   } catch {
     allSavedMatches.value = []
@@ -213,19 +215,16 @@ const savedMatches = computed(() => allSavedMatches.value)
 async function unsave(m) {
   const pid = participantId()
 
-  await fetch(buildApiUrl('/api/save'), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      userId: pid,
-      targetId: String(m.id),
-      remove: true
-    })
+  const url = buildApiUrl(
+    `/api/eventParticipants/${pid}/save/${m.id}`
+  )
+
+  await fetch(url, {
+    method: 'DELETE'
   })
 
-  allSavedMatches.value = allSavedMatches.value.filter(x => String(x.id) !== String(m.id))
+  allSavedMatches.value =
+    allSavedMatches.value.filter(x => String(x.id) !== String(m.id))
 }
 
 function onAvatarError(e) {
