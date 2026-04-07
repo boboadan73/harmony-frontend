@@ -165,6 +165,17 @@
         </div>
 
         <div class="spacerBottom"></div>
+         </div>
+
+      <div v-if="showGeneratePopup" class="popupOverlay">
+        <div class="popupCard">
+          <h3 class="popupTitle">{{ t.generateRequiredTitle }}</h3>
+          <p class="popupText">{{ t.generateRequiredText }}</p>
+
+          <button class="btn" :disabled="generating" @click="generateMatches">
+            {{ generating ? t.generating : t.generateNow }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -499,13 +510,15 @@ image: participant.photoUrl || '',
       hidden: Boolean(participant.hidden),
     }
 
-    fillFormFromProfile()
-    imageVersion.value = Date.now()
-    isEditing.value = false
-    successMsg.value = t.value.saveSuccess
+   fillFormFromProfile()
+imageVersion.value = Date.now()
+isEditing.value = false
+successMsg.value = t.value.saveSuccess
 
-    localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
-    localStorage.setItem('harmony_matches_refresh_needed', '1')
+localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
+localStorage.setItem('harmony_matches_refresh_needed', '1')
+
+showGeneratePopup.value = true
 
     if (isNew && participant.id) {
       const cleanId = String(participant.id).replace(/^p/, '')
@@ -519,7 +532,31 @@ image: participant.photoUrl || '',
     saving.value = false
   }
 }
+async function generateMatches() {
+  generating.value = true
+  errorMsg.value = ''
+  successMsg.value = ''
 
+  try {
+    // כאן יהיה ה-route של matching backend
+    // לדוגמה:
+    // const res = await fetch(buildMatchingApiUrl(`/api/matching/generate/${pid.value}`), {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    // })
+
+    // כרגע רק שלד עד שהשותפות ישלחו route
+    console.log('Generate matches for participant:', pid.value)
+
+    successMsg.value = t.value.generateSuccess
+    showGeneratePopup.value = false
+    localStorage.setItem('harmony_matches_refresh_needed', '1')
+  } catch (error) {
+    errorMsg.value = error?.message || t.value.generateError
+  } finally {
+    generating.value = false
+  }
+}
 async function togglePrivacy() {
   savingPrivacy.value = true
   errorMsg.value = ''
