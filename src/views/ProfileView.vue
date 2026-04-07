@@ -172,7 +172,7 @@
           <h3 class="popupTitle">{{ t.generateRequiredTitle }}</h3>
           <p class="popupText">{{ t.generateRequiredText }}</p>
 
-          <button
+<button
   class="generateBtn"
   :disabled="generating"
   @click="generateMatches"
@@ -892,6 +892,32 @@ watch(pid, loadProfile, { immediate: true })
   margin: 0 0 20px;
   color: var(--h-text);
   line-height: 1.6;
+}
+                  .generateBtn {
+  min-width: 180px;            /* יותר גדול */
+  height: 44px;                /* יותר גבוה */
+  padding: 0 24px;
+
+  border: 2px solid #2f6b4f;   /* קו ירוק כמו במערכת */
+  background: #e6f2ec;         /* ירוק בהיר */
+  color: #1f3f32;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  border-radius: 999px;        /* עגול */
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+.generateBtn:hover {
+  background: #d6e8df;   /* קצת יותר כהה */
+  transform: translateY(-1px);
+}
+.generateBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 @media (max-width: 700px) {
