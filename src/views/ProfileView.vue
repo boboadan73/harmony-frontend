@@ -322,6 +322,8 @@ const isEditing = ref(false)
 const errorMsg = ref('')
 const successMsg = ref('')
 const imageVersion = ref(Date.now())
+const generating = ref(false)
+const showGeneratePopup = ref(false)
 
 const profile = ref({
   id: '',
