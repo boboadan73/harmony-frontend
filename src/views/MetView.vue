@@ -177,11 +177,10 @@ async function fetchMetMatches() {
   }
 
   try {
-    const metRes = await fetch(buildApiUrl(`/api/met/${pid}`))
+    const metRes = await fetch(buildApiUrl(`/api/eventParticipants/${pid}/met`))
     if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
-    const metIds = await metRes.json()
-    const metIdsSet = new Set((metIds || []).map(String))
-
+    const metData = await metRes.json()
+const metIdsSet = new Set(((metData?.met) || []).map(String))
     const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
     if (!res.ok) throw new Error(`API error: ${res.status}`)
     const data = await res.json()
@@ -197,7 +196,11 @@ async function fetchMetMatches() {
         whyMatched: r?.reason ?? '',
         whyMatched_en: r?.reason_en ?? '',
         whyMatched_he: r?.reason_he ?? '',
-        avatar: (r?.imageUrl && String(r.imageUrl).trim()) ? r.imageUrl : placeholderAvatar,
+avatar:
+  (r?.image && String(r.image).trim()) ||
+  (r?.photoUrl && String(r.photoUrl).trim()) ||
+  (r?.imageUrl && String(r.imageUrl).trim()) ||
+  placeholderAvatar
       }))
       .filter(m => metIdsSet.has(String(m.id)))
   } catch {
@@ -215,19 +218,20 @@ const metMatches = computed(() => allMetMatches.value)
 async function unmarkMet(m) {
   const pid = participantId()
 
-  await fetch(buildApiUrl('/api/met'), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      userId: pid,
-      targetId: String(m.id),
-      remove: true
-    })
+  const url = buildApiUrl(
+    `/api/eventParticipants/${pid}/met/${m.id}`
+  )
+
+  const res = await fetch(url, {
+    method: 'DELETE'
   })
 
-  allMetMatches.value = allMetMatches.value.filter(x => String(x.id) !== String(m.id))
+  if (!res.ok) {
+    throw new Error(`API error: ${res.status}`)
+  }
+
+  allMetMatches.value =
+    allMetMatches.value.filter(x => String(x.id) !== String(m.id))
 }
 
 function onAvatarError(e) {
