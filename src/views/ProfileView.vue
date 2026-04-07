@@ -855,6 +855,40 @@ watch(pid, loadProfile, { immediate: true })
 }
 
 .spacerBottom{ height: 10px; }
+  .popupOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.popupCard{
+  width: 100%;
+  max-width: 460px;
+  border-radius: 18px;
+  padding: 24px;
+  background: white;
+  border: 2px solid #2f6b4f;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+  text-align: center;
+}
+
+.popupTitle{
+  margin: 0 0 12px;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--h-green-700);
+}
+
+.popupText{
+  margin: 0 0 20px;
+  color: var(--h-text);
+  line-height: 1.6;
+}
 
 @media (max-width: 700px) {
   .fieldsGrid{
