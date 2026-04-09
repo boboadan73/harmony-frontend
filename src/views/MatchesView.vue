@@ -433,9 +433,7 @@ async function save(m) {
   const pid = participantId()
 
   try {
-    const url = buildApiUrl(
-      `/api/eventParticipants/${pid}/save/${m.id}`
-    )
+ const url = buildApiUrl(`/api/eventParticipants/${pid}/save/${m.id}?eventId=${eventId.value}`)
 
     const res = await fetch(url, {
       method: m.saved ? 'DELETE' : 'POST'
@@ -453,10 +451,7 @@ async function markMet(m) {
   const pid = participantId()
 
   try {
-    const url = buildApiUrl(
-      `/api/eventParticipants/${pid}/met/${m.id}`
-    )
-
+ const url = buildApiUrl(`/api/eventParticipants/${pid}/met/${m.id}?eventId=${eventId.value}`)
     const res = await fetch(url, {
       method: m.met ? 'DELETE' : 'POST'
     })
