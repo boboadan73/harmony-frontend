@@ -80,11 +80,22 @@ import defaultAvatar from '@/assets/default-avatar.png'
 
 const route = useRoute()
 
+const eventId = computed(() =>
+  String(route.params.eventId || localStorage.getItem('harmony_eventId') || '').trim()
+)
+
+watch(
+  eventId,
+  v => {
+    if (v) localStorage.setItem('harmony_eventId', v)
+  },
+  { immediate: true }
+)
+
 /* ===== Language ===== */
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 watch(lang, v => localStorage.setItem(LANG_KEY, v), { immediate: true })
-
 const TEXTS = {
   en: {
     title: 'Saved',
