@@ -65,7 +65,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { authStore } from '@/store/authStore'
 import { buildApiUrl } from '@/services/api'
 
@@ -73,6 +73,8 @@ import { buildApiUrl } from '@/services/api'
 
 
 const router = useRouter()
+const route = useRoute()
+const eventId = computed(() => String(route.params.eventId || '').trim())
 const phone = ref('')
 const phoneTouched = ref(false)
 const errorMessage = ref('')
@@ -82,6 +84,15 @@ const errorMessage = ref('')
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
 watch(lang, v => localStorage.setItem(LANG_KEY, v), { immediate: true })
+watch(
+  eventId,
+  (v) => {
+    if (v) {
+      localStorage.setItem('harmony_eventId', v)
+    }
+  },
+  { immediate: true }
+)
 
 const privacyText = {
   en: 'By continuing, you agree to the Privacy Policy. Your data will only be used for networking recommendations during the event.',
@@ -149,6 +160,10 @@ async function loginAndRoute(targetRoute) {
     errorMessage.value = t.value.phoneError
     return
   }
+  if (!eventId.value) {
+  errorMessage.value = 'Missing eventId in URL'
+  return
+}
 
   const enteredPhone = normalizePhone(phone.value)
 
@@ -160,7 +175,10 @@ async function loginAndRoute(targetRoute) {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: enteredPhone }),
+      body: JSON.stringify({
+  phone: enteredPhone,
+  eventId: eventId.value,
+}),
     })
 
     const rawText = await res.text()
@@ -186,8 +204,9 @@ const pid = data?.participantId ? String(data.participantId).trim() : ''
     authStore.phone = enteredPhone
     authStore.isLoggedIn = true
     localStorage.setItem('harmony_pid', pid)
+    localStorage.setItem('harmony_eventId', eventId.value)
 
-    router.push(`/${targetRoute}/${pid}`)
+    router.push(`/event/${eventId.value}/${targetRoute}/${pid}`)
   } catch (err) {
     console.error('LOGIN ERROR:', err)
     errorMessage.value = err.message || t.value.loginError
@@ -198,7 +217,11 @@ async function continueLogin() {
   await loginAndRoute('matches')
 }
 async function goToRegister() {
-  router.push('/profile/new')
+  router.push(`/event/${eventId.value}/profile/new`)
+}
+  //להוריד אחר כך
+  async function goToRegister() {
+  console.log('register route not updated yet')
 }
 
 </script>
