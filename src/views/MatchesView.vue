@@ -351,11 +351,11 @@ if (!pid || !eventId.value) return
   errorMsg.value = ''
 
   try {
-    const [matchRes, savedRes, metRes] = await Promise.all([
-      fetch(buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`))
-      fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`))
-      fetch(buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`))
-    ])
+const [matchRes, savedRes, metRes] = await Promise.all([
+  fetch(buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`)),
+  fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`)),
+  fetch(buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`)),
+])
 
     if (!matchRes.ok) throw new Error(`API error: ${matchRes.status}`)
     if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
