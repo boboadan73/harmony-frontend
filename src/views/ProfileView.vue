@@ -192,8 +192,11 @@ import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
                   
-const eventId = computed(() => String(route.params.eventId || '').trim())
 const route = useRoute()
+
+const eventId = computed(() =>
+  String(route.params.eventId || localStorage.getItem('harmony_eventId') || '').trim()
+)
 const isNewParticipant = computed(() => String(route.params.id || '').trim() === 'new')
 const pid = computed(() => {
   const routeId = String(route.params.id || '').trim()
