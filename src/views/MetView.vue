@@ -79,6 +79,17 @@ import { buildApiUrl, buildMatchApiUrl } from '@/services/api'
 import defaultAvatar from '@/assets/default-avatar.png'
 
 const route = useRoute()
+const eventId = computed(() =>
+  String(route.params.eventId || localStorage.getItem('harmony_eventId') || '').trim()
+)
+
+watch(
+  eventId,
+  v => {
+    if (v) localStorage.setItem('harmony_eventId', v)
+  },
+  { immediate: true }
+)
 
 /* ===== Language ===== */
 const LANG_KEY = 'harmony_lang'
@@ -168,23 +179,29 @@ function normalizeResponse(data) {
   if (data && Array.isArray(data.matches)) return data.matches
   return []
 }
-
 async function fetchMetMatches() {
   const pid = participantId()
-  if (!pid) {
+
+  if (!pid || !eventId.value) {
     allMetMatches.value = []
     return
   }
 
   try {
-    const metRes = await fetch(buildApiUrl(`/api/eventParticipants/${pid}/met`))
+    const metRes = await fetch(
+      buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`)
+    )
     if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
-    const metData = await metRes.json()
-const metIdsSet = new Set(((metData?.met) || []).map(String))
-    const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
-    if (!res.ok) throw new Error(`API error: ${res.status}`)
-    const data = await res.json()
 
+    const metData = await metRes.json()
+    const metIdsSet = new Set(((metData?.met) || []).map(String))
+
+    const res = await fetch(
+      buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`)
+    )
+    if (!res.ok) throw new Error(`API error: ${res.status}`)
+
+    const data = await res.json()
     const raw = normalizeResponse(data)
 
     allMetMatches.value = raw
@@ -196,11 +213,11 @@ const metIdsSet = new Set(((metData?.met) || []).map(String))
         whyMatched: r?.reason ?? '',
         whyMatched_en: r?.reason_en ?? '',
         whyMatched_he: r?.reason_he ?? '',
-avatar:
-  (r?.image && String(r.image).trim()) ||
-  (r?.photoUrl && String(r.photoUrl).trim()) ||
-  (r?.imageUrl && String(r.imageUrl).trim()) ||
-  placeholderAvatar
+        avatar:
+          (r?.image && String(r.image).trim()) ||
+          (r?.photoUrl && String(r.photoUrl).trim()) ||
+          (r?.imageUrl && String(r.imageUrl).trim()) ||
+          placeholderAvatar
       }))
       .filter(m => metIdsSet.has(String(m.id)))
   } catch {
@@ -210,7 +227,10 @@ avatar:
 
 onMounted(fetchMetMatches)
 
-watch(() => route.params.id, () => fetchMetMatches())
+watch(
+  () => [route.params.id, route.params.eventId],
+  () => fetchMetMatches()
+)
 watch(lang, () => fetchMetMatches())
 
 const metMatches = computed(() => allMetMatches.value)
@@ -219,8 +239,8 @@ async function unmarkMet(m) {
   const pid = participantId()
 
   const url = buildApiUrl(
-    `/api/eventParticipants/${pid}/met/${m.id}`
-  )
+  `/api/eventParticipants/${pid}/met/${m.id}?eventId=${eventId.value}`
+)
 
   const res = await fetch(url, {
     method: 'DELETE'
