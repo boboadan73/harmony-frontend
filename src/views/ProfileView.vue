@@ -492,7 +492,8 @@ async function saveProfile() {
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+   body: JSON.stringify({
+  eventId: eventId.value,
   name: form.value.name,
   phoneNumber: form.value.phone,
   jobTitle: form.value.job,
@@ -577,11 +578,14 @@ async function togglePrivacy() {
   successMsg.value = ''
 
   try {
-    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}/privacy`), {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ hidden: !profile.value.hidden }),
-    })
+    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}/privacy?eventId=${eventId.value}`), {
+  method: 'PATCH',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    hidden: !profile.value.hidden,
+    eventId: eventId.value
+  }),
+})
 
     if (!res.ok) throw new Error('privacy failed')
 
@@ -608,9 +612,9 @@ async function deleteMyData() {
   successMsg.value = ''
 
   try {
-    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}`), {
-      method: 'DELETE',
-    })
+    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`), {
+  method: 'DELETE',
+})
 
     if (!res.ok) throw new Error('delete failed')
 
