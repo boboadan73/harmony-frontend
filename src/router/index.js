@@ -18,41 +18,53 @@ function getStoredPid() {
 
   return hasValidPid ? pid : ''
 }
+function getStoredEventId() {
+  if (typeof window === 'undefined') return ''
 
+  const eventId = String(localStorage.getItem('harmony_eventId') || '').trim()
+
+  const hasValidEventId =
+    eventId !== '' &&
+    eventId !== 'null' &&
+    eventId !== 'undefined'
+
+  return hasValidEventId ? eventId : ''
+}
 const withPidOrLogin = (base) => {
   const pid = getStoredPid()
-  return pid ? `/${base}/${pid}` : '/login'
+  const eventId = getStoredEventId()
+
+  return pid && eventId ? `/event/${eventId}/${base}/${pid}` : '/event/default/login'
 }
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/login' },
-    { path: '/login', component: LoginView },
+  { path: '/', redirect: '/event/default/login' },
 
-    { path: '/matches', redirect: () => withPidOrLogin('matches') },
-    { path: '/saved', redirect: () => withPidOrLogin('saved') },
-    { path: '/met', redirect: () => withPidOrLogin('met') },
-    { path: '/profile', redirect: () => withPidOrLogin('profile') },
+  { path: '/event/:eventId/login', component: LoginView },
 
-    { path: '/matches/:id', component: MatchesView },
-    { path: '/saved/:id', component: SavedView },
-    { path: '/met/:id', component: MetView },
-    { path: '/profile/:id', component: ProfileView },
-    
-  ],
+  { path: '/matches', redirect: () => withPidOrLogin('matches') },
+  { path: '/saved', redirect: () => withPidOrLogin('saved') },
+  { path: '/met', redirect: () => withPidOrLogin('met') },
+  { path: '/profile', redirect: () => withPidOrLogin('profile') },
+
+  { path: '/event/:eventId/matches/:id', component: MatchesView },
+  { path: '/event/:eventId/saved/:id', component: SavedView },
+  { path: '/event/:eventId/met/:id', component: MetView },
+  { path: '/event/:eventId/profile/:id', component: ProfileView },
+],
 })
 
 router.beforeEach((to, from, next) => {
   const pid = getStoredPid()
 
   const isPublicPage =
-    to.path === '/login' ||
-    to.path === '/register' ||
-    to.path === '/profile/new'
+    to.path.startsWith('/event/') && to.path.endsWith('/login')
 
   if (!isPublicPage && !pid) {
-    return next('/login')
+    const eventId = getStoredEventId() || 'default'
+    return next(`/event/${eventId}/login`)
   }
 
   next()
