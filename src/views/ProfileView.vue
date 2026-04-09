@@ -425,7 +425,9 @@ async function loadProfile() {
   successMsg.value = ''
 
   try {
-    const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}`))
+    const res = await fetch(
+  buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`)
+)
     if (!res.ok) throw new Error('load failed')
 
     const data = await res.json()
