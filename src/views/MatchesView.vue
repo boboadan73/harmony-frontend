@@ -344,8 +344,8 @@ avatar:
 }
 
 async function fetchMatches() {
-  const pid = participantId()
-  if (!pid) return
+ const pid = participantId()
+if (!pid || !eventId.value) return
 
   loading.value = true
   errorMsg.value = ''
@@ -353,8 +353,8 @@ async function fetchMatches() {
   try {
     const [matchRes, savedRes, metRes] = await Promise.all([
       fetch(buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`))
-      fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved`)),
-      fetch(buildApiUrl(`/api/eventParticipants/${pid}/met`)),
+      fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`))
+      fetch(buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`))
     ])
 
     if (!matchRes.ok) throw new Error(`API error: ${matchRes.status}`)
