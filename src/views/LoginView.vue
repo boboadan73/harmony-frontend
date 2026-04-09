@@ -74,7 +74,13 @@ import { buildApiUrl } from '@/services/api'
 
 const router = useRouter()
 const route = useRoute()
-const eventId = computed(() => String(route.params.eventId || '').trim())
+const eventId = computed(() =>
+  String(
+    route.params.eventId ||
+    localStorage.getItem('harmony_eventId') ||
+    ''
+  ).trim()
+)
 const phone = ref('')
 const phoneTouched = ref(false)
 const errorMessage = ref('')
@@ -219,10 +225,7 @@ async function continueLogin() {
 async function goToRegister() {
   router.push(`/event/${eventId.value}/profile/new`)
 }
-  //להוריד אחר כך
-  async function goToRegister() {
-  console.log('register route not updated yet')
-}
+
 
 </script>
 
