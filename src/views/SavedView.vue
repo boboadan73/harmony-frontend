@@ -226,7 +226,10 @@ async function fetchSavedMatches() {
 }
 
 onMounted(fetchSavedMatches)
-watch(() => route.params.id, () => fetchSavedMatches())
+watch(
+  () => [route.params.id, route.params.eventId],
+  () => fetchSavedMatches()
+)
 watch(lang, () => fetchSavedMatches())
 
 const savedMatches = computed(() => allSavedMatches.value)
