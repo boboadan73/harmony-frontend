@@ -541,8 +541,7 @@ showGeneratePopup.value = true
     if (isNew && participant.id) {
       const cleanId = String(participant.id).replace(/^p/, '')
       localStorage.setItem('harmony_pid', cleanId)
-      window.location.href = `/matches/${cleanId}`
-      return
+     window.location.href = `/event/${eventId.value}/matches/${cleanId}`
     }
   } catch (error) {
     errorMsg.value = error?.message || 'Save failed'
