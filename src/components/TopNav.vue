@@ -94,7 +94,7 @@ const open = ref(false)
 function logout() {
   localStorage.removeItem('harmony_pid')
   open.value = false
-  router.push('/login')
+  router.push(`/event/${eventId.value}/login`)
 }
 
 const isRtl = computed(() => props.lang === 'he' || props.lang === 'ar')
