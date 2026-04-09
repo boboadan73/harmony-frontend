@@ -150,6 +150,9 @@ import { buildApiUrl, buildMatchApiUrl } from '@/services/api'
 import defaultAvatar from '@/assets/default-avatar.png'
 
 const route = useRoute()
+const eventId = computed(() =>
+  String(route.params.eventId || localStorage.getItem('harmony_eventId') || '').trim()
+)
 const showFilters = ref(false)
 
 const filterType = ref('name') // name | company | skills | interests | languages
@@ -166,6 +169,13 @@ watch(
     if (v !== prev) {
       fetchMatches()
     }
+  },
+  { immediate: true }
+)
+  watch(
+  eventId,
+  v => {
+    if (v) localStorage.setItem('harmony_eventId', v)
   },
   { immediate: true }
 )
