@@ -352,7 +352,7 @@ async function fetchMatches() {
 
   try {
     const [matchRes, savedRes, metRes] = await Promise.all([
-      fetch(buildMatchApiUrl(`/api/match/${pid}`)),
+      fetch(buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`))
       fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved`)),
       fetch(buildApiUrl(`/api/eventParticipants/${pid}/met`)),
     ])
