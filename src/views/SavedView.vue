@@ -181,20 +181,27 @@ function normalizeResponse(data) {
 
 async function fetchSavedMatches() {
   const pid = participantId()
-  if (!pid) {
+
+  if (!pid || !eventId.value) {
     allSavedMatches.value = []
     return
   }
 
   try {
-    const savedRes = await fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved`))
+    const savedRes = await fetch(
+      buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`)
+    )
     if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
-   const savedData = await savedRes.json()
-const savedIdsSet = new Set(((savedData?.saved) || []).map(String))
-    const res = await fetch(buildMatchApiUrl(`/api/match/${pid}`))
-    if (!res.ok) throw new Error(`API error: ${res.status}`)
-    const data = await res.json()
 
+    const savedData = await savedRes.json()
+    const savedIdsSet = new Set(((savedData?.saved) || []).map(String))
+
+    const res = await fetch(
+      buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`)
+    )
+    if (!res.ok) throw new Error(`API error: ${res.status}`)
+
+    const data = await res.json()
     const raw = normalizeResponse(data)
 
     allSavedMatches.value = raw
@@ -206,11 +213,12 @@ const savedIdsSet = new Set(((savedData?.saved) || []).map(String))
         whyMatched: r?.reason ?? '',
         whyMatched_en: r?.reason_en ?? '',
         whyMatched_he: r?.reason_he ?? '',
-avatar:
-  (r?.image && String(r.image).trim()) ||
-  (r?.photoUrl && String(r.photoUrl).trim()) ||
-  (r?.imageUrl && String(r.imageUrl).trim()) ||
-  placeholderAvatar      }))
+        avatar:
+          (r?.image && String(r.image).trim()) ||
+          (r?.photoUrl && String(r.photoUrl).trim()) ||
+          (r?.imageUrl && String(r.imageUrl).trim()) ||
+          placeholderAvatar
+      }))
       .filter(m => savedIdsSet.has(String(m.id)))
   } catch {
     allSavedMatches.value = []
@@ -227,7 +235,7 @@ async function unsave(m) {
   const pid = participantId()
 
   const url = buildApiUrl(
-    `/api/eventParticipants/${pid}/save/${m.id}`
+    `/api/eventParticipants/${pid}/save/${m.id}?eventId=${eventId.value}`
   )
 
   await fetch(url, {
