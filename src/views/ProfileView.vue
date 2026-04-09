@@ -191,7 +191,8 @@ import defaultAvatar from '@/assets/default-avatar.png'
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import TopNav from '@/components/TopNav.vue'
-
+                  
+const eventId = computed(() => String(route.params.eventId || '').trim())
 const route = useRoute()
 const isNewParticipant = computed(() => String(route.params.id || '').trim() === 'new')
 const pid = computed(() => {
@@ -206,6 +207,13 @@ watch(
   pid,
   v => {
     if (v) localStorage.setItem('harmony_pid', v)
+  },
+  { immediate: true }
+)
+watch(
+  eventId,
+  v => {
+    if (v) localStorage.setItem('harmony_eventId', v)
   },
   { immediate: true }
 )
