@@ -108,7 +108,7 @@ const privacyText = {
 
 const TEXTS = {
   en: {
-    subtitle: 'Sign in  view your matches',
+    subtitle: 'Sign in to view your matches',
     language: 'Language',
     phone: 'Participant Phone Number',
     phonePlaceholder: '',
