@@ -28,21 +28,37 @@
         </div>
 
         <nav class="drawerNav">
-          <router-link :to="pidStr ? `/matches/${pidStr}` : '/login'" class="item" @click="open = false">
-            {{ t.matches }}
-          </router-link>
+          <router-link
+  :to="pidStr ? `/event/${eventId}/matches/${pidStr}` : `/event/${eventId}/login`"
+  class="item"
+  @click="open = false"
+>
+  {{ t.matches }}
+</router-link>
 
-          <router-link :to="pidStr ? `/profile/${pidStr}` : '/login'" class="item" @click="open = false">
-            {{ t.profile }}
-          </router-link>
+<router-link
+  :to="pidStr ? `/event/${eventId}/profile/${pidStr}` : `/event/${eventId}/login`"
+  class="item"
+  @click="open = false"
+>
+  {{ t.profile }}
+</router-link>
 
-          <router-link :to="pidStr ? `/met/${pidStr}` : '/login'" class="item" @click="open = false">
-            {{ t.met }}
-          </router-link>
+<router-link
+  :to="pidStr ? `/event/${eventId}/met/${pidStr}` : `/event/${eventId}/login`"
+  class="item"
+  @click="open = false"
+>
+  {{ t.met }}
+</router-link>
 
-          <router-link :to="pidStr ? `/saved/${pidStr}` : '/login'" class="item" @click="open = false">
-            {{ t.saved }}
-          </router-link>
+<router-link
+  :to="pidStr ? `/event/${eventId}/saved/${pidStr}` : `/event/${eventId}/login`"
+  class="item"
+  @click="open = false"
+>
+  {{ t.saved }}
+</router-link>
         </nav>
       </aside>
     </div>
@@ -61,6 +77,18 @@ const props = defineProps({
 
 const route = useRoute()
 const router = useRouter()
+const eventId = computed(() =>
+  String(route.params.eventId || localStorage.getItem('harmony_eventId') || '').trim()
+)
+
+watch(
+  () => route.params.eventId,
+  (v) => {
+    const eid = String(v || '').trim()
+    if (eid) localStorage.setItem('harmony_eventId', eid)
+  },
+  { immediate: true }
+)
 const open = ref(false)
 
 function logout() {
