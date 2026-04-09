@@ -486,9 +486,9 @@ async function saveProfile() {
 
     const isNew = isNewParticipant.value
 
-    const url = isNew
-      ? buildSystemApiUrl('/api/eventParticipants')
-      : buildSystemApiUrl(`/api/eventParticipants/${pid.value}`)
+  const url = isNew
+  ? buildSystemApiUrl('/api/eventParticipants')
+  : buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`)
 
     const method = isNew ? 'POST' : 'PUT'
 
