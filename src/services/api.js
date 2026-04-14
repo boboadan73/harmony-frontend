@@ -6,7 +6,6 @@ export const MATCH_API_BASE_URL =
 
 // ✅ הוספה – בשביל ProfileView
 export const API_BASE_URL = SYSTEM_API_BASE_URL
-import { buildSystemApiUrl, buildMatchApiUrl } from '@/services/api'
 // ===== SYSTEM =====
 export function buildSystemApiUrl(path) {
   if (!path) return SYSTEM_API_BASE_URL
