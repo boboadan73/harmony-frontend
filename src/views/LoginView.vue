@@ -171,7 +171,7 @@ async function loginAndRoute(targetRoute) {
   return
 }
 
-  const enteredPhone = normalizePhone(phone.value)
+  const enteredPhone = phone.value
 
   try {
     const url = buildApiUrl('/api/auth/phone-login')
@@ -182,7 +182,7 @@ async function loginAndRoute(targetRoute) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-  phone: enteredPhone,
+  phone: phone.value,
   eventId: eventId.value,
 }),
     })
@@ -207,7 +207,7 @@ const pid = data?.participantId ? String(data.participantId).trim() : ''
   throw new Error('Login failed: missing participantId')
 }
 
-    authStore.phone = enteredPhone
+    authStore.phone = phone.value
     authStore.isLoggedIn = true
     localStorage.setItem('harmony_pid', pid)
     localStorage.setItem('harmony_eventId', eventId.value)
