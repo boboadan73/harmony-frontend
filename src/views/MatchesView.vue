@@ -345,50 +345,75 @@ avatar:
 }
 
 async function fetchMatches() {
- const pid = participantId()
-if (!pid || !eventId.value) return
+  const pid = participantId()
+  if (!pid || !eventId.value) return
 
   loading.value = true
   errorMsg.value = ''
 
   try {
+    const matchUrl = buildMatchApiUrl(`/api/match/${eventId.value}/${pid}`)
+    const savedUrl = buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`)
+    const metUrl = buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`)
+    const skippedUrl = buildApiUrl(`/api/eventParticipants/${pid}/skipped?eventId=${eventId.value}`)
 
+    console.log("matchUrl:", matchUrl)
+    console.log("savedUrl:", savedUrl)
+    console.log("metUrl:", metUrl)
+    console.log("skippedUrl:", skippedUrl)
 
-   const [matchRes, savedRes, metRes, skippedRes] = await Promise.all([
-  fetch(buildMatchApiUrl(`/api/match/${eventId.value}/${pid}`)),
-  fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`)),
-  fetch(buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`)),
-  fetch(buildApiUrl(`/api/eventParticipants/${pid}/skipped?eventId=${eventId.value}`)),
-])
+    const matchRes = await fetch(matchUrl)
+    console.log("matchRes status:", matchRes.status)
+    if (!matchRes.ok) {
+      const txt = await matchRes.text()
+      throw new Error(`match failed: ${matchRes.status} - ${txt}`)
+    }
 
-if (!matchRes.ok) throw new Error(`API error: ${matchRes.status}`)
-if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
-if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
-if (!skippedRes.ok) throw new Error(`API error: ${skippedRes.status}`)
+    const savedRes = await fetch(savedUrl)
+    console.log("savedRes status:", savedRes.status)
+    if (!savedRes.ok) {
+      const txt = await savedRes.text()
+      throw new Error(`saved failed: ${savedRes.status} - ${txt}`)
+    }
 
-const [matchData, savedData, metData, skippedData] = await Promise.all([
-  matchRes.json(),
-  savedRes.json(),
-  metRes.json(),
-  skippedRes.json(),
-])
+    const metRes = await fetch(metUrl)
+    console.log("metRes status:", metRes.status)
+    if (!metRes.ok) {
+      const txt = await metRes.text()
+      throw new Error(`met failed: ${metRes.status} - ${txt}`)
+    }
 
-const savedIds = new Set(((savedData?.saved) || []).map(String))
-const metIds = new Set(((metData?.met) || []).map(String))
-const skippedIds = new Set(((skippedData?.skipped) || []).map(String))
+    const skippedRes = await fetch(skippedUrl)
+    console.log("skippedRes status:", skippedRes.status)
+    if (!skippedRes.ok) {
+      const txt = await skippedRes.text()
+      throw new Error(`skipped failed: ${skippedRes.status} - ${txt}`)
+    }
 
-const rawMatches = normalizeResponse(matchData)
+    const [matchData, savedData, metData, skippedData] = await Promise.all([
+      matchRes.json(),
+      savedRes.json(),
+      metRes.json(),
+      skippedRes.json(),
+    ])
 
-matches.value = rawMatches.map(raw => {
-  const m = toUiMatch(raw)
-  return {
-    ...m,
-    saved: savedIds.has(String(m.id)),
-    met: metIds.has(String(m.id)),
-    skipped: skippedIds.has(String(m.id)),
-  }
-})
+    const savedIds = new Set(((savedData?.saved) || []).map(String))
+    const metIds = new Set(((metData?.met) || []).map(String))
+    const skippedIds = new Set(((skippedData?.skipped) || []).map(String))
+
+    const rawMatches = normalizeResponse(matchData)
+
+    matches.value = rawMatches.map(raw => {
+      const m = toUiMatch(raw)
+      return {
+        ...m,
+        saved: savedIds.has(String(m.id)),
+        met: metIds.has(String(m.id)),
+        skipped: skippedIds.has(String(m.id)),
+      }
+    })
   } catch (e) {
+    console.error("fetchMatches error:", e)
     errorMsg.value = e?.message || 'Failed to fetch'
     matches.value = []
   } finally {
