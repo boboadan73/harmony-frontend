@@ -352,35 +352,42 @@ if (!pid || !eventId.value) return
   errorMsg.value = ''
 
   try {
-const [matchRes, savedRes, metRes] = await Promise.all([
+
+
+   const [matchRes, savedRes, metRes, skippedRes] = await Promise.all([
   fetch(buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`)),
   fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`)),
   fetch(buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`)),
+  fetch(buildApiUrl(`/api/eventParticipants/${pid}/skipped?eventId=${eventId.value}`)),
 ])
 
-    if (!matchRes.ok) throw new Error(`API error: ${matchRes.status}`)
-    if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
-    if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
+if (!matchRes.ok) throw new Error(`API error: ${matchRes.status}`)
+if (!savedRes.ok) throw new Error(`API error: ${savedRes.status}`)
+if (!metRes.ok) throw new Error(`API error: ${metRes.status}`)
+if (!skippedRes.ok) throw new Error(`API error: ${skippedRes.status}`)
 
-const [matchData, savedData, metData] = await Promise.all([
+const [matchData, savedData, metData, skippedData] = await Promise.all([
   matchRes.json(),
   savedRes.json(),
   metRes.json(),
+  skippedRes.json(),
 ])
 
 const savedIds = new Set(((savedData?.saved) || []).map(String))
 const metIds = new Set(((metData?.met) || []).map(String))
+const skippedIds = new Set(((skippedData?.skipped) || []).map(String))
 
-    const rawMatches = normalizeResponse(matchData)
+const rawMatches = normalizeResponse(matchData)
 
-    matches.value = rawMatches.map(raw => {
-      const m = toUiMatch(raw)
-      return {
-        ...m,
-        saved: savedIds.has(String(m.id)),
-        met: metIds.has(String(m.id)),
-      }
-    })
+matches.value = rawMatches.map(raw => {
+  const m = toUiMatch(raw)
+  return {
+    ...m,
+    saved: savedIds.has(String(m.id)),
+    met: metIds.has(String(m.id)),
+    skipped: skippedIds.has(String(m.id)),
+  }
+})
   } catch (e) {
     errorMsg.value = e?.message || 'Failed to fetch'
     matches.value = []
@@ -397,7 +404,9 @@ watch(
 )
 
 const sortedMatches = computed(() =>
-  [...matches.value].sort((a, b) => (b.matchPercent ?? 0) - (a.matchPercent ?? 0))
+  [...matches.value]
+    .filter(m => !m.skipped)
+    .sort((a, b) => (b.matchPercent ?? 0) - (a.matchPercent ?? 0))
 )
 
 const filteredMatches = computed(() => {
