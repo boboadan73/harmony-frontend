@@ -186,7 +186,8 @@
 </template>
 
 <script setup>
-import { buildSystemApiUrl } from '@/services/api'
+import { buildSystemApiUrl, buildMatchApiUrl } from '@/services/api'
+
 import defaultAvatar from '@/assets/default-avatar.png'
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
