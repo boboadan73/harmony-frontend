@@ -539,11 +539,10 @@ localStorage.setItem('harmony_matches_refresh_needed', '1')
 
 showGeneratePopup.value = true
 
-    if (isNew && participant.id) {
-      const cleanId = String(participant.id).replace(/^p/, '')
-      localStorage.setItem('harmony_pid', cleanId)
-     window.location.href = `/event/${eventId.value}/matches/${cleanId}`
-    }
+    if (participant.id) {
+  const cleanId = String(participant.id).replace(/^p/, '')
+  localStorage.setItem('harmony_pid', cleanId)
+}
   } catch (error) {
     errorMsg.value = error?.message || 'Save failed'
   } finally {
@@ -556,19 +555,40 @@ async function generateMatches() {
   successMsg.value = ''
 
   try {
-    // כאן יהיה ה-route של matching backend
-    // לדוגמה:
-    // const res = await fetch(buildMatchingApiUrl(`/api/matching/generate/${pid.value}`), {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    // })
+    const currentEventId = String(eventId.value || '').trim()
+    const participantDocId = String(profile.value.id || '').trim()
 
-    // כרגע רק שלד עד שהשותפות ישלחו route
-    console.log('Generate matches for participant:', pid.value)
+    if (!currentEventId) {
+      throw new Error('Missing eventId')
+    }
+
+    if (!participantDocId) {
+      throw new Error('Missing participant id')
+    }
+
+    const route = isNewParticipant.value
+      ? `/api/match/add/${currentEventId}/${participantDocId}`
+      : `/api/match/update/${currentEventId}/${participantDocId}`
+
+    const res = await fetch(buildMatchApiUrl(route), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+
+    const text = await res.text()
+    const data = text ? JSON.parse(text) : {}
+
+    if (!res.ok) {
+      throw new Error(data?.error || data?.message || `Generate failed: ${res.status}`)
+    }
 
     successMsg.value = t.value.generateSuccess
     showGeneratePopup.value = false
     localStorage.setItem('harmony_matches_refresh_needed', '1')
+
+    const cleanId = participantDocId.replace(/^p/, '')
+    localStorage.setItem('harmony_pid', cleanId)
+    window.location.href = `/event/${currentEventId}/matches/${cleanId}`
   } catch (error) {
     errorMsg.value = error?.message || t.value.generateError
   } finally {
