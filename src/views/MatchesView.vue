@@ -338,8 +338,9 @@ avatar:
   (raw?.photoUrl && String(raw.photoUrl).trim()) ||
   (raw?.imageUrl && String(raw.imageUrl).trim()) ||
   placeholderAvatar,
-    saved: false,
+  saved: false,
   met: false,
+  skipped: false,
 }
 }
 
@@ -464,8 +465,26 @@ async function markMet(m) {
   }
 }
 
-function skip(m) {
-  matches.value = matches.value.filter(x => x.id !== m.id)
+async function skip(m) {
+  const pid = participantId()
+
+  try {
+    const url = buildApiUrl(`/api/eventParticipants/${pid}/skipped/${m.id}?eventId=${eventId.value}`)
+
+    const res = await fetch(url, {
+      method: m.skipped ? 'DELETE' : 'POST'
+    })
+
+    if (!res.ok) throw new Error(`API error: ${res.status}`)
+
+    m.skipped = !m.skipped
+
+    if (m.skipped) {
+      matches.value = matches.value.filter(x => x.id !== m.id)
+    }
+  } catch (e) {
+    errorMsg.value = e?.message || 'Skip failed'
+  }
 }
 
 function onAvatarError(e) {
