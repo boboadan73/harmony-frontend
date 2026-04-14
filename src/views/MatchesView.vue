@@ -355,7 +355,7 @@ if (!pid || !eventId.value) return
 
 
    const [matchRes, savedRes, metRes, skippedRes] = await Promise.all([
-  fetch(buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`)),
+  fetch(buildMatchApiUrl(`/api/match/${eventId.value}/${pid}`)),
   fetch(buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`)),
   fetch(buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`)),
   fetch(buildApiUrl(`/api/eventParticipants/${pid}/skipped?eventId=${eventId.value}`)),
