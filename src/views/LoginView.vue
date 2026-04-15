@@ -662,5 +662,23 @@ const modalContent = computed(() => {
   color: #304c3d;
   font-size: 15px;
 }
+.policyText {
+  display: inline;
+}
 
+.linkBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 4px;
+  color: #2f6b4f;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+
+.linkBtn:hover {
+  color: #24513f;
+}
 </style>
