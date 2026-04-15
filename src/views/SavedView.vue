@@ -206,7 +206,7 @@ async function fetchSavedMatches() {
 
     allSavedMatches.value = raw
       .map(r => ({
-        id: r?.id,
+       id: r?.matchId ?? r?.id,
         name: r?.name ?? '',
         match_name: r?.match_name ?? null,
         role: r?.role ?? '',
