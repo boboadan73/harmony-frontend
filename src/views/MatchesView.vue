@@ -424,7 +424,6 @@ console.log("raw first match:", normalizeResponse(matchData)?.[0])
     const skippedIds = new Set(((skippedData?.skipped) || []).map(String))
 
     const rawMatches = normalizeResponse(matchData)
-    const pid = participantId()
 
 const filteredRawMatches = rawMatches.filter(
   raw => String(raw?.matchId || raw?.id) !== String(pid)
