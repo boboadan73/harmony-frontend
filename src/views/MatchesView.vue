@@ -356,6 +356,7 @@ async function fetchMatches() {
     const savedUrl = buildApiUrl(`/api/eventParticipants/${pid}/saved?eventId=${eventId.value}`)
     const metUrl = buildApiUrl(`/api/eventParticipants/${pid}/met?eventId=${eventId.value}`)
     const skippedUrl = buildApiUrl(`/api/eventParticipants/${pid}/skipped?eventId=${eventId.value}`)
+    
 
     console.log("matchUrl:", matchUrl)
     console.log("savedUrl:", savedUrl)
@@ -396,6 +397,8 @@ async function fetchMatches() {
       metRes.json(),
       skippedRes.json(),
     ])
+    console.log("matchData:", matchData)
+console.log("raw first match:", normalizeResponse(matchData)?.[0])
 
     const savedIds = new Set(((savedData?.saved) || []).map(String))
     const metIds = new Set(((metData?.met) || []).map(String))
