@@ -18,7 +18,8 @@
 </template>
 
 <script setup>
-import UserLayout from "@/user/UserLayout.vue"
+
+import UserLayout from "@/components/user/UserLayout.vue"
 import { userPrivacyPolicy as policy } from "@/content/userPrivacyPolicy"
 </script>
 
