@@ -521,5 +521,5 @@ async function goToRegister() {
   text-decoration: underline;
   margin: 0 4px;
 }
-}
+
 </style>
