@@ -416,8 +416,11 @@ async function fetchMatches() {
       metRes.json(),
       skippedRes.json(),
     ])
-    console.log("matchData:", matchData)
-console.log("raw first match:", normalizeResponse(matchData)?.[0])
+
+    console.log("rawMatches:", rawMatches)
+console.log("filteredRawMatches:", filteredRawMatches)
+console.log("first shown match:", filteredRawMatches[0])
+console.log("first shown explanation:", filteredRawMatches[0]?.explanation)
 
     const savedIds = new Set(((savedData?.saved) || []).map(String))
     const metIds = new Set(((metData?.met) || []).map(String))
