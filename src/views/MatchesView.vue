@@ -417,11 +417,6 @@ async function fetchMatches() {
       skippedRes.json(),
     ])
 
-    console.log("rawMatches:", rawMatches)
-console.log("filteredRawMatches:", filteredRawMatches)
-console.log("first shown match:", filteredRawMatches[0])
-console.log("first shown explanation:", filteredRawMatches[0]?.explanation)
-
     const savedIds = new Set(((savedData?.saved) || []).map(String))
     const metIds = new Set(((metData?.met) || []).map(String))
     const skippedIds = new Set(((skippedData?.skipped) || []).map(String))
@@ -448,6 +443,10 @@ const filteredRawMatches = rawMatches.filter(
   } finally {
     loading.value = false
   }
+      console.log("rawMatches:", rawMatches)
+console.log("filteredRawMatches:", filteredRawMatches)
+console.log("first shown match:", filteredRawMatches[0])
+console.log("first shown explanation:", filteredRawMatches[0]?.explanation)
 }
 
 onMounted(fetchMatches)
