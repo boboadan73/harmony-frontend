@@ -45,18 +45,16 @@
 
        <div class="policyBox">
   <label class="policyRow">
-    <input type="checkbox" v-model="acceptedPolicy" />
-
+<label class="checkboxWrapper">
+  <input type="checkbox" v-model="acceptedPolicy" />
+  <span class="customCheck"></span>
+</label>
     <span>
-      {{ t.agree }}
-      <router-link :to="`/event/${eventId}/privacy`" class="link">
-        {{ t.privacy }}
-      </router-link>
-      &
-      <router-link :to="`/event/${eventId}/terms`" class="link">
-        {{ t.terms }}
-      </router-link>
-    </span>
+  {{ t.agree }}
+  <span class="link">{{ t.privacy }}</span>
+  &
+  <span class="link">{{ t.terms }}</span>
+</span>
   </label>
 </div>
 
@@ -242,11 +240,12 @@ const pid = data?.participantId ? String(data.participantId).trim() : ''
 }
 
 async function continueLogin() {
-  await loginAndRoute('matches')
   if (!acceptedPolicy.value) {
-  errorMessage.value = "Please accept Terms & Privacy"
-  return
-}
+    errorMessage.value = "Please accept Terms & Privacy"
+    return
+  }
+
+  await loginAndRoute('matches')
 }
 async function goToRegister() {
   router.push(`/event/${eventId.value}/profile/new`)
@@ -425,6 +424,48 @@ async function goToRegister() {
   cursor: not-allowed;
   transform: none;
 }
+  .checkboxWrapper {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+}
+
+.checkboxWrapper input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.customCheck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #2f6b4f;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+/* כשהוא מסומן */
+.checkboxWrapper input:checked + .customCheck {
+  background: #2f6b4f;
+  border-color: #2f6b4f;
+}
+
+/* וי בפנים */
+.checkboxWrapper input:checked + .customCheck::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
 
 /* ===== MOBILE ===== */
 @media (max-width: 420px){
@@ -461,7 +502,7 @@ async function goToRegister() {
 .policyRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 13px;
   line-height: 1.5;
   color: #2c4a3b;
