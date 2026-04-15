@@ -19,7 +19,7 @@
 
 <script setup>
 import UserLayout from "@/user/UserLayout.vue";
-import { userTermsOfUse as terms } from "../../content/userTermsOfUse";
+import { userTermsOfUse as terms } from "../content/userTermsOfUse"
 </script>
 
 <style scoped>
