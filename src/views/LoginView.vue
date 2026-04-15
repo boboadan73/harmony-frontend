@@ -43,13 +43,26 @@
           {{ t.phoneError }}
         </p>
 
-        <p class="privacy-note">
-          {{ privacyText[lang] }}
-        </p>
+       <div class="policyBox">
+  <label class="policyRow">
+    <input type="checkbox" v-model="acceptedPolicy" />
+
+    <span>
+      {{ t.agree }}
+      <router-link :to="`/event/${eventId}/privacy`" class="link">
+        {{ t.privacy }}
+      </router-link>
+      &
+      <router-link :to="`/event/${eventId}/terms`" class="link">
+        {{ t.terms }}
+      </router-link>
+    </span>
+  </label>
+</div>
 
         <!-- BUTTONS -->
         <div class="btnBar">
-  <button class="primaryBtn" :disabled="!phone" @click="continueLogin">
+  <button class="primaryBtn" :disabled="!phone || !acceptedPolicy" @click="continueLogin">
     {{ t.continue }}
   </button>
 
@@ -71,7 +84,7 @@ import { buildApiUrl } from '@/services/api'
 
 
 
-
+const acceptedPolicy = ref(false)
 const router = useRouter()
 const route = useRoute()
 const eventId = computed(() =>
@@ -116,6 +129,9 @@ const TEXTS = {
     loginError: 'Login failed. Please check the phone number and try again.',
     continue: 'Continue',
     newParticipant: 'New participant',
+    agree: 'I agree to the',
+privacy: 'Privacy Policy',
+terms: 'Terms of Use',
   },
   ar: {
     subtitle: 'سجّل/ي الدخول لعرض المطابقات',
@@ -126,6 +142,9 @@ const TEXTS = {
     loginError: 'فشل تسجيل الدخول. يرجى التحقق من رقم الهاتف والمحاولة مرة أخرى.',
     continue: 'متابعة',
     newParticipant: 'مشارك جديد',
+    agree: 'أوافق على',
+privacy: 'سياسة الخصوصية',
+terms: 'شروط الاستخدام',
   },
   he: {
     subtitle: 'התחבר/י כדי לראות את ההתאמות שלך',
@@ -136,6 +155,9 @@ const TEXTS = {
     loginError: 'ההתחברות נכשלה. נא לבדוק את מספר הטלפון ולנסות שוב.',
     continue: 'המשך',
     newParticipant: 'משתתף חדש',
+    agree: 'אני מאשר/ת את',
+privacy: 'מדיניות הפרטיות',
+terms: 'תנאי השימוש',
   },
 }
 
@@ -221,6 +243,10 @@ const pid = data?.participantId ? String(data.participantId).trim() : ''
 
 async function continueLogin() {
   await loginAndRoute('matches')
+  if (!acceptedPolicy.value) {
+  errorMessage.value = "Please accept Terms & Privacy"
+  return
+}
 }
 async function goToRegister() {
   router.push(`/event/${eventId.value}/profile/new`)
@@ -424,10 +450,35 @@ async function goToRegister() {
   }
 }
 
-.privacy-note {
-  margin-top: 14px;
-  font-size: 12px;
-  text-align: center;
-  color: #4b5f52;
+.policyBox {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.7);
+  border: 1.5px solid rgba(47,107,79,0.2);
+}
+
+.policyRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #2c4a3b;
+}
+
+.policyRow input {
+  width: 18px;
+  height: 18px;
+  accent-color: #2f6b4f;
+  cursor: pointer;
+}
+
+.link {
+  color: #2f6b4f;
+  font-weight: 700;
+  text-decoration: underline;
+  margin: 0 4px;
+}
 }
 </style>
