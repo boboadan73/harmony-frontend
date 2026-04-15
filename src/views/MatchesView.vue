@@ -320,28 +320,47 @@ function toUiMatch(raw) {
   const score = Number(raw?.score)
   const matchPercent = Number.isFinite(score) ? Math.round(score * 100) : 0
 
+  const explanation = raw?.explanation || {}
+
   return {
-  id: raw?.id ?? Math.random().toString(16).slice(2),
-  name: raw?.name ?? '',
-  match_name: raw?.match_name ?? null,
-  role: '',
-  company: raw?.company ?? raw?.job ?? raw?.jobTitle ?? '',
-  skills: raw?.skills ?? raw?.professional ?? '',
-  interests: raw?.interests ?? raw?.personal ?? '',
-  languages: raw?.languages ?? '',
-  matchPercent,
-  whyMatched: raw?.reason ?? '',
-  whyMatched_en: raw?.reason_en ?? '',
-  whyMatched_he: raw?.reason_he ?? '',
-avatar:
-  (raw?.image && String(raw.image).trim()) ||
-  (raw?.photoUrl && String(raw.photoUrl).trim()) ||
-  (raw?.imageUrl && String(raw.imageUrl).trim()) ||
-  placeholderAvatar,
-  saved: false,
-  met: false,
-  skipped: false,
-}
+    id: raw?.id ?? raw?.matchId ?? Math.random().toString(16).slice(2),
+    name: raw?.name ?? '',
+    match_name: raw?.match_name ?? null,
+    role: '',
+    company: raw?.company ?? raw?.job ?? raw?.jobTitle ?? '',
+    skills: raw?.skills ?? raw?.professional ?? '',
+    interests: raw?.interests ?? raw?.personal ?? '',
+    languages: raw?.languages ?? '',
+    matchPercent,
+
+    whyMatched:
+      raw?.reason ||
+      explanation?.ar ||
+      explanation?.en ||
+      explanation?.he ||
+      explanation?.text ||
+      '',
+
+    whyMatched_en:
+      raw?.reason_en ||
+      explanation?.en ||
+      '',
+
+    whyMatched_he:
+      raw?.reason_he ||
+      explanation?.he ||
+      '',
+
+    avatar:
+      (raw?.image && String(raw.image).trim()) ||
+      (raw?.photoUrl && String(raw.photoUrl).trim()) ||
+      (raw?.imageUrl && String(raw.imageUrl).trim()) ||
+      placeholderAvatar,
+
+    saved: false,
+    met: false,
+    skipped: false,
+  }
 }
 
 async function fetchMatches() {
@@ -405,8 +424,13 @@ console.log("raw first match:", normalizeResponse(matchData)?.[0])
     const skippedIds = new Set(((skippedData?.skipped) || []).map(String))
 
     const rawMatches = normalizeResponse(matchData)
+    const pid = participantId()
 
-    matches.value = rawMatches.map(raw => {
+const filteredRawMatches = rawMatches.filter(
+  raw => String(raw?.matchId || raw?.id) !== String(pid)
+)
+
+    matches.value = filteredRawMatches.map(raw => {
       const m = toUiMatch(raw)
       return {
         ...m,
