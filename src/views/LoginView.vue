@@ -43,23 +43,24 @@
           {{ t.phoneError }}
         </p>
 
-       <div class="policyBox">
-  <label class="policyRow">
-<label class="checkboxWrapper">
-  <input type="checkbox" v-model="acceptedPolicy" />
-  <span class="customCheck"></span>
-</label>
-   <span>
-  {{ t.agree }}
-  <button type="button" class="linkBtn" @click="openPrivacy">
-    {{ t.privacy }}
-  </button>
-  &
-  <button type="button" class="linkBtn" @click="openTerms">
-    {{ t.terms }}
-  </button>
-</span>
-  </label>
+      <div class="policyBox">
+  <div class="policyRow">
+    <label class="checkboxWrapper">
+      <input type="checkbox" v-model="acceptedPolicy" />
+      <span class="customCheck"></span>
+    </label>
+
+    <span class="policyText">
+      {{ t.agree }}
+      <button type="button" class="linkBtn" @click.stop="openPrivacy">
+        {{ t.privacy }}
+      </button>
+      &
+      <button type="button" class="linkBtn" @click.stop="openTerms">
+        {{ t.terms }}
+      </button>
+    </span>
+  </div>
 </div>
 
         <!-- BUTTONS -->
