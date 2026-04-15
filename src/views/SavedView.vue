@@ -197,7 +197,7 @@ async function fetchSavedMatches() {
     const savedIdsSet = new Set(((savedData?.saved) || []).map(String))
 
     const res = await fetch(
-      buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`)
+      buildMatchApiUrl(`/api/match/${eventId.value}/${pid}`)
     )
     if (!res.ok) throw new Error(`API error: ${res.status}`)
 
@@ -220,11 +220,11 @@ async function fetchSavedMatches() {
           placeholderAvatar
       }))
       .filter(m => savedIdsSet.has(String(m.id)))
-  } catch {
+  } catch (err) {
+    console.error("fetchSavedMatches failed:", err)
     allSavedMatches.value = []
   }
 }
-
 onMounted(fetchSavedMatches)
 watch(
   () => [route.params.id, route.params.eventId],
