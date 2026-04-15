@@ -197,8 +197,8 @@ async function fetchMetMatches() {
     const metIdsSet = new Set(((metData?.met) || []).map(String))
 
     const res = await fetch(
-      buildMatchApiUrl(`/api/match/${pid}?eventId=${eventId.value}`)
-    )
+  buildMatchApiUrl(`/api/match/${eventId.value}/${pid}`)
+)
     if (!res.ok) throw new Error(`API error: ${res.status}`)
 
     const data = await res.json()
@@ -206,7 +206,7 @@ async function fetchMetMatches() {
 
     allMetMatches.value = raw
       .map(r => ({
-        id: r?.id,
+       id: r?.matchId ?? r?.id,
         name: r?.name ?? '',
         match_name: r?.match_name ?? null,
         role: r?.role ?? '',
