@@ -59,6 +59,21 @@
 >
   {{ t.saved }}
 </router-link>
+          <router-link
+  :to="`/event/${eventId}/privacy`"
+  class="item"
+  @click="open = false"
+>
+  {{ t.privacy }}
+</router-link>
+
+<router-link
+  :to="`/event/${eventId}/terms`"
+  class="item"
+  @click="open = false"
+>
+  {{ t.terms }}
+</router-link>
         </nav>
       </aside>
     </div>
@@ -122,6 +137,8 @@ const t = computed(() => {
       met: 'נפגשנו',
       saved: 'שמורים',
       logout: 'התנתק',
+      privacy: 'מדיניות פרטיות',
+terms: 'תנאי שימוש',
     }
   }
 
@@ -132,6 +149,8 @@ const t = computed(() => {
       met: 'تم اللقاء',
       saved: 'المحفوظات',
       logout: 'تسجيل الخروج',
+      privacy: 'سياسة الخصوصية',
+terms: 'شروط الاستخدام',
     }
   }
 
@@ -141,6 +160,8 @@ const t = computed(() => {
     met: 'Met',
     saved: 'Saved',
     logout: 'Logout',
+    privacy: 'Privacy Policy',
+terms: 'Terms of Use',
   }
 })
 </script>
