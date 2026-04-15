@@ -321,9 +321,10 @@ function toUiMatch(raw) {
   const matchPercent = Number.isFinite(score) ? Math.round(score * 100) : 0
 
   const explanation = raw?.explanation || {}
+  const actualId = raw?.matchId ?? raw?.id
 
   return {
-    id: raw?.id ?? raw?.matchId ?? Math.random().toString(16).slice(2),
+    id: actualId ?? Math.random().toString(16).slice(2),
     name: raw?.name ?? '',
     match_name: raw?.match_name ?? null,
     role: '',
