@@ -5,6 +5,8 @@ import MatchesView from '../views/MatchesView.vue'
 import SavedView from '../views/SavedView.vue'
 import MetView from '../views/MetView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import UserPrivacyView from '../views/UserPrivacyView.vue'
+import UserTermsView from '../views/UserTermsView.vue'
 
 function getStoredPid() {
   if (typeof window === 'undefined') return ''
@@ -18,6 +20,7 @@ function getStoredPid() {
 
   return hasValidPid ? pid : ''
 }
+
 function getStoredEventId() {
   if (typeof window === 'undefined') return ''
 
@@ -30,6 +33,7 @@ function getStoredEventId() {
 
   return hasValidEventId ? eventId : ''
 }
+
 const withPidOrLogin = (base) => {
   const pid = getStoredPid()
   const eventId = getStoredEventId()
@@ -40,20 +44,23 @@ const withPidOrLogin = (base) => {
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-  { path: '/', redirect: '/event/default/login' },
+    { path: '/', redirect: '/event/default/login' },
 
-  { path: '/event/:eventId/login', component: LoginView },
+    { path: '/event/:eventId/login', component: LoginView },
 
-  { path: '/matches', redirect: () => withPidOrLogin('matches') },
-  { path: '/saved', redirect: () => withPidOrLogin('saved') },
-  { path: '/met', redirect: () => withPidOrLogin('met') },
-  { path: '/profile', redirect: () => withPidOrLogin('profile') },
+    { path: '/matches', redirect: () => withPidOrLogin('matches') },
+    { path: '/saved', redirect: () => withPidOrLogin('saved') },
+    { path: '/met', redirect: () => withPidOrLogin('met') },
+    { path: '/profile', redirect: () => withPidOrLogin('profile') },
 
-  { path: '/event/:eventId/matches/:id', component: MatchesView },
-  { path: '/event/:eventId/saved/:id', component: SavedView },
-  { path: '/event/:eventId/met/:id', component: MetView },
-  { path: '/event/:eventId/profile/:id', component: ProfileView },
-],
+    { path: '/event/:eventId/matches/:id', component: MatchesView },
+    { path: '/event/:eventId/saved/:id', component: SavedView },
+    { path: '/event/:eventId/met/:id', component: MetView },
+    { path: '/event/:eventId/profile/:id', component: ProfileView },
+
+    { path: '/event/:eventId/privacy', component: UserPrivacyView },
+    { path: '/event/:eventId/terms', component: UserTermsView },
+  ],
 })
 
 router.beforeEach((to, from, next) => {
