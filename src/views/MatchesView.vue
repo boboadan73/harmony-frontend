@@ -425,7 +425,12 @@ async function fetchMatches() {
 
 const filteredRawMatches = rawMatches.filter(
   raw => String(raw?.matchId || raw?.id) !== String(pid)
+  
 )
+      console.log("rawMatches:", rawMatches)
+console.log("filteredRawMatches:", filteredRawMatches)
+console.log("first shown match:", filteredRawMatches[0])
+console.log("first shown explanation:", filteredRawMatches[0]?.explanation)
 
     matches.value = filteredRawMatches.map(raw => {
       const m = toUiMatch(raw)
@@ -443,10 +448,7 @@ const filteredRawMatches = rawMatches.filter(
   } finally {
     loading.value = false
   }
-      console.log("rawMatches:", rawMatches)
-console.log("filteredRawMatches:", filteredRawMatches)
-console.log("first shown match:", filteredRawMatches[0])
-console.log("first shown explanation:", filteredRawMatches[0]?.explanation)
+  
 }
 
 onMounted(fetchMatches)
