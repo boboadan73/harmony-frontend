@@ -49,11 +49,15 @@
   <input type="checkbox" v-model="acceptedPolicy" />
   <span class="customCheck"></span>
 </label>
-    <span>
+   <span>
   {{ t.agree }}
-  <span class="link">{{ t.privacy }}</span>
+  <button type="button" class="linkBtn" @click="openPrivacy">
+    {{ t.privacy }}
+  </button>
   &
-  <span class="link">{{ t.terms }}</span>
+  <button type="button" class="linkBtn" @click="openTerms">
+    {{ t.terms }}
+  </button>
 </span>
   </label>
 </div>
@@ -68,8 +72,28 @@
     {{ t.newParticipant }}
   </button>
 </div>
+        <div v-if="showPolicyModal" class="modalOverlay" @click.self="closePolicyModal">
+  <div class="modalCard" :dir="isRtl ? 'rtl' : 'ltr'">
+    <div class="modalHeader">
+      <h2 class="modalTitle">{{ modalTitle }}</h2>
+      <button type="button" class="modalClose" @click="closePolicyModal">✕</button>
+    </div>
+
+    <div class="modalBody">
+      <div
+        v-for="section in modalContent.sections"
+        :key="section.heading"
+        class="modalSection"
+      >
+        <h3>{{ section.heading }}</h3>
+        <p>{{ section.text }}</p>
+      </div>
+    </div>
+  </div>
+</div>
 
       </div>
+      
     </div>
   </div>
 </template>
@@ -79,6 +103,8 @@ import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { authStore } from '@/store/authStore'
 import { buildApiUrl } from '@/services/api'
+  import { userPrivacyPolicy } from '@/content/userPrivacyPolicy'
+import { userTermsOfUse } from '@/content/userTermsOfUse'
 
 
 
@@ -250,6 +276,30 @@ async function continueLogin() {
 async function goToRegister() {
   router.push(`/event/${eventId.value}/profile/new`)
 }
+  const showPolicyModal = ref(false)
+const modalType = ref('privacy')
+
+function openPrivacy() {
+  modalType.value = 'privacy'
+  showPolicyModal.value = true
+}
+
+function openTerms() {
+  modalType.value = 'terms'
+  showPolicyModal.value = true
+}
+
+function closePolicyModal() {
+  showPolicyModal.value = false
+}
+
+const modalTitle = computed(() => {
+  return modalType.value === 'privacy' ? t.value.privacy : t.value.terms
+})
+
+const modalContent = computed(() => {
+  return modalType.value === 'privacy' ? userPrivacyPolicy : userTermsOfUse
+})
 
 
 </script>
@@ -520,6 +570,96 @@ async function goToRegister() {
   font-weight: 700;
   text-decoration: underline;
   margin: 0 4px;
+}
+  .linkBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 4px;
+  color: #2f6b4f;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 35, 28, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+  padding: 18px;
+}
+
+.modalCard {
+  width: min(760px, 96vw);
+  max-height: 85vh;
+  overflow: hidden;
+  border-radius: 22px;
+  background: linear-gradient(
+    180deg,
+    rgba(233,243,238,0.98),
+    rgba(255,255,255,0.96)
+  );
+  border: 2px solid #2f6b4f;
+  box-shadow: 0 20px 45px rgba(31,63,50,0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(47,107,79,0.18);
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 900;
+  color: #1f3f32;
+}
+
+.modalClose {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 2px solid #2f6b4f;
+  background: #f4faf6;
+  color: #1f3f32;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modalBody {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modalSection {
+  margin-bottom: 22px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(47,107,79,0.12);
+}
+
+.modalSection h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #204634;
+}
+
+.modalSection p {
+  margin: 0;
+  line-height: 1.75;
+  color: #304c3d;
+  font-size: 15px;
 }
 
 </style>
