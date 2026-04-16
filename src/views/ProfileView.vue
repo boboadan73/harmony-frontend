@@ -55,14 +55,14 @@
           <div class="fieldsGrid">
             <div class="fieldBlock">
               <label class="fieldLabel">{{ t.name }}</label>
-           <input
-           v-if="isEditing"
-           v-model="form.name"
-           class="input"
-            type="text"
-            dir="auto"
-             />
-              <div v-else class="fieldValue">{{ profile.name || t.empty }}</div>
+              <input
+                v-if="isEditing"
+                v-model="form.name"
+                class="input"
+                type="text"
+                dir="auto"
+              />
+              <div v-else class="fieldValue" dir="auto">{{ profile.name || t.empty }}</div>
             </div>
 
             <div class="fieldBlock">
@@ -83,8 +83,9 @@
                 v-model="form.job"
                 class="input"
                 type="text"
+                dir="auto"
               />
-              <div v-else class="fieldValue">{{ profile.job || t.empty }}</div>
+              <div v-else class="fieldValue" dir="auto">{{ profile.job || t.empty }}</div>
             </div>
 
             <div class="fieldBlock">
@@ -94,8 +95,9 @@
                 v-model="form.image"
                 class="input ltrNum"
                 type="text"
+                dir="auto"
               />
-              <div v-else class="fieldValue breakAll">{{ profile.image || t.empty }}</div>
+              <div v-else class="fieldValue breakAll ltrNum">{{ profile.image || t.empty }}</div>
             </div>
 
             <div class="fieldBlock fullWidth">
@@ -105,8 +107,11 @@
                 v-model="form.academic"
                 class="textarea"
                 rows="5"
+                dir="auto"
               />
-              <div v-else class="fieldValue multiline">{{ profile.academic || t.empty }}</div>
+              <div v-else class="fieldValue multiline" dir="auto">
+                {{ profile.academic || t.empty }}
+              </div>
             </div>
 
             <div class="fieldBlock fullWidth">
@@ -116,8 +121,11 @@
                 v-model="form.professional"
                 class="textarea"
                 rows="5"
+                dir="auto"
               />
-              <div v-else class="fieldValue multiline">{{ profile.professional || t.empty }}</div>
+              <div v-else class="fieldValue multiline" dir="auto">
+                {{ profile.professional || t.empty }}
+              </div>
             </div>
 
             <div class="fieldBlock fullWidth">
@@ -127,8 +135,11 @@
                 v-model="form.personal"
                 class="textarea"
                 rows="5"
+                dir="auto"
               />
-              <div v-else class="fieldValue multiline">{{ profile.personal || t.empty }}</div>
+              <div v-else class="fieldValue multiline" dir="auto">
+                {{ profile.personal || t.empty }}
+              </div>
             </div>
           </div>
 
@@ -180,6 +191,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { buildSystemApiUrl, buildMatchApiUrl } from '@/services/api'
 
@@ -257,7 +269,6 @@ const TEXTS = {
     generateNow: 'Generate Now',
     generateSuccess: 'Matches generated successfully.',
     generateError: 'Failed to generate matches.',
-              
   },
   ar: {
     title: 'الملف الشخصي',
@@ -287,13 +298,13 @@ const TEXTS = {
     privacyUpdated: 'تم تحديث الخصوصية بنجاح.',
     deleteSuccess: 'تم حذف بياناتك بنجاح.',
     loadError: 'فشل تحميل الملف.',
-     generate: 'إنشاء المطابقات',
+    generate: 'إنشاء المطابقات',
     generating: 'جارٍ إنشاء المطابقات...',
     generateRequiredTitle: 'يجب إنشاء المطابقات',
-   generateRequiredText: 'تم حفظ الملف بنجاح. يجب الآن إنشاء المطابقات لتحديث التوصيات.',
-   generateNow: 'إنشاء الآن',
-   generateSuccess: 'تم إنشاء المطابقات بنجاح.',
-   generateError: 'فشل إنشاء المطابقات.',
+    generateRequiredText: 'تم حفظ الملف بنجاح. يجب الآن إنشاء المطابقات لتحديث التوصيات.',
+    generateNow: 'إنشاء الآن',
+    generateSuccess: 'تم إنشاء المطابقات بنجاح.',
+    generateError: 'فشل إنشاء المطابقات.',
   },
   he: {
     title: 'פרופיל',
@@ -325,11 +336,11 @@ const TEXTS = {
     loadError: 'טעינת הפרופיל נכשלה.',
     generate: 'צור התאמות מחדש',
     generating: 'מחשב התאמות...',
-   generateRequiredTitle: 'חובה ליצור התאמות מחדש',
-  generateRequiredText: 'הפרופיל נשמר בהצלחה. עכשיו חייבים ליצור התאמות מחדש כדי לעדכן את ההמלצות.',
-  generateNow: 'צור עכשיו',
-  generateSuccess: 'ההתאמות נוצרו בהצלחה.',
-   generateError: 'יצירת ההתאמות נכשלה.',
+    generateRequiredTitle: 'חובה ליצור התאמות מחדש',
+    generateRequiredText: 'הפרופיל נשמר בהצלחה. עכשיו חייבים ליצור התאמות מחדש כדי לעדכן את ההמלצות.',
+    generateNow: 'צור עכשיו',
+    generateSuccess: 'ההתאמות נוצרו בהצלחה.',
+    generateError: 'יצירת ההתאמות נכשלה.',
   },
 }
 
@@ -394,6 +405,7 @@ function fillFormFromProfile() {
     image: profile.value.image || '',
   }
 }
+
 async function loadProfile() {
   if (isNewParticipant.value) {
     profile.value = {
@@ -425,8 +437,8 @@ async function loadProfile() {
 
   try {
     const res = await fetch(
-  buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`)
-)
+      buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`)
+    )
     if (!res.ok) throw new Error('load failed')
 
     const data = await res.json()
@@ -450,6 +462,7 @@ async function loadProfile() {
     loading.value = false
   }
 }
+
 function startEdit() {
   successMsg.value = ''
   errorMsg.value = ''
@@ -470,6 +483,7 @@ watch(
     imageVersion.value = Date.now()
   }
 )
+
 async function saveProfile() {
   saving.value = true
   errorMsg.value = ''
@@ -482,25 +496,25 @@ async function saveProfile() {
 
     const isNew = isNewParticipant.value
 
-  const url = isNew
-  ? buildSystemApiUrl('/api/eventParticipants')
-  : buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`)
+    const url = isNew
+      ? buildSystemApiUrl('/api/eventParticipants')
+      : buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`)
 
     const method = isNew ? 'POST' : 'PUT'
 
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-   body: JSON.stringify({
-  eventId: eventId.value,
-  name: form.value.name,
-  phoneNumber: form.value.phone,
-  jobTitle: form.value.job,
-  academicResume: form.value.academic,
-  professionalResume: form.value.professional,
-  personalResume: form.value.personal,
-  photoUrl: form.value.image,
-}),
+      body: JSON.stringify({
+        eventId: eventId.value,
+        name: form.value.name,
+        phoneNumber: form.value.phone,
+        jobTitle: form.value.job,
+        academicResume: form.value.academic,
+        professionalResume: form.value.professional,
+        personalResume: form.value.personal,
+        photoUrl: form.value.image,
+      }),
     })
 
     const text = await res.text()
@@ -516,34 +530,35 @@ async function saveProfile() {
       id: participant.id || '',
       name: participant.name || '',
       phone: participant.phoneNumber || '',
-job: participant.jobTitle || '',
-academic: participant.academicResume || '',
-professional: participant.professionalResume || '',
-personal: participant.personalResume || '',
-image: participant.photoUrl || '',
+      job: participant.jobTitle || '',
+      academic: participant.academicResume || '',
+      professional: participant.professionalResume || '',
+      personal: participant.personalResume || '',
+      image: participant.photoUrl || '',
       hidden: Boolean(participant.hidden),
     }
 
-   fillFormFromProfile()
-imageVersion.value = Date.now()
-isEditing.value = false
-successMsg.value = t.value.saveSuccess
+    fillFormFromProfile()
+    imageVersion.value = Date.now()
+    isEditing.value = false
+    successMsg.value = t.value.saveSuccess
 
-localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
-localStorage.setItem('harmony_matches_refresh_needed', '1')
+    localStorage.setItem('harmony_profile_updated_at', String(Date.now()))
+    localStorage.setItem('harmony_matches_refresh_needed', '1')
 
-showGeneratePopup.value = true
+    showGeneratePopup.value = true
 
     if (participant.id) {
-  const cleanId = String(participant.id).replace(/^p/, '')
-  localStorage.setItem('harmony_pid', cleanId)
-}
+      const cleanId = String(participant.id).replace(/^p/, '')
+      localStorage.setItem('harmony_pid', cleanId)
+    }
   } catch (error) {
     errorMsg.value = error?.message || 'Save failed'
   } finally {
     saving.value = false
   }
 }
+
 async function generateMatches() {
   generating.value = true
   errorMsg.value = ''
@@ -590,6 +605,7 @@ async function generateMatches() {
     generating.value = false
   }
 }
+
 async function togglePrivacy() {
   savingPrivacy.value = true
   errorMsg.value = ''
@@ -597,13 +613,13 @@ async function togglePrivacy() {
 
   try {
     const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}/privacy?eventId=${eventId.value}`), {
-  method: 'PATCH',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    hidden: !profile.value.hidden,
-    eventId: eventId.value
-  }),
-})
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        hidden: !profile.value.hidden,
+        eventId: eventId.value
+      }),
+    })
 
     if (!res.ok) throw new Error('privacy failed')
 
@@ -631,8 +647,8 @@ async function deleteMyData() {
 
   try {
     const res = await fetch(buildSystemApiUrl(`/api/eventParticipants/${pid.value}?eventId=${eventId.value}`), {
-  method: 'DELETE',
-})
+      method: 'DELETE',
+    })
 
     if (!res.ok) throw new Error('delete failed')
 
@@ -832,6 +848,8 @@ watch(pid, loadProfile, { immediate: true })
   line-height: 1.55;
   word-break: break-word;
   box-sizing: border-box;
+  unicode-bidi: plaintext;
+  text-align: start;
 }
 
 .input,
