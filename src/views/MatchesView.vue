@@ -632,7 +632,7 @@ function onAvatarError(e) {
   position: absolute;
   bottom: -10px;
   left: 0;
-  width: 25%;
+  width: 11%;
   height: 4px;
   border-radius: 999px;
   background: linear-gradient(90deg, #8fb89c, #5f8d70);
