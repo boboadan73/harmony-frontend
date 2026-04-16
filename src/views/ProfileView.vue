@@ -1057,11 +1057,16 @@ watch(pid, loadProfile, { immediate: true })
     padding-bottom: 10px;
   }
 
-  .page-title::after {
-  bottom: -6px;
-  height: 3px;
-  margin-bottom: 6px;
-  
+.page-title {
+  display: inline-block;
+  margin: 0;
+  padding-bottom: 12px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #355f4a;
+  letter-spacing: 0.2px;
+  position: relative;
+  line-height: 1.25;
 }
 
   .page-subtitle {
