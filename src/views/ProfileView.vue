@@ -55,12 +55,13 @@
           <div class="fieldsGrid">
             <div class="fieldBlock">
               <label class="fieldLabel">{{ t.name }}</label>
-              <input
-                v-if="isEditing"
-                v-model="form.name"
-                class="input"
-                type="text"
-              />
+           <input
+           v-if="isEditing"
+           v-model="form.name"
+           class="input"
+            type="text"
+            dir="auto"
+             />
               <div v-else class="fieldValue">{{ profile.name || t.empty }}</div>
             </div>
 
