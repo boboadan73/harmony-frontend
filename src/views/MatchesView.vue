@@ -1014,61 +1014,42 @@ function onAvatarError(e) {
 
 @media (max-width: 700px) {
   .matches-wrap {
-    padding: 14px 12px 30px;
+    max-width: 100%;
+    padding: 10px 10px 24px;
   }
 
   .page-head {
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: column;
-  }
-
-  .language-box {
-    align-self: flex-start;
-  }
-
-  :dir(rtl) .language-box {
-    align-self: flex-end;
-  }
-
-  .match-top {
     gap: 12px;
+    margin: 12px 0 14px;
+    padding-bottom: 12px;
   }
 
-  .avatar-side {
-    width: 104px;
+  .modern-page-title {
+    font-size: 22px;
   }
 
-  .match-avatar {
-    width: 78px;
-    height: 78px;
+  .modern-page-subtitle {
+    margin-top: 8px;
+    font-size: 13px;
   }
 
-  .match-score {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  .match-name {
-    font-size: 17px;
-  }
-
-  .why-text {
-    font-size: 14px;
-  }
-
-  .action-btn {
-    min-width: 82px;
-    font-size: 14px;
-  }
-    .head-actions {
+  .head-actions {
     width: 100%;
     justify-content: space-between;
     margin-inline-start: 0;
+    gap: 10px;
+  }
+
+  .filters-toggle,
+  .language-box {
+    min-height: 42px;
   }
 
   .filters-dropdown {
     width: 100%;
-    min-width: 260px;
+    min-width: 240px;
     left: 0;
     right: auto;
   }
@@ -1077,5 +1058,135 @@ function onAvatarError(e) {
     right: 0;
     left: auto;
   }
+
+  .matches-list {
+    gap: 14px;
+  }
+
+  .match-card {
+    padding: 14px 12px 12px;
+    border-radius: 14px;
+  }
+
+  .match-top {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  :dir(rtl) .match-top {
+    flex-direction: row-reverse;
+  }
+
+  .match-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .name-row {
+    margin-bottom: 10px;
+    gap: 6px;
+  }
+
+  .match-name {
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .best-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .why-section {
+    width: 100%;
+    text-align: start;
+  }
+
+  .why-title {
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  .why-text {
+    width: 100%;
+    max-width: none;
+    font-size: 13px;
+    line-height: 1.7;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .avatar-side {
+    width: 82px;
+    min-width: 82px;
+    padding-top: 0;
+  }
+
+  .match-avatar {
+    width: 64px;
+    height: 64px;
+    border-width: 3px;
+  }
+
+  .match-score {
+    margin-top: -6px;
+    font-size: 11px;
+    padding: 6px 9px;
+  }
+
+  .status-row {
+    margin-top: 12px;
+    padding-top: 10px;
+    gap: 6px;
+  }
+
+  .status-pill {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .actions-row {
+    margin-top: 12px;
+    padding-top: 10px;
+  }
+
+  .action-btn {
+    min-width: 0;
+    flex: 1;
+    height: 36px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  .refresh-row {
+    margin-top: 6px;
+  }
+
+  .refresh-btn {
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .state-box {
+    padding: 14px 12px;
+    border-radius: 14px;
+  }
+
+  .state-title {
+    font-size: 15px;
+  }
+
+  .state-sub {
+    font-size: 13px;
+  }
+}
+  .why-section {
+  width: 100%;
+  min-width: 0;
+}
+
+.why-text {
+  width: 100%;
+  max-width: 100%;
 }
 </style>
