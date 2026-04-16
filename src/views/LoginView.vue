@@ -314,20 +314,24 @@ const modalContent = computed(() => {
   display: grid;
   place-items: center;
   width: 100%;
+  max-width: 100%;
   padding: 18px;
   font-family: Arial, sans-serif;
   color: var(--h-text);
 
-  position: relative;  
-  overflow: hidden;    
- background:
-  radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6), transparent 35%),
-  radial-gradient(circle at 80% 80%, rgba(120,170,140,0.25), transparent 40%),
-  linear-gradient(180deg, #f4faf7 0%, #e4f1ea 55%, #d3e6dc 100%);
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6), transparent 35%),
+    radial-gradient(circle at 80% 80%, rgba(120,170,140,0.25), transparent 40%),
+    linear-gradient(180deg, #f4faf7 0%, #e4f1ea 55%, #d3e6dc 100%);
 }
 /* ===== CARD (מסגרת ירוקה + glass ירקרק) ===== */
 .loginCard{
-  width: min(560px, 92vw);
+  width: 100%;
+  max-width: 560px;
   padding: 34px 32px 28px;
   border-radius: 30px;
 
@@ -569,23 +573,38 @@ const modalContent = computed(() => {
 
 /* ===== MOBILE ===== */
 @media (max-width: 420px){
-  .loginPage{ padding: 12px; }
+  .loginPage{
+    padding: 12px;
+  }
+
   .loginCard{
-    width: 94vw;
+    width: 100%;
+    max-width: 100%;
     padding: 16px 14px;
     border-radius: 18px;
     gap: 10px;
   }
-  .title{ font-size: 34px; }
-  .brandLogo{ height: 44px; width:44px; }
 
-  .primaryBtn, .secondaryBtn{ min-height: 50px; font-size: 15px; }
+  .title{
+    font-size: 34px;
+  }
+
+  .brandLogo{
+    height: 44px;
+    width: 44px;
+  }
+
+  .primaryBtn,
+  .secondaryBtn{
+    min-height: 50px;
+    font-size: 15px;
+  }
 
   .btnBar{
-    margin-left: -14px;
-    margin-right: -14px;
-    padding-left: 14px;
-    padding-right: 14px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
     border-bottom-left-radius: 18px;
     border-bottom-right-radius: 18px;
   }
