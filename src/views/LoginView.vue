@@ -451,9 +451,22 @@ async function goToRegister() {
   height: 0;
 }
 .customCheck {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 1.8px solid #5b8b70;
+  background: #ffffff;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: all 0.18s ease;
+}
+
+.checkboxWrapper input:checked + .customCheck {
+  background: #2f6b4f;
+  border-color: #2f6b4f;
 }
 
 .checkboxWrapper input:checked + .customCheck::after {
