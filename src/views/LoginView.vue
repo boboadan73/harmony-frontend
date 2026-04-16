@@ -320,10 +320,10 @@ const modalContent = computed(() => {
 
   position: relative;  
   overflow: hidden;    
-  background:
-    radial-gradient(circle at top left, rgba(255,255,255,0.55), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(133,184,152,0.18), transparent 30%),
-    linear-gradient(180deg, #f6fbf8 0%, #e7f3ec 52%, #d7e9de 100%);
+ background:
+  radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6), transparent 35%),
+  radial-gradient(circle at 80% 80%, rgba(120,170,140,0.25), transparent 40%),
+  linear-gradient(180deg, #f4faf7 0%, #e4f1ea 55%, #d3e6dc 100%);
 }
 /* ===== CARD (מסגרת ירוקה + glass ירקרק) ===== */
 .loginCard{
