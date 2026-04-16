@@ -1057,9 +1057,10 @@ watch(pid, loadProfile, { immediate: true })
     padding-bottom: 10px;
   }
 
-  .page-title {
-    font-size: 20px;
-  }
+  .page-title::after {
+  bottom: -6px;
+  height: 3px;
+}
 
   .page-subtitle {
     font-size: 12px;
