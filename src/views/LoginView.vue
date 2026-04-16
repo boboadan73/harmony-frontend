@@ -146,7 +146,7 @@ const privacyText = {
 
 const TEXTS = {
   en: {
-    subtitle: 'Sign in to view your matches',
+    subtitle: 'Sign in to discover your matches',
     language: 'Language',
     phone: 'Participant Phone Number',
     phonePlaceholder: '',
@@ -159,7 +159,7 @@ privacy: 'Privacy Policy',
 terms: 'Terms of Use',
   },
   ar: {
-    subtitle: 'سجّل/ي الدخول لعرض المطابقات',
+    subtitle: 'سجّل الدخول لاكتشاف التطابقات الخاصة بك',
     language: 'اللغة',
     phone: 'رقم الهاتف',
     phonePlaceholder: '',
@@ -172,7 +172,7 @@ privacy: 'سياسة الخصوصية',
 terms: 'شروط الاستخدام',
   },
   he: {
-    subtitle: 'התחבר/י כדי לראות את ההתאמות שלך',
+    subtitle: 'התחבר כדי לגלות את ההתאמות שלך',
     language: 'שפה',
     phone: 'מספר טלפון',
     phonePlaceholder: '',
@@ -374,12 +374,12 @@ const modalContent = computed(() => {
   letter-spacing: -1px;
 }
 
-.subtitle{
-  text-align:center;
-  font-size:15px;
-  color: #5f766a;
-  margin-top: -2px;
-  margin-bottom: 8px;
+.subtitle {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #6b7f73;
+  font-weight: 400;
+  letter-spacing: 0.2px;
 }
 
 /* ===== FORM ===== */
