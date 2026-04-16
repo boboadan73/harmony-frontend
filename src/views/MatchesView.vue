@@ -1234,5 +1234,28 @@ function onAvatarError(e) {
     font-size: 12px;
   }
 }
+.head-actions {
+  width: 100%;
+  display: flex;
+  gap: 6px;
+}
+
+
+.filters-toggle {
+  padding: 6px 10px;
+  font-size: 12px;
+  height: 34px;
+}
+
+
+.language-box {
+  padding: 5px 8px;
+  gap: 4px;
+  height: 34px;
+}
+
+.language-select {
+  font-size: 12px;
+}
 
 </style>
