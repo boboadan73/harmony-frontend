@@ -416,57 +416,62 @@ async function goToRegister() {
 .policyBox {
   margin-top: 0;
   padding: 4px 0 0;
-  border-radius: 0;
   background: transparent;
   border: 0;
 }
+
 .policyRow {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between; /* 💥 חשוב */
+  gap: 6px;
   font-size: 13px;
   line-height: 1.5;
   color: #476454;
+  cursor: pointer;
 }
 
+:dir(rtl) .policyRow {
+  flex-direction: row-reverse;
+}
+
+:dir(ltr) .policyRow {
+  flex-direction: row;
+}
 
 .policyText {
   margin: 0;
-  text-align: right;
-  flex: 1;
-}
-
-:dir(ltr) .policyText {
-  text-align: left;
+  text-align: start;
 }
 
 .checkboxWrapper {
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 20px;
+  flex: 0 0 18px;
   margin: 0;
 }
 
 .checkboxWrapper input {
+  position: absolute;
   opacity: 0;
-  width: 0;
-  height: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
 }
 
 .customCheck {
   width: 18px;
   height: 18px;
   border: 2px solid #5b8b70;
-  border-radius: 4px; 
+  border-radius: 3px;
   background: #fff;
-
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.18s ease;
 }
 
 .checkboxWrapper input:checked + .customCheck {
@@ -476,9 +481,10 @@ async function goToRegister() {
 
 .checkboxWrapper input:checked + .customCheck::after {
   content: "✓";
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
 }
 .linkBtn {
   background: none;
@@ -576,7 +582,6 @@ async function goToRegister() {
 .modalHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 18px 20px;
   border-bottom: 1px solid rgba(47,107,79,0.18);
 }
