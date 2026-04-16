@@ -328,32 +328,26 @@ const modalContent = computed(() => {
 
 /* ===== CARD (מסגרת ירוקה + glass ירקרק) ===== */
 .loginCard{
-  width: min(520px, 92vw);
-  padding: 26px 22px;
-  border-radius: 26px;
+  width: min(560px, 92vw);
+  padding: 34px 32px 28px;
+  border-radius: 30px;
 
-  background: linear-gradient(
-    180deg,
-    rgba(233,243,238,0.92),
-    rgba(255,255,255,0.80)
-  );
-
-  border: 2.5px solid #2f6b4f;
+  background: rgba(255,255,255,0.88);
+  border: 1.5px solid rgba(47,107,79,0.22);
 
   box-shadow:
-    0 20px 45px rgba(31,63,50,0.15),
-    0 0 0 6px rgba(207,227,216,0.40);
+    0 18px 40px rgba(31,63,50,0.10),
+    0 2px 10px rgba(31,63,50,0.05);
 
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
 
   max-height: calc(100svh - 36px);
   overflow: auto;
-  scroll-padding-bottom: 140px;
 }
 
 /* ===== BRAND ===== */
