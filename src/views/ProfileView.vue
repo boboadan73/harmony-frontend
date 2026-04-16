@@ -692,11 +692,10 @@ watch(pid, loadProfile, { immediate: true })
 }
 
 .h1 {
-  margin: 0;
-
+  margin: 0 0 16px 0;  
   font-size: 34px;
   font-weight: 700;
-  color: #2f4f4f; /* צבע כהה כמו בתמונה */
+  color: #3b5d5a;
 
   position: relative;
 }
