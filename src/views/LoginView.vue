@@ -450,27 +450,14 @@ async function goToRegister() {
   width: 0;
   height: 0;
 }
-
 .customCheck {
-  position: absolute;
-  inset: 0;
-  border-radius: 7px;
-  border: 1.8px solid #5b8b70;
-  background: #fff;
-  transition: all 0.18s ease;
-}
-
-.checkboxWrapper input:checked + .customCheck {
-  background: #2f6b4f;
-  border-color: #2f6b4f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .checkboxWrapper input:checked + .customCheck::after {
   content: "✓";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -60%);
   color: white;
   font-size: 14px;
   font-weight: bold;
