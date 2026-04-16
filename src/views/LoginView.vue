@@ -39,10 +39,6 @@
   {{ errorMessage }}
 </p>
 
-        <p v-if="phoneTouched && phone.trim() && !isIdValid" class="errorText">
-          {{ t.phoneError }}
-        </p>
-
     <div class="policyBox">
 <label class="policyRow">
   <span class="policyText">{{ t.agreeShort }}</span>
@@ -174,7 +170,6 @@ function isValidPhone(raw) {
 const isIdValid = computed(() => isValidPhone(phone.value))
 
 function onPhoneInput() {
-  phoneTouched.value = true
   errorMessage.value = ''
 }
 
