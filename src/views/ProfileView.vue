@@ -1,190 +1,184 @@
 <template>
-  <div class="container">
-    <div class="shell" :dir="isRtl ? 'rtl' : 'ltr'">
-      <div class="blob blob1" aria-hidden="true"></div>
-      <div class="blob blob2" aria-hidden="true"></div>
-      <div class="blob blob3" aria-hidden="true"></div>
+  <div class="matches-page" :dir="isRtl ? 'rtl' : 'ltr'">
+    <TopNav :lang="lang" :pid="pid || 'new'" />
 
-      <div class="page">
-<TopNav :lang="lang" :pid="pid || 'new'" />
-        <div class="headerRow">
-          <div class="titles">
-            <h1 class="h1">{{ t.title }}</h1>
-            <p class="subtitle">{{ t.subtitle }}</p>
+    <main class="matches-wrap">
+      <section class="page-head">
+        <div class="title-box">
+          <h1 class="page-title">{{ t.title }}</h1>
+          <p class="page-subtitle">{{ t.subtitle }}</p>
+        </div>
+
+        <div class="language-box">
+          <span class="language-icon" aria-hidden="true">🌐</span>
+          <select class="language-select" v-model="lang">
+            <option value="en">English</option>
+            <option value="ar">Arabic</option>
+            <option value="he">Hebrew</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="card">
+        <div class="cardGlow" aria-hidden="true"></div>
+
+        <div class="topProfileRow">
+          <div class="profileAvatarWrap">
+            <img
+              class="profileAvatar"
+              :src="profileAvatar"
+              alt="Profile avatar"
+              @error="onAvatarError"
+            />
           </div>
 
-          <div class="langBox">
-            <span class="langIcon" aria-hidden="true">🌐</span>
-            <select class="langSelect" v-model="lang">
-              <option value="en">English</option>
-              <option value="ar">Arabic</option>
-              <option value="he">Hebrew</option>
-            </select>
+          <div class="actionsWrap">
+            <button v-if="!isEditing" class="btn" @click="startEdit">
+              {{ t.edit }}
+            </button>
+
+            <template v-else>
+              <button class="btn" :disabled="saving" @click="saveProfile">
+                {{ saving ? t.saving : t.save }}
+              </button>
+              <button class="btnOutline" :disabled="saving" @click="cancelEdit">
+                {{ t.cancel }}
+              </button>
+            </template>
           </div>
         </div>
 
-        <div class="card">
-          <div class="cardGlow" aria-hidden="true"></div>
+        <div v-if="loading" class="statusText">{{ t.loading }}</div>
+        <div v-else-if="errorMsg" class="statusText errorText">{{ errorMsg }}</div>
 
-          <div class="topProfileRow">
-            <div class="profileAvatarWrap">
-              <img
-                class="profileAvatar"
-                :src="profileAvatar"
-                alt="Profile avatar"
-                @error="onAvatarError"
+        <template v-else>
+          <div class="fieldsGrid">
+            <div class="fieldBlock">
+              <label class="fieldLabel">{{ t.name }}</label>
+              <input
+                v-if="isEditing"
+                v-model="form.name"
+                class="input"
+                type="text"
               />
+              <div v-else class="fieldValue">{{ profile.name || t.empty }}</div>
             </div>
 
-            <div class="actionsWrap">
-              <button v-if="!isEditing" class="btn" @click="startEdit">
-                {{ t.edit }}
+            <div class="fieldBlock">
+              <label class="fieldLabel">{{ t.phone }}</label>
+              <input
+                v-if="isEditing"
+                v-model="form.phone"
+                class="input ltrNum"
+                type="text"
+              />
+              <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
+            </div>
+
+            <div class="fieldBlock">
+              <label class="fieldLabel">{{ t.job }}</label>
+              <input
+                v-if="isEditing"
+                v-model="form.job"
+                class="input"
+                type="text"
+              />
+              <div v-else class="fieldValue">{{ profile.job || t.empty }}</div>
+            </div>
+
+            <div class="fieldBlock">
+              <label class="fieldLabel">{{ t.image }}</label>
+              <input
+                v-if="isEditing"
+                v-model="form.image"
+                class="input ltrNum"
+                type="text"
+              />
+              <div v-else class="fieldValue breakAll">{{ profile.image || t.empty }}</div>
+            </div>
+
+            <div class="fieldBlock fullWidth">
+              <label class="fieldLabel">{{ t.academic }}</label>
+              <textarea
+                v-if="isEditing"
+                v-model="form.academic"
+                class="textarea"
+                rows="5"
+              />
+              <div v-else class="fieldValue multiline">{{ profile.academic || t.empty }}</div>
+            </div>
+
+            <div class="fieldBlock fullWidth">
+              <label class="fieldLabel">{{ t.professional }}</label>
+              <textarea
+                v-if="isEditing"
+                v-model="form.professional"
+                class="textarea"
+                rows="5"
+              />
+              <div v-else class="fieldValue multiline">{{ profile.professional || t.empty }}</div>
+            </div>
+
+            <div class="fieldBlock fullWidth">
+              <label class="fieldLabel">{{ t.personal }}</label>
+              <textarea
+                v-if="isEditing"
+                v-model="form.personal"
+                class="textarea"
+                rows="5"
+              />
+              <div v-else class="fieldValue multiline">{{ profile.personal || t.empty }}</div>
+            </div>
+          </div>
+
+          <div v-if="!isNewParticipant" class="privacyCard">
+            <div class="privacyTitle">{{ t.privacyTitle }}</div>
+            <div class="privacyText">
+              {{ profile.hidden ? t.hiddenNow : t.visibleNow }}
+            </div>
+
+            <div class="privacyActions">
+              <button class="btnOutline" :disabled="savingPrivacy" @click="togglePrivacy">
+                {{
+                  savingPrivacy
+                    ? t.saving
+                    : profile.hidden
+                    ? t.unhideProfile
+                    : t.hideProfile
+                }}
               </button>
 
-              <template v-else>
-                <button class="btn" :disabled="saving" @click="saveProfile">
-                  {{ saving ? t.saving : t.save }}
-                </button>
-                <button class="btnOutline" :disabled="saving" @click="cancelEdit">
-                  {{ t.cancel }}
-                </button>
-              </template>
+              <button class="btnDanger" :disabled="deleting" @click="deleteMyData">
+                {{ deleting ? t.deleting : t.deleteMyData }}
+              </button>
             </div>
           </div>
 
-          <div v-if="loading" class="statusText">{{ t.loading }}</div>
-          <div v-else-if="errorMsg" class="statusText errorText">{{ errorMsg }}</div>
+          <div v-if="successMsg" class="statusText successText">
+            {{ successMsg }}
+          </div>
+        </template>
+      </div>
 
-          <template v-else>
-            <div class="fieldsGrid"><div class="fieldBlock">
-  <label class="fieldLabel">{{ t.name }}</label>
-  <input
-    v-if="isEditing"
-    v-model="form.name"
-    class="input"
-    type="text"
-  />
-  <div v-else class="fieldValue">{{ profile.name || t.empty }}</div>
-</div>
+      <div class="spacerBottom"></div>
+    </main>
 
-<div class="fieldBlock">
-  <label class="fieldLabel">{{ t.phone }}</label>
-  <input
-    v-if="isEditing"
-    v-model="form.phone"
-    class="input ltrNum"
-    type="text"
-  />
-  <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
-</div>
+    <div v-if="showGeneratePopup" class="popupOverlay">
+      <div class="popupCard">
+        <h3 class="popupTitle">{{ t.generateRequiredTitle }}</h3>
+        <p class="popupText">{{ t.generateRequiredText }}</p>
 
-
-              <div class="fieldBlock">
-                <label class="fieldLabel">{{ t.job }}</label>
-                <input
-                  v-if="isEditing"
-                  v-model="form.job"
-                  class="input"
-                  type="text"
-                />
-                <div v-else class="fieldValue">{{ profile.job || t.empty }}</div>
-              </div>
-
-              <div class="fieldBlock">
-                <label class="fieldLabel">{{ t.image }}</label>
-                <input
-                  v-if="isEditing"
-                  v-model="form.image"
-                  class="input ltrNum"
-                  type="text"
-                />
-                <div v-else class="fieldValue breakAll">{{ profile.image || t.empty }}</div>
-              </div>
-
-              <div class="fieldBlock fullWidth">
-                <label class="fieldLabel">{{ t.academic }}</label>
-                <textarea
-                  v-if="isEditing"
-                  v-model="form.academic"
-                  class="textarea"
-                  rows="5"
-                />
-                <div v-else class="fieldValue multiline">{{ profile.academic || t.empty }}</div>
-              </div>
-
-              <div class="fieldBlock fullWidth">
-                <label class="fieldLabel">{{ t.professional }}</label>
-                <textarea
-                  v-if="isEditing"
-                  v-model="form.professional"
-                  class="textarea"
-                  rows="5"
-                />
-                <div v-else class="fieldValue multiline">{{ profile.professional || t.empty }}</div>
-              </div>
-
-              <div class="fieldBlock fullWidth">
-                <label class="fieldLabel">{{ t.personal }}</label>
-                <textarea
-                  v-if="isEditing"
-                  v-model="form.personal"
-                  class="textarea"
-                  rows="5"
-                />
-                <div v-else class="fieldValue multiline">{{ profile.personal || t.empty }}</div>
-              </div>
-            </div>
-
-<div v-if="!isNewParticipant" class="privacyCard">             
-   <div class="privacyTitle">{{ t.privacyTitle }}</div>
-              <div class="privacyText">
-                {{ profile.hidden ? t.hiddenNow : t.visibleNow }}
-              </div>
-
-              <div class="privacyActions">
-                <button class="btnOutline" :disabled="savingPrivacy" @click="togglePrivacy">
-                  {{
-                    savingPrivacy
-                      ? t.saving
-                      : profile.hidden
-                      ? t.unhideProfile
-                      : t.hideProfile
-                  }}
-                </button>
-
-                <button class="btnDanger" :disabled="deleting" @click="deleteMyData">
-                  {{ deleting ? t.deleting : t.deleteMyData }}
-                </button>
-              </div>
-            </div>
-
-            <div v-if="successMsg" class="statusText successText">
-              {{ successMsg }}
-            </div>
-          </template>
-        </div>
-
-        <div class="spacerBottom"></div>
-         </div>
-
-      <div v-if="showGeneratePopup" class="popupOverlay">
-        <div class="popupCard">
-          <h3 class="popupTitle">{{ t.generateRequiredTitle }}</h3>
-          <p class="popupText">{{ t.generateRequiredText }}</p>
-
-<button
-  class="generateBtn"
-  :disabled="generating"
-  @click="generateMatches"
->
-  {{ generating ? t.generating : t.generateNow }}
-</button>
-        </div>
+        <button
+          class="generateBtn"
+          :disabled="generating"
+          @click="generateMatches"
+        >
+          {{ generating ? t.generating : t.generateNow }}
+        </button>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { buildSystemApiUrl, buildMatchApiUrl } from '@/services/api'
 
@@ -664,359 +658,253 @@ watch(pid, loadProfile, { immediate: true })
 </script>
 
 <style scoped>
-.container { width: 100%; padding: 0; margin: 0; }
-
-.shell {
+.matches-page {
   min-height: 100vh;
-  padding: 18px 16px 70px;
+  background: #f5f6f4;
+  color: #45545a;
   font-family: Arial, sans-serif;
-  color: var(--h-text);
-
-  background: linear-gradient(
-    180deg,
-    #e6f2ec 0%,
-    #d6e8df 55%,
-    #c8ded3 100%
-  );
-
-  position: relative;
-  overflow: hidden;
-}
-.blob { 
-  position:absolute; 
-  filter: blur(18px); 
-  opacity:.55; 
-  border-radius:999px; 
-  pointer-events:none; 
 }
 
-.blob1 { 
-  width:360px; 
-  height:360px; 
-  left:-140px; 
-  top:-140px; 
-  background: radial-gradient(circle at 30% 30%, rgba(var(--h-green-600-rgb),0.45), rgba(var(--h-green-600-rgb),0.08));
+.matches-wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 18px 18px 40px;
 }
 
-.blob2 { 
-  width:460px; 
-  height:460px; 
-  right:-210px; 
-  top:50px; 
-  background: radial-gradient(circle at 40% 40%, rgba(var(--h-green-700-rgb),0.30), rgba(233,243,238,0.14));
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 18px 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #d9ddd9;
 }
 
-.blob3 { 
-  width:420px; 
-  height:420px; 
-  left:50%; 
-  bottom:-250px; 
-  transform: translateX(-50%); 
-  background: radial-gradient(circle at 40% 40%, rgba(233,243,238,0.80), rgba(var(--h-green-700-rgb),0.06));
+:dir(rtl) .page-head {
+  text-align: right;
 }
 
-.page { max-width: 980px; margin: 0 auto; }
-
-.headerRow{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:14px;
-  margin: 8px 0 18px;
+.title-box {
+  min-width: 0;
 }
 
-.h1 {
-  margin: 0 0 16px 0;  
+.page-title {
+  margin: 0 0 16px 0;
   font-size: 34px;
   font-weight: 700;
   color: #3b5d5a;
-
   position: relative;
 }
 
-.h1::after {
+.page-title::after {
   content: "";
   display: block;
-
-  width: 60px;
-  height: 4px;
-  margin-top: 8px;
-
+  width: 70px;
+  height: 5px;
+  margin-top: 10px;
   border-radius: 3px;
-  background: #6ea48d; /* ירוק עדין כמו בתמונה */
-}
-.subtitle{ margin:0; color: var(--h-text-muted); }
-
-.langBox{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:14px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.70), rgba(255,255,255,0.40));
-  border: 1px solid var(--h-border);
-  box-shadow: var(--h-shadow-soft);
-  backdrop-filter: blur(10px);
+  background: #7fb49a;
 }
 
-.langIcon{ opacity:0.8; }
-.langSelect{ border:none; outline:none; background:transparent; font-weight:800; color: var(--h-text); cursor:pointer; }
+.page-subtitle {
+  margin: 10px 0 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #7f8c91;
+}
 
-.card{
-  position:relative;
-  border-radius: 18px;
+.language-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f8f6;
+  border: 1px solid #d7dbd6;
+  border-radius: 999px;
+  padding: 7px 12px;
+}
+
+.language-icon {
+  font-size: 15px;
+}
+
+.language-select {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ===== CARD ===== */
+
+.card {
+  border-radius: 16px;
   padding: 18px;
-  overflow:hidden;
-  background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.52));
-  border: 2.5px solid #2f6b4f;
-  box-shadow: var(--h-shadow);
-  backdrop-filter: blur(10px);
+  background: #ffffff;
+  border: 1px solid #d8ddd8;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.06);
 }
 
-.cardGlow{
-  position:absolute;
-  inset:-2px;
-  background: radial-gradient(700px 240px at 15% 0%, rgba(var(--h-green-600-rgb),0.16), transparent 60%);
-  pointer-events:none;
+.cardGlow {
+  display: none;
 }
 
-.topProfileRow{
-  position: relative;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:18px;
+/* ===== PROFILE TOP ===== */
+
+.topProfileRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
-.profileAvatarWrap{
-  display:flex;
-  justify-content:center;
-}
-
-.profileAvatar{
-  width: 120px;
-  height: 120px;
+.profileAvatar {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(255,255,255,0.95);
-  box-shadow:
-    0 14px 30px rgba(31,63,50,0.18),
-    0 0 0 4px rgba(207,227,216,0.70);
 }
 
-.actionsWrap{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+.actionsWrap {
+  display: flex;
+  gap: 10px;
 }
 
-.fieldsGrid{
-  display:grid;
+/* ===== FIELDS ===== */
+
+.fieldsGrid {
+  display: grid;
   grid-template-columns: 1fr 1fr;
-  gap:14px;
+  gap: 14px;
 }
 
-.fieldBlock{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+.fieldBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.fullWidth{
+.fullWidth {
   grid-column: 1 / -1;
 }
 
-.fieldLabel{
-  font-weight: 900;
-  color: var(--h-green-800);
+.fieldLabel {
+  font-weight: 700;
 }
 
 .fieldValue,
 .input,
-.textarea{
-  border-radius: 14px;
-  background: rgba(233,243,238,0.65);
-  border: 1px solid var(--h-border);
-  padding: 12px;
-  color: var(--h-text);
+.textarea {
+  border-radius: 10px;
+  background: #f3f6f3;
+  border: 1px solid #d7ddd8;
+  padding: 10px;
   font-size: 14px;
 }
 
-.input,
-.textarea{
-  width:100%;
-  font-family: inherit;
-  outline:none;
-}
-
-.textarea{
+.textarea {
+  min-height: 100px;
   resize: vertical;
-  min-height: 120px;
 }
 
-.multiline{
-  white-space: pre-wrap;
-  line-height: 1.5;
+/* ===== BUTTONS ===== */
+
+.btn,
+.btnOutline {
+  min-width: 120px;
+  height: 36px;
+  border: 1px solid #cfd6cf;
+  background: #ffffff;
+  color: #58666b;
+  font-size: 14px;
+  border-radius: 999px;
+  cursor: pointer;
 }
 
-.breakAll{
-  word-break: break-all;
+.btn:hover,
+.btnOutline:hover {
+  background: #eef3ee;
 }
 
-.ltrNum { direction:ltr; unicode-bidi: plaintext; }
-
-.privacyCard{
-  margin-top: 18px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(233,243,238,0.65);
-  border: 1px solid var(--h-border);
-}
-
-.privacyTitle{
-  font-weight:900;
-  margin-bottom:8px;
-  color: var(--h-green-800);
-}
-
-.privacyText{
-  color: var(--h-text);
-  margin-bottom: 12px;
-}
-
-.privacyActions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.statusText{
-  margin-top: 12px;
-  font-weight: 700;
-}
-
-.successText{
-  color: #1f6b45;
-}
-
-.errorText{
+.btnDanger {
+  border: 1px solid #e0b4b4;
   color: #a12626;
+  background: #fff;
 }
 
-.btn{
-  padding: 10px 14px;
+/* ===== PRIVACY ===== */
+
+.privacyCard {
+  margin-top: 18px;
+  padding: 14px;
   border-radius: 12px;
-  border: 2.5px solid #2f6b4f;
-  background: rgba(233, 243, 238, 0.85);
-  color: #1f3f32;
-  font-weight: 800;
-  cursor: pointer;
+  background: #f3f6f3;
+  border: 1px solid #d7ddd8;
 }
 
-.btnOutline{
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 2.5px solid #2f6b4f;
-  background: rgba(255,255,255,0.4);
-  color: #1f3f32;
-  font-weight: 800;
-  cursor: pointer;
+.privacyTitle {
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
-.btnDanger{
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 2.5px solid #a12626;
-  background: rgba(255,255,255,0.4);
-  color: #8b1e1e;
-  font-weight: 800;
-  cursor: pointer;
+.privacyText {
+  margin-bottom: 10px;
 }
 
-.btn:disabled,
-.btnOutline:disabled,
-.btnDanger:disabled{
-  opacity: 0.6;
-  cursor: not-allowed;
+/* ===== STATUS ===== */
+
+.statusText {
+  margin-top: 10px;
+  font-weight: 600;
 }
 
-.spacerBottom{ height: 10px; }
-  .popupOverlay{
+.successText {
+  color: #2f7d55;
+}
+
+.errorText {
+  color: #c0392b;
+}
+
+/* ===== POPUP ===== */
+
+.popupOverlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  padding: 20px;
 }
 
-.popupCard{
-  width: 100%;
-  max-width: 360px;
-  border-radius: 18px;
-  padding: 24px;
+.popupCard {
   background: white;
-  border: 2px solid #2f6b4f;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+  padding: 24px;
+  border-radius: 16px;
   text-align: center;
+  max-width: 360px;
 }
 
-.popupTitle{
-  margin: 0 0 12px;
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--h-green-700);
-}
-
-.popupText{
-  margin: 0 0 20px;
-  color: var(--h-text);
-  line-height: 1.6;
-}
-                  .generateBtn {
-  min-width: 180px;            /* יותר גדול */
-  height: 44px;                /* יותר גבוה */
-  padding: 0 24px;
-
-  border: 2px solid #2f6b4f;   /* קו ירוק כמו במערכת */
-  background: #e6f2ec;         /* ירוק בהיר */
-  color: #1f3f32;
-
-  font-size: 16px;
-  font-weight: 700;
-
-  border-radius: 999px;        /* עגול */
+.generateBtn {
+  margin-top: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid #cfd6cf;
+  background: #eef3ee;
   cursor: pointer;
+}
 
-  transition: all 0.2s ease;
-}
-.generateBtn:hover {
-  background: #d6e8df;   /* קצת יותר כהה */
-  transform: translateY(-1px);
-}
-.generateBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
+/* ===== MOBILE ===== */
 
 @media (max-width: 700px) {
-  .fieldsGrid{
+  .fieldsGrid {
     grid-template-columns: 1fr;
   }
 
-  .topProfileRow{
+  .topProfileRow {
     flex-direction: column;
     align-items: flex-start;
   }
-}
-
-@media (max-width: 420px) {
-  .shell { padding: 12px 10px 60px; }
-  .h1 { font-size: 34px; }
-  .card { padding: 12px; border-radius: 16px; }
 }
 </style>
