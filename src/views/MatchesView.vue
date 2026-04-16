@@ -89,7 +89,7 @@ v-for="(m, idx) in filteredMatches"
                 <h2 class="match-name">{{ getName(m) }}</h2>
 
                 <span v-if="idx === 0" class="best-badge">
-                   <span class="best-badge-star">★</span>
+                   <span class="best-badge-star">★ </span>
                   {{ t.bestMatch }}
                 </span>
               </div>
