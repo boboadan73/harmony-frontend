@@ -1035,43 +1035,56 @@ function onAvatarError(e) {
 @media (max-width: 700px) {
   .matches-wrap {
     max-width: 100%;
-    padding: 10px 10px 24px;
+    padding: 8px 8px 20px;
   }
 
   .page-head {
     align-items: stretch;
     flex-direction: column;
-    gap: 12px;
-    margin: 12px 0 14px;
-    padding-bottom: 12px;
+    gap: 10px;
+    margin: 10px 0 12px;
+    padding-bottom: 10px;
   }
 
   .modern-page-title {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .modern-page-subtitle {
-    margin-top: 8px;
-    font-size: 13px;
+    margin-top: 6px;
+    font-size: 12px;
   }
 
   .head-actions {
     width: 100%;
     justify-content: space-between;
     margin-inline-start: 0;
-    gap: 10px;
+    gap: 8px;
   }
 
-  .filters-toggle,
+  .filters-toggle {
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
   .language-box {
-    min-height: 42px;
+    min-height: 38px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .language-select {
+    font-size: 13px;
   }
 
   .filters-dropdown {
     width: 100%;
-    min-width: 240px;
+    min-width: 0;
     left: 0;
     right: auto;
+    padding: 12px;
+    border-radius: 14px;
   }
 
   :dir(rtl) .filters-dropdown {
@@ -1079,18 +1092,30 @@ function onAvatarError(e) {
     left: auto;
   }
 
+  .filters-select,
+  .filters-input {
+    height: 38px;
+    font-size: 13px;
+    padding: 0 10px;
+  }
+
+  .filters-clear {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
   .matches-list {
-    gap: 14px;
+    gap: 12px;
   }
 
   .match-card {
-    padding: 14px 12px 12px;
+    padding: 12px 10px 10px;
     border-radius: 14px;
   }
 
   .match-top {
     align-items: flex-start;
-    gap: 10px;
+    gap: 8px;
   }
 
   :dir(rtl) .match-top {
@@ -1103,18 +1128,18 @@ function onAvatarError(e) {
   }
 
   .name-row {
-    margin-bottom: 10px;
-    gap: 6px;
+    margin-bottom: 8px;
+    gap: 5px;
   }
 
   .match-name {
-    font-size: 16px;
-    line-height: 1.3;
+    font-size: 15px;
+    line-height: 1.25;
   }
 
   .best-badge {
-    font-size: 10px;
-    padding: 3px 8px;
+    font-size: 9px;
+    padding: 3px 7px;
   }
 
   .why-section {
@@ -1123,81 +1148,90 @@ function onAvatarError(e) {
   }
 
   .why-title {
-    margin-bottom: 6px;
-    font-size: 14px;
+    margin-bottom: 4px;
+    font-size: 13px;
   }
 
   .why-text {
     width: 100%;
     max-width: none;
-    font-size: 13px;
-    line-height: 1.7;
-    word-break: normal;
+    font-size: 12px;
+    line-height: 1.55;
     overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .avatar-side {
-    width: 82px;
-    min-width: 82px;
+    width: 68px;
+    min-width: 68px;
     padding-top: 0;
+    gap: 4px;
   }
 
   .match-avatar {
-    width: 64px;
-    height: 64px;
-    border-width: 3px;
+    width: 54px;
+    height: 54px;
+    border-width: 2px;
   }
 
   .match-score {
-    margin-top: -6px;
-    font-size: 11px;
-    padding: 6px 9px;
+    margin-top: -4px;
+    font-size: 10px;
+    padding: 5px 8px;
   }
 
   .status-row {
-    margin-top: 12px;
-    padding-top: 10px;
-    gap: 6px;
+    margin-top: 10px;
+    padding-top: 8px;
+    gap: 5px;
   }
 
   .status-pill {
-    font-size: 12px;
-    padding: 4px 8px;
+    font-size: 11px;
+    padding: 4px 7px;
   }
 
   .actions-row {
-    margin-top: 12px;
-    padding-top: 10px;
+    margin-top: 10px;
+    padding-top: 8px;
   }
 
   .action-btn {
     min-width: 0;
     flex: 1;
-    height: 36px;
-    padding: 0 8px;
-    font-size: 13px;
+    height: 34px;
+    padding: 0 6px;
+    font-size: 12px;
   }
 
   .refresh-row {
-    margin-top: 6px;
+    margin-top: 4px;
   }
 
   .refresh-btn {
     width: 100%;
-    max-width: 220px;
+    max-width: 180px;
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   .state-box {
-    padding: 14px 12px;
-    border-radius: 14px;
+    padding: 12px 10px;
+    border-radius: 12px;
+  }
+
+  .state-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 
   .state-title {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .state-sub {
-    font-size: 13px;
+    font-size: 12px;
   }
 }
 
