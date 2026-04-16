@@ -1177,6 +1177,7 @@ function onAvatarError(e) {
     margin-top: -4px;
     font-size: 10px;
     padding: 5px 8px;
+    white-space: nowrap;
   }
 
   .status-row {
