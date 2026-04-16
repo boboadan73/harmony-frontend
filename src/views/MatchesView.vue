@@ -620,7 +620,7 @@ function onAvatarError(e) {
   align-items: center;
   gap: 10px;
   margin: 0;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 800;
   color: #355f4a;
   letter-spacing: 0.2px;
