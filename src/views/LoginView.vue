@@ -385,11 +385,12 @@ const modalContent = computed(() => {
 
 /* ===== FORM ===== */
 .label{
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  color: #355646;
-  margin-bottom: 2px;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #2f4f3e;
+  line-height: 1.4;
 }
 
 .input{
