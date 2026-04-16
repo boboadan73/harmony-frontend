@@ -204,22 +204,41 @@ async function fetchMetMatches() {
     const data = await res.json()
     const raw = normalizeResponse(data)
 
-    allMetMatches.value = raw
-      .map(r => ({
-       id: r?.matchId ?? r?.id,
-        name: r?.name ?? '',
-        match_name: r?.match_name ?? null,
-        role: r?.role ?? '',
-        whyMatched: r?.reason ?? '',
-        whyMatched_en: r?.reason_en ?? '',
-        whyMatched_he: r?.reason_he ?? '',
-        avatar:
-          (r?.image && String(r.image).trim()) ||
-          (r?.photoUrl && String(r.photoUrl).trim()) ||
-          (r?.imageUrl && String(r.imageUrl).trim()) ||
-          placeholderAvatar
-      }))
-      .filter(m => metIdsSet.has(String(m.id)))
+   allMetMatches.value = raw
+  .map(r => {
+    const explanation = r?.explanation || {}
+
+    return {
+      id: r?.matchId ?? r?.id,
+      name: r?.name ?? '',
+      match_name: r?.match_name ?? null,
+      role: r?.role ?? '',
+
+      whyMatched:
+        r?.reason ||
+        explanation?.ar ||
+        explanation?.en ||
+        explanation?.he ||
+        '',
+
+      whyMatched_en:
+        r?.reason_en ||
+        explanation?.en ||
+        '',
+
+      whyMatched_he:
+        r?.reason_he ||
+        explanation?.he ||
+        '',
+
+      avatar:
+        (r?.image && String(r.image).trim()) ||
+        (r?.photoUrl && String(r.photoUrl).trim()) ||
+        (r?.imageUrl && String(r.imageUrl).trim()) ||
+        placeholderAvatar
+    }
+  })
+  .filter(m => metIdsSet.has(String(m.id)))
   } catch {
     allMetMatches.value = []
   }
