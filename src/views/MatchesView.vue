@@ -785,32 +785,34 @@ function onAvatarError(e) {
 }
 
 .match-top {
-  flex-direction: column-reverse;
-  align-items: stretch;
-  gap: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 :dir(rtl) .match-top {
-  flex-direction: column-reverse;
+  flex-direction: row-reverse;
 }
-
 .avatar-side {
-  width: 100%;
-  min-width: 0;
-  flex-direction: row;
-  justify-content: space-between;
+  width: 80px;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 6px;
 }
 
 .match-avatar {
-  width: 58px;
-  height: 58px;
+  width: 60px;
+  height: 60px;
 }
 
 .match-score {
-  margin-top: 0;
+  margin-top: -6px;
+  font-size: 11px;
+  padding: 5px 8px;
 }
-
 
 
 .match-main {
