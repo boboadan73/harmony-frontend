@@ -67,7 +67,7 @@ const TEXTS = {
     badge: 'Harmony User',
     title: 'User Privacy Policy',
     intro:
-      'This Privacy Policy explains how the Harmony Intelligent Networking System collects, uses, and protects participant information during the event experience.',
+      'Please read these terms carefully before using the Harmony Intelligent Networking System.',
     sections: [
       {
         heading: 'Purpose',
