@@ -692,15 +692,25 @@ watch(pid, loadProfile, { immediate: true })
 }
 
 .h1 {
-  font-size: 36px;
-  font-weight: 800;
-  color: #3b5d5a;
+  margin: 0;
+
+  font-size: 34px;
+  font-weight: 700;
+  color: #2f4f4f; /* צבע כהה כמו בתמונה */
+
+  position: relative;
 }
 
 .h1::after {
-  width: 70px;
-  height: 5px;
-  background: #7fb49a;
+  content: "";
+  display: block;
+
+  width: 60px;
+  height: 4px;
+  margin-top: 8px;
+
+  border-radius: 3px;
+  background: #6ea48d; /* ירוק עדין כמו בתמונה */
 }
 .subtitle{ margin:0; color: var(--h-text-muted); }
 
