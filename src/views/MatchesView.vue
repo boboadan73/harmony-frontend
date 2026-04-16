@@ -3,11 +3,13 @@
     <TopNav :lang="lang" :pid="participantId()" />
 
     <main class="matches-wrap">
-      <section class="page-head">
-        <div class="title-box">
-          <h1 class="page-title">{{ t.title }}</h1>
-          <p class="page-subtitle">{{ t.subtitle }}</p>
-        </div>
+ <div class="title-box modern-title-box">
+  <h1 class="page-title modern-page-title">
+    <span class="title-icon">✨</span>
+    {{ t.title }}
+  </h1>
+  <p class="page-subtitle modern-page-subtitle">{{ t.subtitle }}</p>
+</div>
    
 <div class="head-actions">
   <div class="filters-bar">
@@ -106,10 +108,10 @@ v-for="(m, idx) in filteredMatches"
                 @error="onAvatarError"
               />
 
-              <div class="match-score ltrNum">
-                {{ m.matchPercent }}% {{ t.matchSuffix }}
+       <div class="match-score ltrNum">
+       <span class="score-star">★</span>
+          <span>{{ m.matchPercent }}% {{ t.matchSuffix }}</span>
               </div>
-            </div>
           </div>
 
           <div v-if="m.saved || m.met" class="status-row">
