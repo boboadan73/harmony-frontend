@@ -351,15 +351,37 @@ const modalContent = computed(() => {
 }
 
 /* ===== BRAND ===== */
-.brand{ display:flex; align-items:center; justify-content:center; gap:12px; }
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin-top: 4px;
+}
+
 .brandLogo{
-  height: 54px;
-  width: 54px;
+  height: 64px;
+  width: 64px;
   object-fit: cover;
   border-radius: 50%;
 }
-.title{ font-size: 44px; font-weight: 900; color: #1f3f32; margin: 0; }
-.subtitle{ text-align:center; font-size:14px; color: var(--h-text-muted); }
+
+.title{
+  font-size: 52px;
+  line-height: 1;
+  font-weight: 900;
+  color: #1f3f32;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:15px;
+  color: #5f766a;
+  margin-top: -2px;
+  margin-bottom: 8px;
+}
 
 /* ===== FORM ===== */
 .label{ font-size: 13px; font-weight: 900; color: var(--h-text); }
