@@ -692,15 +692,15 @@ watch(pid, loadProfile, { immediate: true })
 }
 
 .h1 {
-  margin: 0;
+  font-size: 36px;
+  font-weight: 800;
+  color: #3b5d5a;
+}
 
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-
-  background: linear-gradient(135deg, #2e7d5b, #4caf7a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.h1::after {
+  width: 70px;
+  height: 5px;
+  background: #7fb49a;
 }
 .subtitle{ margin:0; color: var(--h-text-muted); }
 
