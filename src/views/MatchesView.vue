@@ -608,17 +608,57 @@ function onAvatarError(e) {
   flex-direction: row-reverse;
 }
 
-.page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 500;
-  color: #4e5d63;
+.modern-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.page-subtitle {
-  margin: 6px 0 0;
-  font-size: 14px;
-  color: #9aa5aa;
+.modern-page-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  color: #355f4a;
+  letter-spacing: 0.2px;
+  position: relative;
+}
+
+.modern-page-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 72%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8fb89c, #5f8d70);
+  opacity: 0.95;
+}
+
+:dir(rtl) .modern-page-title::after {
+  left: auto;
+  right: 0;
+}
+
+.title-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #eef6f0, #dceadf);
+  box-shadow: 0 8px 20px rgba(80, 120, 96, 0.14);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.modern-page-subtitle {
+  margin: 10px 0 0;
+  font-size: 15px;
+  color: #7c8b84;
   font-weight: 600;
 }
 
