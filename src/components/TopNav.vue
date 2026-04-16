@@ -20,63 +20,83 @@
     <div class="spacer"></div>
 
     <!-- Overlay + Drawer -->
-    <div v-if="open" class="overlay" @click.self="open = false">
-      <aside class="drawer" :class="{ right: isRtl }" @click.stop>
-        <div class="drawerTop">
-          <img class="drawerLogo" :src="logoSrc" alt="Harmony" />
-          <button class="closeBtn" @click="open = false" aria-label="Close menu">✕</button>
-        </div>
+    <transition name="fade">
+      <div v-if="open" class="overlay" @click.self="open = false">
+        <aside class="drawer" :class="{ right: isRtl }" @click.stop>
+          <div class="drawerGlow"></div>
 
-        <nav class="drawerNav">
-          <router-link
-  :to="pidStr ? `/event/${eventId}/matches/${pidStr}` : `/event/${eventId}/login`"
-  class="item"
-  @click="open = false"
->
-  {{ t.matches }}
-</router-link>
+          <div class="drawerTop">
+            <div class="brandMini">
+              <div class="drawerLogoWrap">
+                <img class="drawerLogo" :src="logoSrc" alt="Harmony" />
+              </div>
+              <div class="brandText">
+                <p class="brandEyebrow">Harmony</p>
+                <h3 class="brandTitle">Navigation</h3>
+              </div>
+            </div>
 
-<router-link
-  :to="pidStr ? `/event/${eventId}/profile/${pidStr}` : `/event/${eventId}/login`"
-  class="item"
-  @click="open = false"
->
-  {{ t.profile }}
-</router-link>
+            <button class="closeBtn" @click="open = false" aria-label="Close menu">✕</button>
+          </div>
 
-<router-link
-  :to="pidStr ? `/event/${eventId}/met/${pidStr}` : `/event/${eventId}/login`"
-  class="item"
-  @click="open = false"
->
-  {{ t.met }}
-</router-link>
+          <nav class="drawerNav">
+            <router-link
+              :to="pidStr ? `/event/${eventId}/matches/${pidStr}` : `/event/${eventId}/login`"
+              class="item"
+              @click="open = false"
+            >
+              <span class="itemLabel">{{ t.matches }}</span>
+              <span class="itemArrow">›</span>
+            </router-link>
 
-<router-link
-  :to="pidStr ? `/event/${eventId}/saved/${pidStr}` : `/event/${eventId}/login`"
-  class="item"
-  @click="open = false"
->
-  {{ t.saved }}
-</router-link>
-          <router-link
-  :to="`/event/${eventId}/privacy`"
-  class="item"
-  @click="open = false"
->
-  {{ t.privacy }}
-</router-link>
+            <router-link
+              :to="pidStr ? `/event/${eventId}/profile/${pidStr}` : `/event/${eventId}/login`"
+              class="item"
+              @click="open = false"
+            >
+              <span class="itemLabel">{{ t.profile }}</span>
+              <span class="itemArrow">›</span>
+            </router-link>
 
-<router-link
-  :to="`/event/${eventId}/terms`"
-  class="item"
-  @click="open = false"
->
-  {{ t.terms }}
-</router-link>
-        </nav>
-      </aside>
-    </div>
+            <router-link
+              :to="pidStr ? `/event/${eventId}/met/${pidStr}` : `/event/${eventId}/login`"
+              class="item"
+              @click="open = false"
+            >
+              <span class="itemLabel">{{ t.met }}</span>
+              <span class="itemArrow">›</span>
+            </router-link>
+
+            <router-link
+              :to="pidStr ? `/event/${eventId}/saved/${pidStr}` : `/event/${eventId}/login`"
+              class="item"
+              @click="open = false"
+            >
+              <span class="itemLabel">{{ t.saved }}</span>
+              <span class="itemArrow">›</span>
+            </router-link>
+
+            <router-link
+              :to="`/event/${eventId}/privacy`"
+              class="item secondary"
+              @click="open = false"
+            >
+              <span class="itemLabel">{{ t.privacy }}</span>
+              <span class="itemArrow">›</span>
+            </router-link>
+
+            <router-link
+              :to="`/event/${eventId}/terms`"
+              class="item secondary"
+              @click="open = false"
+            >
+              <span class="itemLabel">{{ t.terms }}</span>
+              <span class="itemArrow">›</span>
+            </router-link>
+          </nav>
+        </aside>
+      </div>
+    </transition>
   </header>
 </template>
 
@@ -92,6 +112,7 @@ const props = defineProps({
 
 const route = useRoute()
 const router = useRouter()
+
 const eventId = computed(() =>
   String(route.params.eventId || localStorage.getItem('harmony_eventId') || '').trim()
 )
@@ -104,6 +125,7 @@ watch(
   },
   { immediate: true }
 )
+
 const open = ref(false)
 
 function logout() {
@@ -138,7 +160,7 @@ const t = computed(() => {
       saved: 'שמורים',
       logout: 'התנתק',
       privacy: 'מדיניות פרטיות',
-terms: 'תנאי שימוש',
+      terms: 'תנאי שימוש',
     }
   }
 
@@ -150,7 +172,7 @@ terms: 'תנאי שימוש',
       saved: 'المحفوظات',
       logout: 'تسجيل الخروج',
       privacy: 'سياسة الخصوصية',
-terms: 'شروط الاستخدام',
+      terms: 'شروط الاستخدام',
     }
   }
 
@@ -161,213 +183,359 @@ terms: 'شروط الاستخدام',
     saved: 'Saved',
     logout: 'Logout',
     privacy: 'Privacy Policy',
-terms: 'Terms of Use',
+    terms: 'Terms of Use',
   }
 })
 </script>
 
 <style scoped>
-/* NAV */
-
-.logoutBtn{
-  margin-bottom: 10px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 2px solid #2f6b4f;
-  background: rgba(233,243,238,0.95);
-  color: #1f3f32;
-  font-weight: 900;
+.logoutBtn {
+  margin-bottom: 12px;
+  padding: 11px 16px;
+  border: 1px solid rgba(47, 107, 79, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #244636;
+  font-weight: 800;
+  font-size: 14px;
   cursor: pointer;
+  box-shadow: 0 10px 28px rgba(31, 63, 50, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
-.logoutBtn:hover{
-  background: #ffffff;
+.logoutBtn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 14px 32px rgba(31, 63, 50, 0.12);
 }
 
-.topNav{
+.topNav {
   position: sticky;
   top: 12px;
   z-index: 120;
-
   display: grid;
   grid-template-columns: 56px 1fr 56px;
   align-items: center;
   padding: 10px 14px;
-  border-radius: 22px;
-
-  background: linear-gradient(135deg, rgba(47,107,79,0.96), rgba(63,127,99,0.92));
-  border: 1px solid rgba(233,243,238,0.30);
-  box-shadow: 0 18px 55px rgba(31,63,50,0.20);
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.88), rgba(244,250,246,0.78));
+  border: 1px solid rgba(111, 153, 121, 0.18);
+  box-shadow:
+    0 18px 50px rgba(31, 63, 50, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-/* MENU BUTTON */
-.menuBtn{
-  width:56px;
-  height:44px;
-  border-radius:14px;
-
-  background: rgba(233,243,238,0.20);
-  border: 1px solid rgba(233,243,238,0.32);
-
-  display:grid;
-  place-content:center;
-  gap:6px;
-  cursor:pointer;
-  transition: transform 140ms ease, background 140ms ease;
-}
-.menuBtn:hover{
-  transform: translateY(-1px);
-  background: rgba(233,243,238,0.28);
-}
-.menuBtn span{
-  width:22px;
-  height:3px;
-  background: rgba(255,255,255,0.94);
-  border-radius:999px;
+.menuBtn {
+  width: 56px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2f6b4f, #4f8a69);
+  border: 1px solid rgba(255,255,255,0.16);
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(47, 107, 79, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 }
 
-/* LOGO */
+.menuBtn:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 16px 30px rgba(47, 107, 79, 0.28);
+  filter: brightness(1.03);
+}
+
+.menuBtn span {
+  width: 22px;
+  height: 2.8px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 999px;
+}
+
 .logoWrap {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  overflow: hidden;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
+  padding: 3px;
+  background: linear-gradient(135deg, rgba(47,107,79,0.18), rgba(255,255,255,0.92));
+  box-shadow: 0 10px 26px rgba(31, 63, 50, 0.10);
 }
+
 .logo {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  display: block;
+  background: #fff;
 }
 
-/* spacer */
-.spacer{ width:56px; height:44px; }
+.spacer {
+  width: 56px;
+  height: 44px;
+}
 
-/* Overlay */
-.overlay{
+.overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 25, 20, 0.70);
+  background: rgba(16, 24, 20, 0.46);
   z-index: 9999;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
-/* Drawer */
-.drawer{
+.drawer {
   position: absolute;
   top: 0;
   left: 0;
-
-  width: min(340px, 86vw);
+  width: min(360px, 88vw);
   height: 100vh;
-
-  background: linear-gradient(180deg, #2f6b4f 0%, #3f7f63 100%);
-
-  border-right: 3px solid #24513f;
-  box-shadow: 18px 0 70px rgba(31,63,50,0.35);
-
-  padding: 16px;
+  overflow-y: auto;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-
-  overflow-y: auto;
+  background:
+    linear-gradient(180deg, rgba(248,252,249,0.96) 0%, rgba(235,244,238,0.96) 100%);
+  border-right: 1px solid rgba(90, 129, 104, 0.16);
+  box-shadow: 24px 0 60px rgba(20, 41, 31, 0.14);
 }
 
-.drawer.right{
+.drawer.right {
   left: auto;
   right: 0;
   border-right: none;
-  border-left: 3px solid #24513f;
-  box-shadow: -18px 0 70px rgba(31,63,50,0.35);
+  border-left: 1px solid rgba(90, 129, 104, 0.16);
+  box-shadow: -24px 0 60px rgba(20, 41, 31, 0.14);
 }
 
-/* TOP area */
-.drawerTop{
+.drawerGlow {
+  position: absolute;
+  top: -80px;
+  left: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: rgba(88, 153, 117, 0.14);
+  filter: blur(38px);
+  pointer-events: none;
+}
+
+.drawerTop {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 12px 12px;
-  border-radius: 16px;
-
-  background: rgba(233,243,238,0.95);
-  border: 2px solid #24513f;
-
-  box-shadow: 0 10px 22px rgba(31,63,50,0.18);
+  gap: 12px;
+  padding: 14px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(111, 153, 121, 0.14);
+  box-shadow:
+    0 14px 34px rgba(31, 63, 50, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.drawerLogo{
+.brandMini {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.drawerLogoWrap {
+  width: 52px;
   height: 52px;
-  width: auto;
-  border-radius: 12px;
+  border-radius: 16px;
+  padding: 3px;
+  background: linear-gradient(135deg, rgba(47,107,79,0.16), rgba(255,255,255,0.9));
+  flex-shrink: 0;
 }
 
-.closeBtn{
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+.drawerLogo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 13px;
+  display: block;
+  background: #fff;
+}
 
-  background: #f2f8f5;
-  border: 2px solid #2f6b4f;
+.brandText {
+  min-width: 0;
+}
+
+.brandEyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6c8a79;
+}
+
+.brandTitle {
+  margin: 4px 0 0;
+  font-size: 19px;
+  line-height: 1.1;
+  font-weight: 900;
   color: #1f3f32;
+}
+
+.closeBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(47, 107, 79, 0.14);
+  background: rgba(255,255,255,0.86);
+  color: #244636;
+  font-size: 18px;
   font-weight: 900;
   cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.18s ease, background 0.18s ease;
 }
-.closeBtn:hover{
+
+.closeBtn:hover {
+  transform: scale(1.03);
   background: #ffffff;
 }
 
-/* NAV list */
-.drawerNav{
-  margin-top: 16px;
+.drawerNav {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
   display: grid;
   gap: 12px;
 }
 
-/* ITEMS */
-.item{
-  padding: 16px;
-  border-radius: 16px;
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
   text-decoration: none;
-  font-weight: 900;
-
+  background: rgba(255,255,255,0.82);
+  border: 1px solid rgba(111, 153, 121, 0.14);
   color: #1f3f32;
-  background: rgba(233,243,238,0.95);
-  border: 2px solid #24513f;
-
-  box-shadow: 0 10px 22px rgba(31,63,50,0.14);
+  box-shadow:
+    0 12px 28px rgba(31, 63, 50, 0.07),
+    inset 0 1px 0 rgba(255,255,255,0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
-.item:hover{
-  background: #ffffff;
+
+.item:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.96);
+  box-shadow:
+    0 18px 32px rgba(31, 63, 50, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.76);
 }
 
-/* MOBILE */
-@media (max-width: 420px){
-  .topNav{
+.item.secondary {
+  background: rgba(246, 250, 247, 0.88);
+}
+
+.itemLabel {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.itemArrow {
+  font-size: 24px;
+  line-height: 1;
+  color: #6b8f7a;
+  flex-shrink: 0;
+  transform: translateY(-1px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 420px) {
+  .logoutBtn {
+    padding: 10px 14px;
+    border-radius: 13px;
+    font-size: 13px;
+  }
+
+  .topNav {
     grid-template-columns: 48px 1fr 48px;
     padding: 8px 10px;
-    border-radius:18px;
+    border-radius: 20px;
     top: 10px;
   }
-  .menuBtn{ width:48px; height:38px; border-radius:12px; gap:5px; }
-  .menuBtn span{ width:20px; height:3px; }
-  .spacer{ width:48px; height:38px; }
-  .logoWrap{ width:48px; height:48px; }
-  .drawer{ padding: 14px; }
-  .drawerLogo{ height:44px; }
-  .item{ padding:14px; border-radius:14px; }
+
+  .menuBtn {
+    width: 48px;
+    height: 38px;
+    border-radius: 12px;
+  }
+
+  .menuBtn span {
+    width: 20px;
+    height: 2.6px;
+  }
+
+  .spacer {
+    width: 48px;
+    height: 38px;
+  }
+
+  .logoWrap {
+    width: 50px;
+    height: 50px;
+  }
+
+  .drawer {
+    padding: 14px;
+    width: min(340px, 90vw);
+  }
+
+  .drawerTop {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .drawerLogoWrap {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .brandTitle {
+    font-size: 17px;
+  }
+
+  .item {
+    padding: 14px 15px;
+    border-radius: 16px;
+  }
+
+  .itemLabel {
+    font-size: 14px;
+  }
 }
 </style>
