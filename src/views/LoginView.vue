@@ -311,14 +311,13 @@ const modalContent = computed(() => {
 /* ===== PAGE BG (ירוק מחוזק כמו שביקשת) ===== */
 .loginPage{
   min-height: 100svh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  max-width: 100%;
   padding: 18px;
   font-family: Arial, sans-serif;
   color: var(--h-text);
-
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
@@ -332,8 +331,8 @@ const modalContent = computed(() => {
 .loginCard{
   width: 100%;
   max-width: 560px;
-  padding: 34px 32px 28px;
-  border-radius: 30px;
+  padding: 28px 24px 24px;
+  border-radius: 28px;
 
   background: rgba(255,255,255,0.88);
   border: 1.5px solid rgba(47,107,79,0.22);
@@ -347,10 +346,9 @@ const modalContent = computed(() => {
 
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 
-  max-height: calc(100svh - 36px);
-  overflow: auto;
+  overflow: visible;
 }
 
 /* ===== BRAND ===== */
@@ -572,181 +570,129 @@ const modalContent = computed(() => {
 }
 
 /* ===== MOBILE ===== */
-@media (max-width: 420px){
+@media (max-width: 768px){
+  .container{
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   .loginPage{
-    padding: 12px;
+    display: block;
+    min-height: 100svh;
+    padding: 0;
   }
 
   .loginCard{
     width: 100%;
     max-width: 100%;
-    padding: 16px 14px;
-    border-radius: 18px;
+    min-height: 100svh;
+    border-radius: 0;
+    padding: 24px 16px 32px;
+    gap: 14px;
+    box-shadow: none;
+    border: none;
+    background: rgba(255,255,255,0.92);
+  }
+
+  .brand{
     gap: 10px;
+    margin-top: 4px;
+  }
+
+  .brandLogo{
+    width: 44px;
+    height: 44px;
   }
 
   .title{
     font-size: 34px;
   }
 
-  .brandLogo{
-    height: 44px;
-    width: 44px;
+  .subtitle{
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .label{
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .input{
+    height: 50px;
+    padding: 12px 42px 12px 14px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+
+  .selectInput{
+    padding-right: 42px;
+  }
+
+  .arrow{
+    right: 14px;
+  }
+
+  .policyBox{
+    margin-top: 0;
+    padding: 4px 0 0;
+  }
+
+  .policyRow{
+    gap: 10px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .btnBar{
+    margin-top: 10px;
+    gap: 10px;
   }
 
   .primaryBtn,
   .secondaryBtn{
     min-height: 50px;
     font-size: 15px;
+    border-radius: 14px;
   }
 
-  .btnBar{
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 18px;
+  .modalOverlay{
+    padding: 10px;
   }
-}
 
-.policyBox {
-  margin-top: 2px;
-  padding: 8px 2px 2px;
-  border-radius: 0;
-  background: transparent;
-  border: 0;
-}
+  .modalCard{
+    width: 100%;
+    max-width: 100%;
+    max-height: 90svh;
+    border-radius: 18px;
+  }
 
-.policyRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: #476454;
-}
+  .modalHeader{
+    padding: 14px 16px;
+  }
 
-.policyRow input {
-  width: 18px;
-  height: 18px;
-  accent-color: #2f6b4f;
-  cursor: pointer;
-}
+  .modalTitle{
+    font-size: 20px;
+  }
 
-.link {
-  color: #2f6b4f;
-  font-weight: 700;
-  text-decoration: underline;
-  margin: 0 4px;
-}
-  .linkBtn {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0 4px;
-  color: #2f6b4f;
-  font-weight: 700;
-  text-decoration: underline;
-  cursor: pointer;
-  font: inherit;
-}
+  .modalBody{
+    padding: 16px;
+  }
 
-.modalOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(20, 35, 28, 0.45);
-  display: grid;
-  place-items: center;
-  z-index: 9999;
-  padding: 18px;
-}
+  .modalSection{
+    padding: 14px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
 
-.modalCard {
-  width: min(760px, 96vw);
-  max-height: 85vh;
-  overflow: hidden;
-  border-radius: 22px;
-  background: linear-gradient(
-    180deg,
-    rgba(233,243,238,0.98),
-    rgba(255,255,255,0.96)
-  );
-  border: 2px solid #2f6b4f;
-  box-shadow: 0 20px 45px rgba(31,63,50,0.18);
-  display: flex;
-  flex-direction: column;
-}
+  .modalSection h3{
+    font-size: 17px;
+  }
 
-.modalHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 20px;
-  border-bottom: 1px solid rgba(47,107,79,0.18);
-}
-
-.modalTitle {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 900;
-  color: #1f3f32;
-}
-
-.modalClose {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  border: 2px solid #2f6b4f;
-  background: #f4faf6;
-  color: #1f3f32;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.modalBody {
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.modalSection {
-  margin-bottom: 22px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.78);
-  border: 1px solid rgba(47,107,79,0.12);
-}
-
-.modalSection h3 {
-  margin: 0 0 10px;
-  font-size: 20px;
-  color: #204634;
-}
-
-.modalSection p {
-  margin: 0;
-  line-height: 1.75;
-  color: #304c3d;
-  font-size: 15px;
-}
-.policyText {
-  display: inline;
-}
-
-.linkBtn {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0 4px;
-  color: #2f6b4f;
-  font-weight: 700;
-  text-decoration: underline;
-  cursor: pointer;
-  font: inherit;
-}
-
-.linkBtn:hover {
-  color: #24513f;
+  .modalSection p{
+    font-size: 14px;
+    line-height: 1.65;
+  }
 }
 </style>
