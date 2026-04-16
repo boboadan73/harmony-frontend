@@ -307,13 +307,17 @@ function getName(m) {
   if (!m) return ''
 
   const mn = m.match_name || {}
-  const original = mn.original || m.name || ''
+
+  const ar = mn.ar || ''
   const en = mn.en || ''
   const he = mn.he || ''
+  const original = mn.original || m.name || ''
 
-  if (lang.value === 'en') return en || original || he || ''
-  if (lang.value === 'he') return he || en || original || ''
-  return original || en || he || ''
+  if (lang.value === 'ar') return ar || en || original || he || ''
+  if (lang.value === 'en') return en || ar || original || he || ''
+  if (lang.value === 'he') return he || en || original || ar || ''
+
+  return original || en || he || ar || ''
 }
 
 function toUiMatch(raw) {
