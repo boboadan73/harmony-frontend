@@ -785,15 +785,33 @@ function onAvatarError(e) {
 }
 
 .match-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: 12px;
 }
 
 :dir(rtl) .match-top {
-  flex-direction: row-reverse;
+  flex-direction: column-reverse;
 }
+
+.avatar-side {
+  width: 100%;
+  min-width: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.match-avatar {
+  width: 58px;
+  height: 58px;
+}
+
+.match-score {
+  margin-top: 0;
+}
+
+
 
 .match-main {
   flex: 1;
@@ -832,9 +850,6 @@ function onAvatarError(e) {
   white-space: nowrap;
 }
 
-.why-section {
-  text-align: start;
-}
 
 .why-title {
   margin-bottom: 8px;
@@ -843,11 +858,14 @@ function onAvatarError(e) {
   color: #6c8778;
 }
 
+  .why-section {
+  width: 100%;
+  min-width: 0;
+}
+
 .why-text {
-  font-size: 15px;
-  line-height: 1.65;
-  color: #5c6a6f;
-  word-break: break-word;
+  width: 100%;
+  max-width: 100%;
 }
 
 .avatar-side {
@@ -1180,13 +1198,5 @@ function onAvatarError(e) {
     font-size: 13px;
   }
 }
-  .why-section {
-  width: 100%;
-  min-width: 0;
-}
 
-.why-text {
-  width: 100%;
-  max-width: 100%;
-}
 </style>
