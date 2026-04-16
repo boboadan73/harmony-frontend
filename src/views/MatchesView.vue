@@ -3,6 +3,7 @@
     <TopNav :lang="lang" :pid="participantId()" />
 
     <main class="matches-wrap">
+       <section class="page-head">
  <div class="title-box modern-title-box">
   <h1 class="page-title modern-page-title">
     <span class="title-icon">✨</span>
