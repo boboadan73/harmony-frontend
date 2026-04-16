@@ -114,6 +114,7 @@ v-for="(m, idx) in filteredMatches"
           <span>{{ m.matchPercent }}% {{ t.matchSuffix }}</span>
               </div>
           </div>
+            </div>
 
           <div v-if="m.saved || m.met" class="status-row">
             <span v-if="m.saved" class="status-pill">{{ t.saved }}</span>
