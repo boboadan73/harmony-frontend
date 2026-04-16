@@ -1041,48 +1041,126 @@ watch(pid, loadProfile, { immediate: true })
 }
 
 /* ===== MOBILE ===== */
-
 @media (max-width: 700px) {
+
   .matches-wrap {
-    padding: 14px 12px 30px;
+    max-width: 100%;
+    padding: 10px 10px 24px;
   }
 
+  /* ===== HEADER ===== */
   .page-head {
-    align-items: flex-start;
     flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin: 10px 0 12px;
+    padding-bottom: 10px;
   }
 
+  .page-title {
+    font-size: 20px;
+  }
+
+  .page-subtitle {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* שפה */
   .language-box {
-    align-self: flex-start;
+    align-self: flex-end;
+    padding: 5px 10px;
   }
 
   :dir(rtl) .language-box {
-    align-self: flex-end;
+    align-self: flex-start;
   }
 
+  /* ===== CARD ===== */
+  .card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  /* ===== PROFILE TOP ===== */
   .topProfileRow {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
   .profileAvatarWrap {
-    width: 104px;
+    width: 90px;
   }
 
   .profileAvatar {
-    width: 78px;
-    height: 78px;
+    width: 70px;
+    height: 70px;
   }
 
+  .actionsWrap {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ===== FIELDS ===== */
   .fieldsGrid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
+  .fieldLabel {
+    font-size: 13px;
+  }
+
+  .input,
+  .textarea,
+  .fieldValue {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .textarea {
+    min-height: 90px;
+  }
+
+  /* ===== BUTTONS ===== */
   .btn,
   .btnOutline,
   .btnDanger {
-    min-width: 120px;
+    width: 100%;
+    min-width: unset;
+    height: 34px;
+    font-size: 13px;
+  }
+
+  /* ===== PRIVACY ===== */
+  .privacyCard {
+    padding: 12px;
+  }
+
+  .privacyActions {
+    flex-direction: column;
+  }
+
+  /* ===== POPUP ===== */
+  .popupCard {
+    max-width: 90%;
+    padding: 18px;
+  }
+
+  .popupTitle {
+    font-size: 18px;
+  }
+
+  .popupText {
+    font-size: 13px;
+  }
+
+  .generateBtn {
+    width: 100%;
+    height: 40px;
     font-size: 14px;
   }
 }
