@@ -384,27 +384,35 @@ const modalContent = computed(() => {
 }
 
 /* ===== FORM ===== */
-.label{ font-size: 13px; font-weight: 900; color: var(--h-text); }
+.label{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: #355646;
+  margin-bottom: 2px;
+}
 
 .input{
   width: 100%;
-  padding: 14px 44px 14px 14px;
-  border-radius: 16px;
-  height: 52px;
+  padding: 14px 44px 14px 16px;
+  border-radius: 18px;
+  height: 56px;
   box-sizing: border-box;
 
-  border: 2px solid rgba(47,107,79,0.25);
-  background: rgba(255,255,255,0.94);
+  border: 1.5px solid rgba(47,107,79,0.18);
+  background: #ffffff;
   color: var(--h-text);
 
-  font-size: 14px;
-  box-shadow: 0 10px 22px rgba(31,63,50,0.08);
+  font-size: 15px;
+  box-shadow: 0 6px 16px rgba(31,63,50,0.05);
 }
 
 .input:focus{
   outline: none;
-  border-color: #2f6b4f;
-  box-shadow: 0 0 0 4px rgba(47,107,79,0.18), 0 12px 26px rgba(31,63,50,0.10);
+  border-color: #6e9d82;
+  box-shadow:
+    0 0 0 4px rgba(110,157,130,0.14),
+    0 8px 20px rgba(31,63,50,0.08);
 }
 
 .field{
