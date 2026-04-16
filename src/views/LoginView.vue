@@ -43,17 +43,14 @@
           {{ t.phoneError }}
         </p>
 
-      <div class="policyBox">
-  <div class="policyRow">
-    <label class="checkboxWrapper">
+    <div class="policyBox">
+  <label class="policyRow">
+    <span class="policyText">{{ t.agreeShort }}</span>
+    <span class="checkboxWrapper">
       <input type="checkbox" v-model="acceptedPolicy" />
       <span class="customCheck"></span>
-    </label>
-
-  <span class="policyText">
-  {{ t.agreeShort }}
-</span>
-  </div>
+    </span>
+  </label>
 </div>
 
         <!-- BUTTONS -->
@@ -422,13 +419,13 @@ async function goToRegister() {
   background: transparent;
   border: 0;
 }
-
 .policyRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 8px;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.5;
   color: #476454;
 }
 
@@ -441,8 +438,9 @@ async function goToRegister() {
 }
 
 .policyText {
-  flex: 1;
+  margin: 0;
   text-align: right;
+  flex: 1;
 }
 
 :dir(ltr) .policyText {
@@ -451,13 +449,13 @@ async function goToRegister() {
 
 .checkboxWrapper {
   position: relative;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 22px;
-  margin-top: 0;
+  flex: 0 0 20px;
+  margin: 0;
 }
 
 .checkboxWrapper input {
@@ -465,17 +463,16 @@ async function goToRegister() {
   width: 0;
   height: 0;
 }
-.customCheck {
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  border: 1.8px solid #5b8b70;
-  background: #ffffff;
 
-  display: flex;
+.customCheck {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #5b8b70;
+  border-radius: 4px;
+  background: #fff;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-
   transition: all 0.18s ease;
 }
 
@@ -486,9 +483,10 @@ async function goToRegister() {
 
 .checkboxWrapper input:checked + .customCheck::after {
   content: "✓";
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .linkBtn {
