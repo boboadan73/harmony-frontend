@@ -691,14 +691,17 @@ watch(pid, loadProfile, { immediate: true })
   margin: 8px 0 18px;
 }
 
-.h1{
-  margin:0 0 6px;
-  font-size:44px;
-  letter-spacing:-0.8px;
-  font-weight:900;
-  color: var(--h-green-700);
-}
+.h1 {
+  margin: 0;
 
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+
+  background: linear-gradient(135deg, #2e7d5b, #4caf7a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .subtitle{ margin:0; color: var(--h-text-muted); }
 
 .langBox{
