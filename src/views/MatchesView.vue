@@ -632,7 +632,7 @@ function onAvatarError(e) {
   position: absolute;
   bottom: -10px;
   left: 0;
-  width: 40%;
+  width: 25%;
   height: 4px;
   border-radius: 999px;
   background: linear-gradient(90deg, #8fb89c, #5f8d70);
@@ -1264,12 +1264,17 @@ function onAvatarError(e) {
   display: flex;
 }
 
-.filters-bar {
-  order: 1;
+.head-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+  .filters-bar {
+  margin-inline-end: auto;
 }
 
 .language-box {
-  order: 2;
+  margin-inline-start: auto;
 }
 
 
