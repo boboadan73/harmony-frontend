@@ -63,56 +63,56 @@ watch(lang, (v) => {
 const TEXTS = {
   en: {
     pageTitle: 'Privacy Policy',
-    pageSubtitle: 'Read how administrator data is handled',
-    badge: 'Harmony Admin',
-    title: 'Admin Privacy Policy',
+    pageSubtitle: 'Read how participant data is handled',
+    badge: 'Harmony User',
+    title: 'User Privacy Policy',
     intro:
-      'This Privacy Policy describes how the Harmony Intelligent Networking System Admin Panel collects, uses, and protects administrator information.',
+      'This Privacy Policy explains how the Harmony Intelligent Networking System collects, uses, and protects participant information during the event experience.',
     sections: [
       {
         heading: 'Purpose',
         text:
-          'This Privacy Policy describes how the Harmony Intelligent Networking System Admin Panel collects, uses, and protects administrator information.',
+          'This Privacy Policy explains how the Harmony Intelligent Networking System collects, uses, and protects participant information during the event experience.',
       },
       {
         heading: 'Information We Collect',
         text:
-          'When administrators access the system, we may collect name, email address, authentication identifier from Microsoft Azure Entra ID, admin activity logs, and technical data.',
-      },
-      {
-        heading: 'Authentication',
-        text:
-          'Administrator access is provided using Microsoft Azure Entra ID. Authentication is handled by Microsoft, and we only receive basic profile information required for authorization.',
+          'When participants use the system, we may collect profile information such as name, phone number, professional details, academic background, personal interests, profile image, and event-related information.',
       },
       {
         heading: 'How We Use Information',
         text:
-          'We use administrator information to authenticate authorized administrators, manage events and participant data, provide analytics dashboards, monitor system usage, and maintain system security.',
+          'We use participant information to identify the participant within the event, generate networking recommendations, display relevant matches, and improve the event networking experience.',
+      },
+      {
+        heading: 'Authentication',
+        text:
+          'Participant access is provided through the event login flow using the information submitted for the event. We do not use OTP authentication for participants in this flow.',
       },
       {
         heading: 'Data Storage',
         text:
-          'Administrator-related data may be stored securely using Microsoft Azure services, including Azure Cosmos DB and secure cloud infrastructure with restricted access.',
+          'Participant-related data may be stored securely in protected cloud systems, including Microsoft Azure services such as Azure Cosmos DB, for the operation of the project.',
       },
       {
         heading: 'Data Sharing',
         text:
-          'We do not sell or share administrator information. Data may be shared only with Microsoft Azure services required for system operation, if required by law, or to protect system security.',
+          'We do not sell participant information. Data is used only for the operation of the Harmony system and may be processed through secure infrastructure required for the project.',
       },
       {
         heading: 'Data Retention',
         text:
-          'Administrator data is retained only for the duration of the project deployment and testing period.',
+          'Participant data is retained only for the period necessary for the event, project operation, and academic testing, and may later be deleted according to project needs.',
       },
       {
         heading: 'Security',
         text:
-          'We implement Azure Entra ID authentication, role-based access control, HTTPS encryption, and restricted database access.',
+          'We apply reasonable security measures such as HTTPS communication, controlled backend access, and restricted database access to protect participant information.',
       },
       {
         heading: 'Academic Project Notice',
         text:
-          'This system is developed as part of an academic project and may change before production release.',
+          'This system is developed as part of an academic project and may change before any future production release.',
       },
       {
         heading: 'Contact',
@@ -124,56 +124,56 @@ const TEXTS = {
 
   ar: {
     pageTitle: 'سياسة الخصوصية',
-    pageSubtitle: 'اقرأ كيف يتم التعامل مع بيانات المديرين',
-    badge: 'Harmony Admin',
-    title: 'سياسة خصوصية المشرف',
+    pageSubtitle: 'اقرأ كيف يتم التعامل مع بيانات المشاركين',
+    badge: 'Harmony User',
+    title: 'سياسة خصوصية المستخدم',
     intro:
-      'توضح سياسة الخصوصية هذه كيف تقوم لوحة إدارة نظام Harmony الذكي للتواصل بجمع معلومات المشرفين واستخدامها وحمايتها.',
+      'توضح سياسة الخصوصية هذه كيف يقوم نظام Harmony الذكي للتواصل بجمع معلومات المشاركين واستخدامها وحمايتها خلال تجربة الفعالية.',
     sections: [
       {
         heading: 'الغرض',
         text:
-          'توضح سياسة الخصوصية هذه كيف تقوم لوحة إدارة نظام Harmony الذكي للتواصل بجمع معلومات المشرفين واستخدامها وحمايتها.',
+          'توضح سياسة الخصوصية هذه كيف يقوم نظام Harmony الذكي للتواصل بجمع معلومات المشاركين واستخدامها وحمايتها خلال تجربة الفعالية.',
       },
       {
         heading: 'المعلومات التي نجمعها',
         text:
-          'عند دخول المشرفين إلى النظام، قد نقوم بجمع الاسم، عنوان البريد الإلكتروني، معرّف المصادقة من Microsoft Azure Entra ID، سجلات نشاط المشرف، والبيانات التقنية.',
-      },
-      {
-        heading: 'المصادقة',
-        text:
-          'يتم توفير وصول المشرفين باستخدام Microsoft Azure Entra ID. تتم المصادقة من خلال Microsoft، ونحن نتلقى فقط معلومات الملف الشخصي الأساسية المطلوبة للتفويض.',
+          'عند استخدام المشاركين للنظام، قد نقوم بجمع معلومات الملف الشخصي مثل الاسم، رقم الهاتف، التفاصيل المهنية، الخلفية الأكاديمية، الاهتمامات الشخصية، صورة الملف الشخصي، ومعلومات متعلقة بالفعالية.',
       },
       {
         heading: 'كيف نستخدم المعلومات',
         text:
-          'نستخدم معلومات المشرفين لمصادقة المشرفين المصرح لهم، وإدارة الفعاليات وبيانات المشاركين، وتوفير لوحات التحليلات، ومراقبة استخدام النظام، والحفاظ على أمان النظام.',
+          'نستخدم معلومات المشاركين للتعرف على المشارك داخل الفعالية، وإنشاء توصيات للتواصل، وعرض المطابقات المناسبة، وتحسين تجربة التواصل داخل الفعالية.',
+      },
+      {
+        heading: 'المصادقة',
+        text:
+          'يتم توفير وصول المشاركين من خلال مسار تسجيل الدخول الخاص بالفعالية باستخدام المعلومات المقدمة عند التسجيل. نحن لا نستخدم مصادقة OTP للمشاركين في هذا المسار.',
       },
       {
         heading: 'تخزين البيانات',
         text:
-          'قد يتم تخزين البيانات المتعلقة بالمشرفين بشكل آمن باستخدام خدمات Microsoft Azure، بما في ذلك Azure Cosmos DB وبنية سحابية آمنة ذات وصول مقيّد.',
+          'قد يتم تخزين البيانات المتعلقة بالمشاركين بشكل آمن في أنظمة سحابية محمية، بما في ذلك خدمات Microsoft Azure مثل Azure Cosmos DB، لتشغيل المشروع.',
       },
       {
         heading: 'مشاركة البيانات',
         text:
-          'نحن لا نبيع أو نشارك معلومات المشرفين. قد تتم مشاركة البيانات فقط مع خدمات Microsoft Azure اللازمة لتشغيل النظام، أو إذا كان ذلك مطلوبًا بموجب القانون، أو لحماية أمن النظام.',
+          'نحن لا نبيع معلومات المشاركين. تُستخدم البيانات فقط لتشغيل نظام Harmony، وقد تتم معالجتها من خلال بنية تحتية آمنة مطلوبة للمشروع.',
       },
       {
         heading: 'الاحتفاظ بالبيانات',
         text:
-          'يتم الاحتفاظ ببيانات المشرفين فقط طوال مدة نشر المشروع وفترة الاختبار.',
+          'يتم الاحتفاظ ببيانات المشاركين فقط للفترة اللازمة للفعالية وتشغيل المشروع والاختبارات الأكاديمية، وقد يتم حذفها لاحقًا وفقًا لاحتياجات المشروع.',
       },
       {
         heading: 'الأمان',
         text:
-          'نقوم بتطبيق مصادقة Azure Entra ID، والتحكم في الوصول حسب الأدوار، وتشفير HTTPS، وتقييد الوصول إلى قاعدة البيانات.',
+          'نطبق إجراءات أمان معقولة مثل الاتصال عبر HTTPS، والوصول المتحكم به إلى الخادم، وتقييد الوصول إلى قاعدة البيانات لحماية معلومات المشاركين.',
       },
       {
         heading: 'إشعار المشروع الأكاديمي',
         text:
-          'تم تطوير هذا النظام كجزء من مشروع أكاديمي، وقد يتغير قبل الإطلاق الإنتاجي.',
+          'تم تطوير هذا النظام كجزء من مشروع أكاديمي، وقد يتغير قبل أي إصدار إنتاجي مستقبلي.',
       },
       {
         heading: 'التواصل',
@@ -185,56 +185,56 @@ const TEXTS = {
 
   he: {
     pageTitle: 'מדיניות פרטיות',
-    pageSubtitle: 'קראי/קרא כיצד מנוהל מידע של מנהלים',
-    badge: 'Harmony Admin',
-    title: 'מדיניות פרטיות לאדמין',
+    pageSubtitle: 'קראי/קרא כיצד מידע המשתתפים מנוהל',
+    badge: 'Harmony User',
+    title: 'מדיניות פרטיות למשתמש',
     intro:
-      'מדיניות פרטיות זו מתארת כיצד פאנל הניהול של Harmony Intelligent Networking System אוסף, משתמש ושומר על מידע של מנהלים.',
+      'מדיניות פרטיות זו מסבירה כיצד מערכת Harmony Intelligent Networking System אוספת, משתמשת ושומרת על מידע של משתתפים במהלך חוויית האירוע.',
     sections: [
       {
         heading: 'מטרה',
         text:
-          'מדיניות פרטיות זו מתארת כיצד פאנל הניהול של Harmony Intelligent Networking System אוסף, משתמש ושומר על מידע של מנהלים.',
+          'מדיניות פרטיות זו מסבירה כיצד מערכת Harmony Intelligent Networking System אוספת, משתמשת ושומרת על מידע של משתתפים במהלך חוויית האירוע.',
       },
       {
         heading: 'המידע שאנו אוספים',
         text:
-          'כאשר מנהלים ניגשים למערכת, אנו עשויים לאסוף שם, כתובת דוא"ל, מזהה אימות מ־Microsoft Azure Entra ID, יומני פעילות של אדמינים ונתונים טכניים.',
-      },
-      {
-        heading: 'אימות',
-        text:
-          'הגישה למנהלים ניתנת באמצעות Microsoft Azure Entra ID. האימות מתבצע על ידי Microsoft, ואנו מקבלים רק מידע בסיסי מהפרופיל שנדרש לצורך הרשאה.',
+          'כאשר משתתפים משתמשים במערכת, אנו עשויים לאסוף מידע פרופיל כגון שם, מספר טלפון, פרטים מקצועיים, רקע אקדמי, תחומי עניין אישיים, תמונת פרופיל ומידע הקשור לאירוע.',
       },
       {
         heading: 'כיצד אנו משתמשים במידע',
         text:
-          'אנו משתמשים במידע של מנהלים כדי לאמת מנהלים מורשים, לנהל אירועים ונתוני משתתפים, לספק לוחות אנליטיקה, לנטר שימוש במערכת ולשמור על אבטחת המערכת.',
+          'אנו משתמשים במידע של משתתפים כדי לזהות את המשתתף בתוך האירוע, לייצר המלצות לנטוורקינג, להציג התאמות רלוונטיות ולשפר את חוויית הנטוורקינג באירוע.',
+      },
+      {
+        heading: 'אימות',
+        text:
+          'הגישה של המשתתפים ניתנת דרך תהליך ההתחברות של האירוע באמצעות המידע שנמסר עבור האירוע. אין שימוש באימות OTP עבור משתתפים בתהליך זה.',
       },
       {
         heading: 'אחסון נתונים',
         text:
-          'נתונים הקשורים למנהלים עשויים להישמר באופן מאובטח באמצעות שירותי Microsoft Azure, כולל Azure Cosmos DB ותשתית ענן מאובטחת עם גישה מוגבלת.',
+          'נתונים הקשורים למשתתפים עשויים להישמר באופן מאובטח במערכות ענן מוגנות, כולל שירותי Microsoft Azure כגון Azure Cosmos DB, לצורך תפעול הפרויקט.',
       },
       {
         heading: 'שיתוף נתונים',
         text:
-          'איננו מוכרים או משתפים מידע של מנהלים. נתונים עשויים להיות משותפים רק עם שירותי Microsoft Azure הנדרשים להפעלת המערכת, אם נדרש על פי חוק, או כדי להגן על אבטחת המערכת.',
+          'איננו מוכרים מידע של משתתפים. הנתונים משמשים רק להפעלת מערכת Harmony, ועשויים להיות מעובדים באמצעות תשתית מאובטחת הנדרשת לפרויקט.',
       },
       {
         heading: 'שמירת נתונים',
         text:
-          'נתוני מנהלים נשמרים רק למשך תקופת הפריסה והבדיקות של הפרויקט.',
+          'נתוני משתתפים נשמרים רק למשך התקופה הנדרשת עבור האירוע, תפעול הפרויקט והבדיקות האקדמיות, ולאחר מכן עשויים להימחק בהתאם לצורכי הפרויקט.',
       },
       {
         heading: 'אבטחה',
         text:
-          'אנו מיישמים Azure Entra ID authentication, בקרת גישה מבוססת תפקידים, הצפנת HTTPS וגישה מוגבלת למסד הנתונים.',
+          'אנו מיישמים אמצעי אבטחה סבירים כגון תקשורת HTTPS, גישת backend מבוקרת וגישה מוגבלת למסד הנתונים כדי להגן על מידע המשתתפים.',
       },
       {
         heading: 'הודעה על פרויקט אקדמי',
         text:
-          'מערכת זו מפותחת כחלק מפרויקט אקדמי, וייתכנו בה שינויים לפני גרסת הייצור.',
+          'מערכת זו מפותחת כחלק מפרויקט אקדמי, וייתכנו בה שינויים לפני כל גרסת ייצור עתידית.',
       },
       {
         heading: 'יצירת קשר',
