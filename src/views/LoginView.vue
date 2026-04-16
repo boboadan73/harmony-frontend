@@ -524,30 +524,29 @@ const modalContent = computed(() => {
   transform: translateY(-1px);
   background: rgba(239,247,242,0.95);
 }
-  .checkboxWrapper {
+.checkboxWrapper {
   position: relative;
   width: 22px;
   height: 22px;
   display: inline-block;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
+.customCheck {
+  position: absolute;
+  inset: 0;
+  border-radius: 7px;
+  border: 1.8px solid #5b8b70;
+  background: #fff;
+  transition: all 0.18s ease;
+}
 .checkboxWrapper input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.customCheck {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid #2f6b4f;
-  background: white;
-  transition: all 0.2s ease;
-}
 
 /* כשהוא מסומן */
 .checkboxWrapper input:checked + .customCheck {
@@ -592,20 +591,20 @@ const modalContent = computed(() => {
 }
 
 .policyBox {
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.7);
-  border: 1.5px solid rgba(47,107,79,0.2);
+  margin-top: 2px;
+  padding: 8px 2px 2px;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
 }
 
 .policyRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   font-size: 13px;
-  line-height: 1.5;
-  color: #2c4a3b;
+  line-height: 1.6;
+  color: #476454;
 }
 
 .policyRow input {
