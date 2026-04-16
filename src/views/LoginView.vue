@@ -318,12 +318,13 @@ const modalContent = computed(() => {
   font-family: Arial, sans-serif;
   color: var(--h-text);
 
-background:
-  radial-gradient(circle at top left, rgba(255,255,255,0.55), transparent 32%),
-  radial-gradient(circle at bottom right, rgba(133,184,152,0.18), transparent 30%),
-  linear-gradient(180deg, #f6fbf8 0%, #e7f3ec 52%, #d7e9de 100%);
+  position: relative;  
+  overflow: hidden;    
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.55), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(133,184,152,0.18), transparent 30%),
+    linear-gradient(180deg, #f6fbf8 0%, #e7f3ec 52%, #d7e9de 100%);
 }
-
 /* ===== CARD (מסגרת ירוקה + glass ירקרק) ===== */
 .loginCard{
   width: min(560px, 92vw);
