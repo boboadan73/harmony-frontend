@@ -212,23 +212,17 @@ const t = computed(() => {
 }
 
 .topNav {
-  position: sticky;
-  top: 12px;
-  z-index: 120;
+  background: linear-gradient(
+    135deg,
+    #eaf9f1,
+    #d7eee3
+  );
 
-  display: grid;
-  grid-template-columns: 56px 1fr 56px;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 24px;
+  border: 1px solid rgba(95, 159, 127, 0.22);
 
-  
-  background: linear-gradient(135deg, #e8f6ee, #d7eee3) !important;
-
-  border: 1px solid rgba(95, 159, 127, 0.25);
-  box-shadow: 0 12px 30px rgba(47, 107, 79, 0.10);
-
-  backdrop-filter: blur(10px);
+  box-shadow:
+    0 10px 25px rgba(47, 107, 79, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.6);
 }
 
 .menuBtn {
