@@ -560,6 +560,19 @@ const t = computed(() => {
   .itemArrow {
     font-size: 20px;
   }
+   .drawer {
+    width: min(280px, 76vw);
+    padding: 10px;
+  }
+
+  .drawerNav {
+    margin-top: 14px;
+    gap: 10px;
+  }
+
+  .item {
+    padding: 11px 13px;
+  }
 }
 
 </style>
