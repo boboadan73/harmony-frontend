@@ -1060,6 +1060,8 @@ watch(pid, loadProfile, { immediate: true })
   .page-title::after {
   bottom: -6px;
   height: 3px;
+  margin-bottom: 6px;
+  
 }
 
   .page-subtitle {
