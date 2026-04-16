@@ -50,16 +50,9 @@
       <span class="customCheck"></span>
     </label>
 
-    <span class="policyText">
-      {{ t.agree }}
-      <button type="button" class="linkBtn" @click.stop="openPrivacy">
-        {{ t.privacy }}
-      </button>
-      &
-      <button type="button" class="linkBtn" @click.stop="openTerms">
-        {{ t.terms }}
-      </button>
-    </span>
+  <span class="policyText">
+  {{ t.agreeShort }}
+</span>
   </div>
 </div>
 
@@ -73,25 +66,7 @@
     {{ t.newParticipant }}
   </button>
 </div>
-        <div v-if="showPolicyModal" class="modalOverlay" @click.self="closePolicyModal">
-  <div class="modalCard" :dir="isRtl ? 'rtl' : 'ltr'">
-    <div class="modalHeader">
-      <h2 class="modalTitle">{{ modalTitle }}</h2>
-      <button type="button" class="modalClose" @click="closePolicyModal">✕</button>
-    </div>
-
-    <div class="modalBody">
-      <div
-        v-for="section in modalContent.sections"
-        :key="section.heading"
-        class="modalSection"
-      >
-        <h3>{{ section.heading }}</h3>
-        <p>{{ section.text }}</p>
-      </div>
-    </div>
-  </div>
-</div>
+      
 
       </div>
       
@@ -104,10 +79,6 @@ import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { authStore } from '@/store/authStore'
 import { buildApiUrl } from '@/services/api'
-  import { userPrivacyPolicy } from '@/content/userPrivacyPolicy'
-import { userTermsOfUse } from '@/content/userTermsOfUse'
-
-
 
 const acceptedPolicy = ref(false)
 const router = useRouter()
@@ -157,6 +128,7 @@ const TEXTS = {
     agree: 'I agree to the',
 privacy: 'Privacy Policy',
 terms: 'Terms of Use',
+    agreeShort: 'I consent to the use of my data for generating networking recommendations during the event.',
   },
   ar: {
     subtitle: 'سجّل الدخول لاكتشاف التطابقات الخاصة بك',
@@ -170,6 +142,8 @@ terms: 'Terms of Use',
     agree: 'أوافق على',
 privacy: 'سياسة الخصوصية',
 terms: 'شروط الاستخدام',
+    agreeShort: 'أوافق على استخدام بياناتي لإنشاء توصيات للتواصل خلال الفعالية.',
+    
   },
   he: {
     subtitle: 'התחבר כדי לגלות את ההתאמות שלך',
@@ -183,6 +157,7 @@ terms: 'شروط الاستخدام',
     agree: 'אני מאשר/ת את',
 privacy: 'מדיניות הפרטיות',
 terms: 'תנאי השימוש',
+    agreeShort: 'אני מאשר/ת שימוש בנתונים שלי לצורך יצירת התאמות נטוורקינג במהלך האירוע.',
   },
 }
 
@@ -277,30 +252,6 @@ async function continueLogin() {
 async function goToRegister() {
   router.push(`/event/${eventId.value}/profile/new`)
 }
-  const showPolicyModal = ref(false)
-const modalType = ref('privacy')
-
-function openPrivacy() {
-  modalType.value = 'privacy'
-  showPolicyModal.value = true
-}
-
-function openTerms() {
-  modalType.value = 'terms'
-  showPolicyModal.value = true
-}
-
-function closePolicyModal() {
-  showPolicyModal.value = false
-}
-
-const modalTitle = computed(() => {
-  return modalType.value === 'privacy' ? t.value.privacy : t.value.terms
-})
-
-const modalContent = computed(() => {
-  return modalType.value === 'privacy' ? userPrivacyPolicy : userTermsOfUse
-})
 
 
 </script>
