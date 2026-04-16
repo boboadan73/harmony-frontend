@@ -1267,14 +1267,25 @@ function onAvatarError(e) {
 .head-actions {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-.language-box {
-  margin-inline-end: auto;
+/* ===== LTR (אנגלית) ===== */
+:dir(ltr) .filters-bar {
+  order: 1; /* שמאל */
 }
 
-.filters-bar {
-  margin-inline-start: auto;
+:dir(ltr) .language-box {
+  order: 2; /* ימין */
+}
+
+/* ===== RTL (עברית / ערבית) ===== */
+:dir(rtl) .filters-bar {
+  order: 2; /* ימין */
+}
+
+:dir(rtl) .language-box {
+  order: 1; /* שמאל */
 }
 
 
