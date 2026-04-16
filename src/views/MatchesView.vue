@@ -1266,14 +1266,14 @@ function onAvatarError(e) {
 
 .head-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-}
-  .filters-bar {
-  margin-inline-end: auto;
 }
 
 .language-box {
+  margin-inline-end: auto;
+}
+
+.filters-bar {
   margin-inline-start: auto;
 }
 
