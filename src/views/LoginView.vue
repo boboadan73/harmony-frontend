@@ -571,128 +571,126 @@ const modalContent = computed(() => {
 
 /* ===== MOBILE ===== */
 @media (max-width: 768px){
-  .container{
+  html, body, #app {
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
   }
 
-  .loginPage{
-    display: block;
-    min-height: 100svh;
-    padding: 0;
-  }
-
-  .loginCard{
+  .container {
     width: 100%;
     max-width: 100%;
-    min-height: 100svh;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  .loginPage {
+    min-height: 100dvh;
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .loginCard {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 20px 16px 28px;
     border-radius: 0;
-    padding: 24px 16px 32px;
-    gap: 14px;
+    border: 0;
     box-shadow: none;
-    border: none;
-    background: rgba(255,255,255,0.92);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    overflow: visible;
+    gap: 14px;
   }
 
-  .brand{
+  .brand {
     gap: 10px;
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
-  .brandLogo{
-    width: 44px;
-    height: 44px;
+  .brandLogo {
+    width: 42px;
+    height: 42px;
   }
 
-  .title{
-    font-size: 34px;
+  .title {
+    font-size: 32px;
+    line-height: 1.05;
   }
 
-  .subtitle{
+  .subtitle {
     font-size: 14px;
-    margin-top: 4px;
+    margin-top: 2px;
+    line-height: 1.5;
   }
 
-  .label{
+  .label {
     font-size: 14px;
     margin-bottom: 8px;
   }
 
-  .input{
+  .field {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .input {
+    width: 100%;
+    max-width: 100%;
     height: 50px;
-    padding: 12px 42px 12px 14px;
-    font-size: 15px;
+    padding: 12px 40px 12px 14px;
+    font-size: 16px;
     border-radius: 14px;
   }
 
-  .selectInput{
-    padding-right: 42px;
+  .selectInput {
+    padding-right: 40px;
   }
 
-  .arrow{
+  .arrow {
     right: 14px;
   }
 
-  .policyBox{
+  .policyBox {
+    padding: 2px 0 0;
     margin-top: 0;
-    padding: 4px 0 0;
   }
 
-  .policyRow{
+  .policyRow {
     gap: 10px;
     font-size: 12.5px;
     line-height: 1.5;
   }
 
-  .btnBar{
+  .btnBar {
+    width: 100%;
     margin-top: 10px;
     gap: 10px;
   }
 
   .primaryBtn,
-  .secondaryBtn{
+  .secondaryBtn {
+    width: 100%;
     min-height: 50px;
     font-size: 15px;
     border-radius: 14px;
   }
 
-  .modalOverlay{
+  .modalOverlay {
     padding: 10px;
   }
 
-  .modalCard{
+  .modalCard {
     width: 100%;
     max-width: 100%;
-    max-height: 90svh;
+    max-height: 90dvh;
     border-radius: 18px;
-  }
-
-  .modalHeader{
-    padding: 14px 16px;
-  }
-
-  .modalTitle{
-    font-size: 20px;
-  }
-
-  .modalBody{
-    padding: 16px;
-  }
-
-  .modalSection{
-    padding: 14px;
-    border-radius: 14px;
-    margin-bottom: 16px;
-  }
-
-  .modalSection h3{
-    font-size: 17px;
-  }
-
-  .modalSection p{
-    font-size: 14px;
-    line-height: 1.65;
   }
 }
 </style>
