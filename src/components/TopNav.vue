@@ -492,76 +492,74 @@ const t = computed(() => {
   color: #b42318;
 }
 
-@media (max-width: 420px) {
-  .logoutBtn {
-    padding: 10px 14px;
-    border-radius: 13px;
-    font-size: 13px;
+@media (max-width: 600px) {
+
+  .topNav {
+    top: 8px;
+    padding: 6px 10px;
+    border-radius: 18px;
+
+    grid-template-columns: 48px 1fr 48px;
   }
 
-.topNav {
-  background: linear-gradient(
-    135deg,
-    #eaf9f1,
-    #d7eee3
-  );
-
-  border: 1px solid rgba(95, 159, 127, 0.22);
-
-  box-shadow:
-    0 10px 25px rgba(47, 107, 79, 0.08),
-    inset 0 1px 0 rgba(255,255,255,0.6);
-}
-
+  /* כפתור תפריט */
   .menuBtn {
-    width: 48px;
-    height: 38px;
-    border-radius: 12px;
+    width: 44px;
+    height: 34px;
+    border-radius: 10px;
+    gap: 4px;
   }
 
   .menuBtn span {
-    width: 20px;
-    height: 2.6px;
+    width: 18px;
+    height: 2.4px;
   }
 
-  .spacer {
-    width: 48px;
-    height: 38px;
-  }
-
+  /* לוגו */
   .logoWrap {
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
   }
 
+  /* spacer */
+  .spacer {
+    width: 44px;
+    height: 34px;
+  }
+
+  /* drawer */
   .drawer {
-    padding: 14px;
-    width: min(340px, 90vw);
+    width: 85vw;
+    padding: 12px;
   }
 
   .drawerTop {
-    padding: 12px;
-    border-radius: 18px;
-  }
-
-  .drawerLogoWrap {
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
-  }
-
-  .brandTitle {
-    font-size: 17px;
-  }
-
-  .item {
-    padding: 14px 15px;
+    padding: 10px;
     border-radius: 16px;
   }
 
-  .itemLabel {
-    font-size: 14px;
+  .drawerLogoWrap {
+    width: 42px;
+    height: 42px;
   }
-  
+
+  .brandTitle {
+    font-size: 15px;
+  }
+
+  /* items */
+  .item {
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  .itemLabel {
+    font-size: 13px;
+  }
+
+  .itemArrow {
+    font-size: 20px;
+  }
 }
+
 </style>
