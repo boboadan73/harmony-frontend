@@ -425,15 +425,24 @@ async function goToRegister() {
 
 .policyRow {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
   font-size: 13px;
   line-height: 1.6;
   color: #476454;
+
+  flex-direction: row-reverse; 
+}
+  :dir(rtl) .policyRow {
+  flex-direction: row-reverse;
+}
+
+:dir(ltr) .policyRow {
+  flex-direction: row;
 }
 
 .policyText {
-  display: inline;
+  text-align: right;
 }
 
 .checkboxWrapper {
