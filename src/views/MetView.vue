@@ -311,19 +311,32 @@ function onAvatarError(e) {
 }
 
 .page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 500;
-  color: #4e5d63;
-}
+  margin: 0 0 16px 0;
 
+  font-size: 34px;
+  font-weight: 700;
+  color: #3b5d5a;
+
+  position: relative;
+}
+  .page-title::after {
+  content: "";
+  display: block;
+
+  width: 70px;
+  height: 5px;
+
+  margin-top: 10px;
+  border-radius: 3px;
+
+  background: #7fb49a;
+}
 .page-subtitle {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   font-size: 14px;
   color: #9aa5aa;
   font-weight: 600;
 }
-
 .language-box {
   display: inline-flex;
   align-items: center;
