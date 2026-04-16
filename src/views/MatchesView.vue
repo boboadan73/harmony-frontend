@@ -6,7 +6,6 @@
        <section class="page-head">
  <div class="title-box modern-title-box">
   <h1 class="page-title modern-page-title">
-    <span class="title-icon">✨</span>
     {{ t.title }}
   </h1>
   <p class="page-subtitle modern-page-subtitle">{{ t.subtitle }}</p>
@@ -90,6 +89,7 @@ v-for="(m, idx) in filteredMatches"
                 <h2 class="match-name">{{ getName(m) }}</h2>
 
                 <span v-if="idx === 0" class="best-badge">
+                   <span class="best-badge-star">★</span>
                   {{ t.bestMatch }}
                 </span>
               </div>
@@ -110,7 +110,6 @@ v-for="(m, idx) in filteredMatches"
               />
 
        <div class="match-score ltrNum">
-       <span class="score-star">★</span>
           <span>{{ m.matchPercent }}% {{ t.matchSuffix }}</span>
               </div>
           </div>
