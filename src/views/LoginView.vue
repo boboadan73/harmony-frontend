@@ -44,13 +44,14 @@
         </p>
 
     <div class="policyBox">
-  <label class="policyRow">
-    <span class="policyText">{{ t.agreeShort }}</span>
-    <span class="checkboxWrapper">
-      <input type="checkbox" v-model="acceptedPolicy" />
-      <span class="customCheck"></span>
-    </span>
-  </label>
+<label class="policyRow">
+  <span class="policyText">{{ t.agreeShort }}</span>
+
+  <span class="checkboxWrapper">
+    <input type="checkbox" v-model="acceptedPolicy" />
+    <span class="customCheck"></span>
+  </span>
+</label>
 </div>
 
         <!-- BUTTONS -->
@@ -422,20 +423,12 @@ async function goToRegister() {
 .policyRow {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
+  justify-content: space-between; /* 💥 חשוב */
   font-size: 13px;
   line-height: 1.5;
   color: #476454;
 }
 
-:dir(rtl) .policyRow {
-  flex-direction: row-reverse;
-}
-
-:dir(ltr) .policyRow {
-  flex-direction: row;
-}
 
 .policyText {
   margin: 0;
@@ -465,15 +458,15 @@ async function goToRegister() {
 }
 
 .customCheck {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 2px solid #5b8b70;
-  border-radius: 4px;
+  border-radius: 4px; 
   background: #fff;
-  display: inline-flex;
+
+  display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.18s ease;
 }
 
 .checkboxWrapper input:checked + .customCheck {
@@ -483,12 +476,10 @@ async function goToRegister() {
 
 .checkboxWrapper input:checked + .customCheck::after {
   content: "✓";
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
 }
-
 .linkBtn {
   background: none;
   border: none;
