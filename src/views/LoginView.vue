@@ -431,11 +431,12 @@ async function goToRegister() {
 }
 
 :dir(rtl) .policyRow {
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 :dir(ltr) .policyRow {
-  flex-direction: row;
+    flex-direction: row-reverse;
+
 }
 
 .policyText {
