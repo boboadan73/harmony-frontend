@@ -1031,198 +1031,140 @@ function onAvatarError(e) {
   font-size: 14px;
   color: #6f7d82;
 }
-  @media (max-width: 700px) {
+@media (max-width: 700px) {
+
   .matches-wrap {
     max-width: 100%;
     padding: 8px 8px 20px;
   }
 
   .page-head {
-    align-items: stretch;
     flex-direction: column;
     gap: 10px;
     margin: 10px 0 12px;
     padding-bottom: 10px;
   }
 
+  /* ===== TITLE ===== */
   .modern-page-title {
     font-size: 20px;
+    display: inline-block;
+  }
+
+  .modern-page-title::after {
+    width: 90px !important;
+    height: 3px;
   }
 
   .modern-page-subtitle {
-    margin-top: 6px;
     font-size: 12px;
+    margin-top: 6px;
   }
 
+  /* ===== ACTIONS (FILTER + LANGUAGE) ===== */
   .head-actions {
     width: 100%;
-    justify-content: space-between;
-    margin-inline-start: 0;
-    gap: 8px;
-  }
-
-  .filters-toggle {
-    min-height: 38px;
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-
-  .language-box {
-    min-height: 38px;
-    padding: 6px 10px;
+    display: flex;
     gap: 6px;
   }
 
-  .language-select {
-    font-size: 13px;
+  .filters-toggle {
+    flex: 1;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+    border-radius: 999px;
   }
 
+  .language-box {
+    flex: 1;
+    height: 32px;
+    padding: 0 6px;
+    gap: 4px;
+    justify-content: center;
+    border-radius: 999px;
+  }
+
+  .language-select {
+    font-size: 12px !important;
+  }
+
+  .language-icon {
+    font-size: 12px;
+  }
+
+  /* dropdown */
   .filters-dropdown {
     width: 100%;
-    min-width: 0;
-    left: 0;
-    right: auto;
-    padding: 12px;
+    padding: 10px;
     border-radius: 14px;
-  }
-
-  :dir(rtl) .filters-dropdown {
-    right: 0;
-    left: auto;
   }
 
   .filters-select,
   .filters-input {
-    height: 38px;
-    font-size: 13px;
-    padding: 0 10px;
+    height: 36px;
+    font-size: 12px;
+    padding: 0 8px;
   }
 
   .filters-clear {
-    padding: 7px 12px;
     font-size: 12px;
+    padding: 6px 10px;
   }
 
-  .matches-list {
-    gap: 12px;
-  }
-
+  /* ===== MATCH CARD ===== */
   .match-card {
-    padding: 12px 10px 10px;
+    padding: 12px 10px;
     border-radius: 14px;
-  }
-
-  .match-top {
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  :dir(rtl) .match-top {
-    flex-direction: row-reverse;
-  }
-
-  .match-main {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .name-row {
-    margin-bottom: 8px;
-    gap: 5px;
   }
 
   .match-name {
     font-size: 15px;
-    line-height: 1.25;
-  }
-
-  .best-badge {
-    font-size: 9px;
-    padding: 3px 7px;
-  }
-
-  .why-section {
-    width: 100%;
-    text-align: start;
   }
 
   .why-title {
-    margin-bottom: 4px;
     font-size: 13px;
   }
 
   .why-text {
-    width: 100%;
-    max-width: none;
     font-size: 12px;
-    line-height: 1.55;
+    line-height: 1.5;
     overflow-wrap: anywhere;
-    word-break: break-word;
   }
 
   .avatar-side {
     width: 68px;
     min-width: 68px;
-    padding-top: 0;
-    gap: 4px;
   }
 
   .match-avatar {
     width: 54px;
     height: 54px;
-    border-width: 2px;
   }
 
   .match-score {
-    margin-top: -4px;
     font-size: 10px;
     padding: 5px 8px;
   }
 
-  .status-row {
-    margin-top: 10px;
-    padding-top: 8px;
-    gap: 5px;
-  }
-
-  .status-pill {
-    font-size: 11px;
-    padding: 4px 7px;
-  }
-
-  .actions-row {
-    margin-top: 10px;
-    padding-top: 8px;
-  }
-
+  /* ===== BUTTONS ===== */
   .action-btn {
-    min-width: 0;
     flex: 1;
     height: 34px;
-    padding: 0 6px;
     font-size: 12px;
-  }
-
-  .refresh-row {
-    margin-top: 4px;
+    padding: 0 6px;
   }
 
   .refresh-btn {
     width: 100%;
     max-width: 180px;
-    padding: 8px 12px;
     font-size: 13px;
+    padding: 8px 12px;
   }
 
+  /* ===== STATE ===== */
   .state-box {
     padding: 12px 10px;
-    border-radius: 12px;
-  }
-
-  .state-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
   }
 
   .state-title {
