@@ -671,15 +671,12 @@ watch(pid, loadProfile, { immediate: true })
   padding: 18px 16px 70px;
   font-family: Arial, sans-serif;
   color: var(--h-text);
-  background: linear-gradient(180deg, #e6f2ec 0%, #d6e8df 55%, #c8ded3 100%);
-  position: relative;
-  overflow: hidden;
-}
 
-.blob { position:absolute; filter: blur(18px); opacity:.55; border-radius:999px; pointer-events:none; }
-.blob1 { width:360px; height:360px; left:-140px; top:-140px; background: radial-gradient(circle at 30% 30%, rgba(var(--h-green-600-rgb),0.45), rgba(var(--h-green-600-rgb),0.08));}
-.blob2 { width:460px; height:460px; right:-210px; top:50px; background: radial-gradient(circle at 40% 40%, rgba(var(--h-green-700-rgb),0.30), rgba(233,243,238,0.14));}
-.blob3 { width:420px; height:420px; left:50%; bottom:-250px; transform: translateX(-50%); background: radial-gradient(circle at 40% 40%, rgba(233,243,238,0.80), rgba(var(--h-green-700-rgb),0.06));}
+  background: #f5f6f4; 
+}
+.blob {
+  display: none;
+}
 
 .page { max-width: 980px; margin: 0 auto; }
 
