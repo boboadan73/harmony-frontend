@@ -430,10 +430,9 @@ async function goToRegister() {
   font-size: 13px;
   line-height: 1.6;
   color: #476454;
-
-  flex-direction: row-reverse; 
 }
-  :dir(rtl) .policyRow {
+
+:dir(rtl) .policyRow {
   flex-direction: row-reverse;
 }
 
@@ -442,16 +441,23 @@ async function goToRegister() {
 }
 
 .policyText {
+  flex: 1;
   text-align: right;
+}
+
+:dir(ltr) .policyText {
+  text-align: left;
 }
 
 .checkboxWrapper {
   position: relative;
   width: 22px;
   height: 22px;
-  display: inline-block;
-  flex-shrink: 0;
-  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 22px;
+  margin-top: 0;
 }
 
 .checkboxWrapper input {
