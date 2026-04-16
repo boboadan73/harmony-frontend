@@ -484,20 +484,45 @@ const modalContent = computed(() => {
   background: linear-gradient(135deg, rgba(233,243,238,0.98), rgba(206,232,221,0.98));
 }
 
-.primaryBtn:hover,
-.secondaryBtn:hover{
+.primaryBtn,
+.secondaryBtn{
+  width: 100%;
+  min-height: 56px;
+  border-radius: 18px;
+  font-weight: 800;
+  font-size: 17px;
+  cursor: pointer;
+  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.primaryBtn{
+  border: 0;
+  background: linear-gradient(135deg, #5f8f73, #7cab8b);
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(79,125,99,0.22);
+}
+
+.primaryBtn:hover:not(:disabled){
   transform: translateY(-1px);
-  border-color: #24513f;
-  background: rgba(233,243,238,1);
+  box-shadow: 0 16px 28px rgba(79,125,99,0.28);
 }
 
 .primaryBtn:disabled{
-  background: rgba(233,243,238,0.55);
-  border-color: rgba(47,107,79,0.28);
-  color: rgba(31,63,50,0.55);
+  background: #dbe6df;
+  color: #7d8f84;
   box-shadow: none;
   cursor: not-allowed;
-  transform: none;
+}
+
+.secondaryBtn{
+  border: 1.5px solid rgba(47,107,79,0.30);
+  background: rgba(255,255,255,0.72);
+  color: #214234;
+}
+
+.secondaryBtn:hover{
+  transform: translateY(-1px);
+  background: rgba(239,247,242,0.95);
 }
   .checkboxWrapper {
   position: relative;
