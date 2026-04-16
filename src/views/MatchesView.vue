@@ -632,7 +632,7 @@ function onAvatarError(e) {
   position: absolute;
   bottom: -10px;
   left: 0;
-  width: 55%;
+  width: 40%;
   height: 4px;
   border-radius: 999px;
   background: linear-gradient(90deg, #8fb89c, #5f8d70);
@@ -1259,6 +1259,17 @@ function onAvatarError(e) {
 
 .language-icon {
   font-size: 11px;
+}
+  .head-actions {
+  display: flex;
+}
+
+.filters-bar {
+  order: 1;
+}
+
+.language-box {
+  order: 2;
 }
 
 
