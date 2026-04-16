@@ -481,12 +481,19 @@ const t = computed(() => {
     font-size: 13px;
   }
 
-  .topNav {
-    grid-template-columns: 48px 1fr 48px;
-    padding: 8px 10px;
-    border-radius: 20px;
-    top: 10px;
-  }
+.topNav {
+  background: linear-gradient(
+    135deg,
+    #eaf9f1,
+    #d7eee3
+  );
+
+  border: 1px solid rgba(95, 159, 127, 0.22);
+
+  box-shadow:
+    0 10px 25px rgba(47, 107, 79, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+}
 
   .menuBtn {
     width: 48px;
