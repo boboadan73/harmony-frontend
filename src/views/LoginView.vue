@@ -387,7 +387,7 @@ const modalContent = computed(() => {
 .label{
   display: block;
   margin-bottom: 10px;
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 700;
   color: #2f4f3e;
   line-height: 1.4;
