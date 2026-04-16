@@ -215,19 +215,20 @@ const t = computed(() => {
   position: sticky;
   top: 12px;
   z-index: 120;
+
   display: grid;
   grid-template-columns: 56px 1fr 56px;
   align-items: center;
   padding: 10px 14px;
   border-radius: 24px;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.88), rgba(244,250,246,0.78));
-  border: 1px solid rgba(111, 153, 121, 0.18);
-  box-shadow:
-    0 18px 50px rgba(31, 63, 50, 0.10),
-    inset 0 1px 0 rgba(255,255,255,0.6);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+
+  
+  background: linear-gradient(135deg, #e8f6ee, #d7eee3) !important;
+
+  border: 1px solid rgba(95, 159, 127, 0.25);
+  box-shadow: 0 12px 30px rgba(47, 107, 79, 0.10);
+
+  backdrop-filter: blur(10px);
 }
 
 .menuBtn {
