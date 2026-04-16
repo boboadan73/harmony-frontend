@@ -375,11 +375,12 @@ const modalContent = computed(() => {
 }
 
 .subtitle {
-  margin-top: 6px;
-  font-size: 15px;
-  color: #6b7f73;
+  margin-top: 10px;
+  font-size: 15.5px;
+  color: #7a8f84;
   font-weight: 400;
-  letter-spacing: 0.2px;
+  text-align: center;
+  letter-spacing: 0.3px;
 }
 
 /* ===== FORM ===== */
