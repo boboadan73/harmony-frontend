@@ -1058,21 +1058,22 @@ watch(pid, loadProfile, { immediate: true })
   }
 
 .page-title {
-  display: inline-block;
-  margin: 0;
-  padding-bottom: 12px;
-  font-size: 30px;
-  font-weight: 800;
-  color: #355f4a;
-  letter-spacing: 0.2px;
-  position: relative;
-  line-height: 1.25;
+  font-size: 20px;
+  padding-bottom: 10px;
+  line-height: 1.3;
 }
 
-  .page-subtitle {
-    font-size: 12px;
-    margin-top: 4px;
-  }
+.page-title::after {
+  bottom: 0;
+  height: 3px;
+  width: 58%;
+}
+
+.page-subtitle {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+}
 
   /* שפה */
   .language-box {
