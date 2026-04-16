@@ -1,7 +1,5 @@
 <template>
-  <button class="logoutBtn" @click="logout">
-    {{ t.logout }}
-  </button>
+ 
 
   <header class="topNav" :dir="isRtl ? 'rtl' : 'ltr'">
     <!-- Hamburger -->
@@ -93,6 +91,10 @@
               <span class="itemLabel">{{ t.terms }}</span>
               <span class="itemArrow">›</span>
             </router-link>
+            <button class="item logoutItem" @click="logout">
+  <span class="itemLabel">{{ t.logout }}</span>
+  <span class="itemArrow">›</span>
+</button>
           </nav>
         </aside>
       </div>
@@ -475,6 +477,20 @@ const t = computed(() => {
 .fade-leave-to {
   opacity: 0;
 }
+  .logoutItem {
+  color: #b42318;
+  background: rgba(255, 240, 240, 0.9);
+  border: 1px solid rgba(180, 35, 24, 0.2);
+}
+
+.logoutItem:hover {
+  background: rgba(255, 230, 230, 1);
+  transform: translateY(-2px);
+}
+
+.logoutItem .itemArrow {
+  color: #b42318;
+}
 
 @media (max-width: 420px) {
   .logoutBtn {
@@ -546,5 +562,6 @@ const t = computed(() => {
   .itemLabel {
     font-size: 14px;
   }
+  
 }
 </style>
