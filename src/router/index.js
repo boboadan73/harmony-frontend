@@ -66,10 +66,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const pid = getStoredPid()
 
-  const isPublicPage =
+  const isLoginPage =
     to.path.startsWith('/event/') && to.path.endsWith('/login')
 
-  if (!isPublicPage && !pid) {
+  const isNewParticipantPage =
+    to.path.startsWith('/event/') && to.path.endsWith('/profile/new')
+
+  if (!isLoginPage && !isNewParticipantPage && !pid) {
     const eventId = getStoredEventId() || 'default'
     return next(`/event/${eventId}/login`)
   }
