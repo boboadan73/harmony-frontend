@@ -109,10 +109,10 @@
                 rows="5"
                 dir="auto"
               />
-              <div v-else class="fieldValue multiline" dir="auto">
-                {{ profile.academic || t.empty }}
-              </div>
-            </div>
+              
+                <div v-else class="fieldValue multiline mixedText" dir="rtl">
+                        {{ formatMixedText(profile.academic || t.empty) }}
+                </div>
 
             <div class="fieldBlock fullWidth">
               <label class="fieldLabel">{{ t.professional }}</label>
@@ -123,11 +123,9 @@
                 rows="5"
                 dir="auto"
               />
-              <div v-else class="fieldValue multiline" dir="auto">
-                {{ profile.professional || t.empty }}
-              </div>
-            </div>
-
+            <div v-else class="fieldValue multiline mixedText" dir="rtl">
+                   {{ formatMixedText(profile.professional || t.empty) }}
+             </div>
             <div class="fieldBlock fullWidth">
               <label class="fieldLabel">{{ t.personal }}</label>
               <textarea
@@ -137,8 +135,8 @@
                 rows="5"
                 dir="auto"
               />
-              <div v-else class="fieldValue multiline" dir="auto">
-                {{ profile.personal || t.empty }}
+             <div v-else class="fieldValue multiline mixedText" dir="rtl">
+                 {{ formatMixedText(profile.personal || t.empty) }}
               </div>
             </div>
           </div>
@@ -392,6 +390,14 @@ const profileAvatar = computed(() => {
 
 function onAvatarError(event) {
   event.target.src = defaultAvatar
+}
+function formatMixedText(value) {
+  if (!value) return ''
+
+  return String(value).replace(
+    /([A-Za-z0-9][A-Za-z0-9\s.,:;()\-_/#+]*[A-Za-z0-9]|[A-Za-z0-9])/g,
+    '\u2068$1\u2069'
+  )
 }
 
 function fillFormFromProfile() {
@@ -851,8 +857,7 @@ watch(pid, loadProfile, { immediate: true })
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: break-word;
-  unicode-bidi: plaintext;
-  text-align: start;
+
 
   box-sizing: border-box;
 }
@@ -877,6 +882,15 @@ watch(pid, loadProfile, { immediate: true })
 .multiline {
   white-space: pre-wrap;
   line-height: 1.6;
+}
+.mixedText {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: embed;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.8;
 }
 
 .breakAll {
