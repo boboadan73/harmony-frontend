@@ -253,10 +253,10 @@ const pid = data?.participantId ? String(data.participantId).trim() : ''
     localStorage.setItem('harmony_eventId', eventId.value)
 
     router.push(`/event/${eventId.value}/${targetRoute}/${pid}`)
-  } catch (err) {
-    console.error('LOGIN ERROR:', err)
-    errorMessage.value = err.message || t.value.loginError
-  }
+} catch (err) {
+  console.error('LOGIN ERROR:', err)
+  errorMessage.value = getLocalizedLoginError(err.message)
+}
 }
 
 async function continueLogin() {
