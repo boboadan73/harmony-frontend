@@ -13,8 +13,8 @@
           <span class="language-icon" aria-hidden="true">🌐</span>
           <select class="language-select" v-model="lang">
             <option value="en">English</option>
-            <option value="ar">Arabic</option>
-            <option value="he">Hebrew</option>
+            <option value="ar">العربية</option>
+            <option value="he">עברית</option>
           </select>
         </div>
       </section>
@@ -342,9 +342,11 @@ function onAvatarError(e) {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #f8f8f6;
-  border: 1px solid #d7dbd6;
+
+  background: #eef6f1; /* ירוק בהיר כמו MATCHES */
+  border: 1px solid #cfe3d8;
   border-radius: 999px;
+
   padding: 7px 12px;
   flex-shrink: 0;
 }
@@ -352,17 +354,20 @@ function onAvatarError(e) {
 .language-icon {
   font-size: 15px;
   line-height: 1;
+  color: #3b5d5a;
 }
 
 .language-select {
   border: 0;
   outline: 0;
   background: transparent;
+
   font-size: 14px;
-  color: #5a666b;
+  font-weight: 600;
+  color: #3b5d5a;
+
   cursor: pointer;
 }
-
 .matches-list {
   display: flex;
   flex-direction: column;
