@@ -331,7 +331,7 @@ function onAvatarError(e) {
   bottom: -10px;
 
   left: 0;
-  width: 51%;
+  width: 80%;
   height: 4px;
 
   border-radius: 999px;
