@@ -52,8 +52,8 @@
     <span class="language-icon" aria-hidden="true">🌐</span>
     <select class="language-select" v-model="lang">
       <option value="en">English</option>
-      <option value="ar">Arabic</option>
-      <option value="he">Hebrew</option>
+      <option value="ar">العربية</option>
+      <option value="he">עברית</option>
     </select>
   </div>
 </div>
