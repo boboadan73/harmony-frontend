@@ -690,14 +690,21 @@ function onAvatarError(e) {
 }
 
 .filters-toggle {
-  border: 1px solid #cfd6cf;
-  background: #ffffff;
-  color: #56656a;
+  border: 1px solid rgba(95, 159, 127, 0.25);
+  background: linear-gradient(135deg, #eef8f2 0%, #e3f2e8 100%);
+  color: #355f4a;
+
   border-radius: 999px;
-  padding: 10px 18px;
+  padding: 10px 16px;
   font-size: 14px;
   font-weight: 700;
+
+  box-shadow:
+    0 4px 10px rgba(47, 107, 79, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .filters-toggle:hover {
