@@ -261,7 +261,7 @@ const pid = data?.participantId ? String(data.participantId).trim() : ''
 
 async function continueLogin() {
   if (!acceptedPolicy.value) {
-    errorMessage.value = "Please accept Terms & Privacy"
+   errorMessage.value = t.value.acceptPolicyError
     return
   }
 
