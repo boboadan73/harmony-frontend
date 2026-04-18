@@ -717,22 +717,25 @@ watch(pid, loadProfile, { immediate: true })
   display: inline-flex;
   align-items: center;
   gap: 10px;
+
   margin: 0;
-  font-size: 30px;
+  font-size: 25px; /* כמו MATCHES */
   font-weight: 800;
   color: #355f4a;
   letter-spacing: 0.2px;
+
   position: relative;
-   padding-bottom: 10px;
 }
 
 .page-title::after {
   content: "";
   position: absolute;
-  bottom: -4px;
+  bottom: -10px;
+
   left: 0;
-  width: 72%;
+  width: 80%;
   height: 4px;
+
   border-radius: 999px;
   background: linear-gradient(90deg, #8fb89c, #5f8d70);
   opacity: 0.95;
