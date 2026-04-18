@@ -312,25 +312,27 @@ function onAvatarError(e) {
 }
 
 .page-title {
-  margin: 0 0 16px 0;
+  margin: 0 0 14px 0;
 
-  font-size: 34px;
+  font-size: 32px; /* כמו MATCHES */
   font-weight: 700;
-  color: #3b5d5a;
+  color: #2f6b4f; /* ירוק יותר חזק */
 
   position: relative;
+  letter-spacing: -0.3px;
 }
-  .page-title::after {
+
+.page-title::after {
   content: "";
   display: block;
 
-  width: 70px;
-  height: 5px;
+  width: 60px; /* יותר עדין */
+  height: 4px;
 
-  margin-top: 10px;
+  margin-top: 8px;
   border-radius: 3px;
 
-  background: #7fb49a;
+  background: #7fb49a; /* אותו ירוק של המערכת */
 }
 .page-subtitle {
   margin: 8px 0 0;
