@@ -207,7 +207,7 @@ async function loginAndRoute(targetRoute) {
     return
   }
   if (!eventId.value) {
-  errorMessage.value = 'Missing eventId in URL'
+  errorMessage.value = t.value.missingEventId
   return
 }
 
