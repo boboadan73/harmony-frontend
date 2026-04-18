@@ -164,6 +164,24 @@ const TEXTS = {
 
 const t = computed(() => TEXTS[lang.value] ?? TEXTS.en)
 const isRtl = computed(() => lang.value === 'ar' || lang.value === 'he')
+function getLocalizedLoginError(message) {
+  const msg = String(message || '').toLowerCase()
+
+  if (
+    msg.includes('not found') ||
+    msg.includes('participant not found') ||
+    msg.includes('user not found') ||
+    msg.includes('invalid phone')
+  ) {
+    return t.value.userNotFound
+  }
+
+  if (msg.includes('missing eventid')) {
+    return t.value.missingEventId
+  }
+
+  return t.value.loginError
+}
 
 function normalizePhone(raw) {
   return String(raw || '').replace(/[^\d]/g, '').trim()
