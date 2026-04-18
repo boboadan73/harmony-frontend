@@ -312,32 +312,42 @@ function onAvatarError(e) {
 }
 
 .page-title {
-  margin: 0 0 14px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 
-  font-size: 32px; /* כמו MATCHES */
-  font-weight: 700;
-  color: #2f6b4f; /* ירוק יותר חזק */
+  margin: 0;
+  font-size: 25px; /* כמו MATCHES */
+  font-weight: 800;
+  color: #355f4a;
+  letter-spacing: 0.2px;
 
   position: relative;
-  letter-spacing: -0.3px;
 }
 
 .page-title::after {
   content: "";
-  display: block;
+  position: absolute;
+  bottom: -10px;
 
-  width: 60px; /* יותר עדין */
+  left: 0;
+  width: 11%;
   height: 4px;
 
-  margin-top: 8px;
-  border-radius: 3px;
-
-  background: #7fb49a; /* אותו ירוק של המערכת */
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8fb89c, #5f8d70);
+  opacity: 0.95;
 }
+
+:dir(rtl) .page-title::after {
+  left: auto;
+  right: 0;
+}
+
 .page-subtitle {
-  margin: 8px 0 0;
-  font-size: 14px;
-  color: #9aa5aa;
+  margin: 10px 0 0;
+  font-size: 15px;
+  color: #7c8b84;
   font-weight: 600;
 }
 .language-box {
