@@ -17,28 +17,31 @@
       {{ t.filters }}
     </button>
 
-    <div v-if="showFilters" class="filters-dropdown">
-      <select v-model="filterType" class="filters-select">
-        <option value="name">{{ t.searchByName }}</option>
-        <option value="company">{{ t.searchByCompany }}</option>
-        <option value="skills">{{ t.filterBySkills }}</option>
-        <option value="interests">{{ t.filterByInterests }}</option>
-        <option value="languages">{{ t.filterByLanguages }}</option>
-      </select>
+<div v-if="showFilters" class="filters-dropdown">
+  <div class="filters-top">
+    <select v-model="filterType" class="filters-select">
+      <option value="name">{{ t.searchByName }}</option>
+      <option value="freeText">{{ t.freeSearch }}</option>
+    </select>
 
-      <input
-        v-model="filterValue"
-        class="filters-input"
-        type="text"
-        :placeholder="t.typeHere"
-      />
+    <button class="filters-close" @click="showFilters = false">
+      ✕
+    </button>
+  </div>
 
-      <div class="filters-actions">
-        <button class="filters-clear" @click="clearFilters">
-          {{ t.clearFilters }}
-        </button>
-      </div>
-    </div>
+  <input
+    v-model="filterValue"
+    class="filters-input"
+    type="text"
+    :placeholder="filterType === 'name' ? t.typeNameHere : t.typeHere"
+  />
+
+  <div class="filters-actions">
+    <button class="filters-clear" @click="clearFilters">
+      {{ t.clearFilters }}
+    </button>
+  </div>
+</div>
   </div>
 
   <div class="language-box">
@@ -158,7 +161,7 @@ const eventId = computed(() =>
 )
 const showFilters = ref(false)
 
-const filterType = ref('name') // name | company | skills | interests | languages
+const filterType = ref('name') // name | freeText
 const filterValue = ref('')
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
@@ -203,14 +206,13 @@ const TEXTS = {
     matchSuffix: 'match',
     bestMatch: 'BEST MATCH',
     refresh: 'Refresh',
-    filtersTitle: 'Filters',
-    searchByName: 'Search by name',
-    searchByCompany: 'Search by company',
-    filterBySkills: 'Filter by skills',
-    filterByInterests: 'Filter by interests',
-    filterByLanguages: 'Filter by languages',
-    clearFilters: 'Clear all filters',
-    filters: 'Filters',
+   filtersTitle: 'Filters',
+searchByName: 'Search by name',
+freeSearch: 'Free search',
+clearFilters: 'Clear filters',
+filters: 'Filters',
+typeHere: 'Search by interests or keywords',
+typeNameHere: 'Type a name...',
 typeHere: 'Type here...',
     
     
@@ -236,13 +238,12 @@ typeHere: 'Type here...',
     refresh: 'تحديث',
     filtersTitle: 'عوامل التصفية',
     searchByName: 'ابحث بالاسم',
-    searchByCompany: 'ابحث بالشركة',
-    filterBySkills: 'تصفية حسب المهارات',
-    filterByInterests: 'تصفية حسب الاهتمامات',
-    filterByLanguages: 'تصفية حسب اللغات',
-    clearFilters: 'مسح جميع عوامل التصفية',
+    freeSearch: 'بحث حر',
+    clearFilters: 'مسح عوامل التصفية',
     filters: 'عوامل التصفية',
-typeHere: 'اكتب هنا...',
+    typeHere: 'ابحث حسب الاهتمامات أو الكلمات المفتاحية',
+    typeNameHere: 'اكتب الاسم هنا...',
+    typeHere: 'اكتب هنا...',
   },
   he: {
     title: 'התאמות',
@@ -263,14 +264,13 @@ typeHere: 'اكتب هنا...',
     matchSuffix: 'התאמה',
     bestMatch: 'ההתאמה הטובה ביותר',
     refresh: 'רענן',
-    filtersTitle: 'סינון',
-    searchByName: 'חיפוש לפי שם',
-    searchByCompany: 'חיפוש לפי חברה',
-    filterBySkills: 'סינון לפי כישורים',
-    filterByInterests: 'סינון לפי תחומי עניין',
-    filterByLanguages: 'סינון לפי שפות',
-    clearFilters: 'נקה את כל הסינונים',
-    filters: 'סינון',
+   filtersTitle: 'סינון',
+searchByName: 'חיפוש לפי שם',
+freeSearch: 'חיפוש חופשי',
+clearFilters: 'נקה סינון',
+filters: 'סינון',
+typeHere: 'חיפוש לפי תחומי עניין או מילות מפתח',
+typeNameHere: 'הקלד/י שם...',
 typeHere: 'הקלד/י כאן...',
   },
 }
@@ -473,29 +473,17 @@ const sortedMatches = computed(() =>
 )
 
 const filteredMatches = computed(() => {
-  if (!filterValue.value) return sortedMatches.value
+  if (!filterValue.value.trim()) return sortedMatches.value
 
-  const q = filterValue.value.toLowerCase()
+  const q = filterValue.value.toLowerCase().trim()
 
   return sortedMatches.value.filter((m) => {
     if (filterType.value === 'name') {
       return getName(m).toLowerCase().includes(q)
     }
 
-    if (filterType.value === 'company') {
-      return String(m.company || '').toLowerCase().includes(q)
-    }
-
-    if (filterType.value === 'skills') {
-      return String(m.skills || '').toLowerCase().includes(q)
-    }
-
-    if (filterType.value === 'interests') {
-      return String(m.interests || '').toLowerCase().includes(q)
-    }
-
-    if (filterType.value === 'languages') {
-      return String(m.languages || '').toLowerCase().includes(q)
+    if (filterType.value === 'freeText') {
+      return getWhy(m).toLowerCase().includes(q)
     }
 
     return true
@@ -1031,6 +1019,33 @@ function onAvatarError(e) {
   font-size: 14px;
   color: #6f7d82;
 }
+.filters-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filters-top .filters-select {
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+.filters-close {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 10px;
+  border: 1px solid #d3d9d3;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #56656a;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.filters-close:hover {
+  background: #eef3ee;
+}
 @media (max-width: 700px) {
   .matches-wrap {
     max-width: 100%;
@@ -1287,6 +1302,11 @@ function onAvatarError(e) {
 
 :dir(rtl) .language-box {
   order: 1; /* שמאל */
+}
+.filters-close {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
 }
 
 
