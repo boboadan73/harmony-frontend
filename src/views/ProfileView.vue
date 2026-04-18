@@ -108,7 +108,8 @@
                 class="textarea"
                 rows="5"
                 dir="auto"
-              />
+              </div>
+              </div>
               
                 <div v-else class="fieldValue multiline mixedText" dir="rtl">
                         {{ formatMixedText(profile.academic || t.empty) }}
@@ -122,7 +123,8 @@
                 class="textarea"
                 rows="5"
                 dir="auto"
-              />
+                  </div>
+                </div>
             <div v-else class="fieldValue multiline mixedText" dir="rtl">
                    {{ formatMixedText(profile.professional || t.empty) }}
              </div>
