@@ -37,6 +37,10 @@
   />
 
   <div class="filters-actions">
+    <button class="filters-submit" @click="showFilters = false">
+      {{ t.searchBtn }}
+    </button>
+
     <button class="filters-clear" @click="clearFilters">
       {{ t.clearFilters }}
     </button>
@@ -208,12 +212,13 @@ const TEXTS = {
     refresh: 'Refresh',
    filtersTitle: 'Filters',
 searchByName: 'Search by name',
-freeSearch: 'Free search',
+freeSearch: 'Search by interests or keywords',
 clearFilters: 'Clear filters',
 filters: 'Filters',
 typeHere: 'Search by interests or keywords',
 typeNameHere: 'Type a name...',
 typeHere: 'Type here...',
+    searchBtn: 'Search',
     
     
   },
@@ -238,12 +243,13 @@ typeHere: 'Type here...',
     refresh: 'تحديث',
     filtersTitle: 'عوامل التصفية',
     searchByName: 'ابحث بالاسم',
-    freeSearch: 'بحث حر',
+    freeSearch: 'ابحث حسب الاهتمامات أو الكلمات المفتاحية',
     clearFilters: 'مسح عوامل التصفية',
     filters: 'عوامل التصفية',
     typeHere: 'ابحث حسب الاهتمامات أو الكلمات المفتاحية',
     typeNameHere: 'اكتب الاسم هنا...',
     typeHere: 'اكتب هنا...',
+    searchBtn: 'بحث',
   },
   he: {
     title: 'התאמות',
@@ -266,12 +272,13 @@ typeHere: 'Type here...',
     refresh: 'רענן',
    filtersTitle: 'סינון',
 searchByName: 'חיפוש לפי שם',
-freeSearch: 'חיפוש חופשי',
+freeSearch: 'חיפוש לפי תחומי עניין או מילות מפתח',
 clearFilters: 'נקה סינון',
 filters: 'סינון',
 typeHere: 'חיפוש לפי תחומי עניין או מילות מפתח',
 typeNameHere: 'הקלד/י שם...',
 typeHere: 'הקלד/י כאן...',
+    searchBtn: 'חפש',
   },
 }
 
@@ -695,6 +702,28 @@ function onAvatarError(e) {
 
 .filters-toggle:hover {
   background: #eef3ee;
+}
+  .filters-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filters-submit {
+  border: 1px solid #8fb89c;
+  background: #8fb89c;
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filters-submit:hover {
+  background: #7aa889;
+  border-color: #7aa889;
 }
 
 .filters-dropdown {
