@@ -723,12 +723,13 @@ watch(pid, loadProfile, { immediate: true })
   color: #355f4a;
   letter-spacing: 0.2px;
   position: relative;
+   padding-bottom: 10px;
 }
 
 .page-title::after {
   content: "";
   position: absolute;
-  bottom: -6px;
+  bottom: -4px;
   left: 0;
   width: 72%;
   height: 4px;
