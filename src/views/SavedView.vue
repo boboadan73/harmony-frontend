@@ -308,10 +308,11 @@ function onAvatarError(e) {
 .page-title {
   margin: 0 0 16px 0;
 
-  font-size: 34px;
-  font-weight: 700;
-  color: #3b5d5a;
+  font-size: 25px;          /* כמו MET */
+  font-weight: 800;         /* יותר מודגש */
+  color: #355f4a;           /* ירוק יותר עמוק */
 
+  letter-spacing: 0.2px;
   position: relative;
 }
 
@@ -319,13 +320,13 @@ function onAvatarError(e) {
   content: "";
   display: block;
 
-  width: 70px;
-  height: 5px;
+  width: 100px;             /* כמו שעשינו ב-MET */
+  height: 4px;              /* יותר דק */
 
   margin-top: 10px;
-  border-radius: 3px;
+  border-radius: 999px;
 
-  background: #7fb49a;
+  background: linear-gradient(90deg, #8fb89c, #5f8d70);
 }
 
 .page-subtitle {
