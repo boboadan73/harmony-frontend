@@ -753,10 +753,13 @@ watch(pid, loadProfile, { immediate: true })
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #f8f8f6;
-  border: 1px solid #d7dbd6;
+  padding: 8px 14px;
   border-radius: 999px;
-  padding: 7px 12px;
+  border: 1px solid rgba(95, 159, 127, 0.18);
+  background: linear-gradient(135deg, #eef8f2 0%, #e3f2e8 100%);
+  box-shadow:
+    0 8px 20px rgba(47, 107, 79, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
   flex-shrink: 0;
 }
 
@@ -770,8 +773,11 @@ watch(pid, loadProfile, { immediate: true })
   outline: 0;
   background: transparent;
   font-size: 14px;
-  color: #5a666b;
+  font-weight: 700;
+  color: #355f4a;
   cursor: pointer;
+  font-family: inherit;
+  padding-inline-end: 4px;
 }
 
 /* ===== PROFILE CARD ===== */
@@ -1101,14 +1107,18 @@ watch(pid, loadProfile, { immediate: true })
 }
 
   /* שפה */
-  .language-box {
-    align-self: flex-end;
-    padding: 5px 10px;
-  }
+ .language-box {
+  align-self: flex-end;
+  padding: 6px 12px;
+}
 
-  :dir(rtl) .language-box {
-    align-self: flex-start;
-  }
+:dir(rtl) .language-box {
+  align-self: flex-start;
+}
+
+.language-select {
+  font-size: 13px;
+}
 
   /* ===== CARD ===== */
   .card {
