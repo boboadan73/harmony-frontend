@@ -306,37 +306,43 @@ function onAvatarError(e) {
 }
 
 .page-title {
-  margin: 0 0 16px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 
-  font-size: 25px;          /* כמו MET */
-  font-weight: 800;         /* יותר מודגש */
-  color: #355f4a;           /* ירוק יותר עמוק */
-
+  margin: 0;
+  font-size: 25px; /* כמו MATCHES */
+  font-weight: 800;
+  color: #355f4a;
   letter-spacing: 0.2px;
+
   position: relative;
 }
 
 .page-title::after {
   content: "";
-  display: block;
+  position: absolute;
+  bottom: -10px;
 
-  width: 100px;             /* כמו שעשינו ב-MET */
-  height: 4px;              /* יותר דק */
+  left: 0;
+  width: 80%;
+  height: 4px;
 
-  margin-top: 10px;
   border-radius: 999px;
-
   background: linear-gradient(90deg, #8fb89c, #5f8d70);
+  opacity: 0.95;
+}
+
+:dir(rtl) .page-title::after {
+  left: auto;
+  right: 0;
 }
 
 .page-subtitle {
   margin: 10px 0 0;
-
   font-size: 15px;
-  font-weight: 500; 
-
-  color: #7f8c91; 
-  line-height: 1.5;
+  color: #7c8b84;
+  font-weight: 600;
 }
 
 .language-box {
