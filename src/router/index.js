@@ -70,10 +70,10 @@ router.beforeEach((to, from, next) => {
     to.path.startsWith('/event/') && to.path.endsWith('/login')
 
   const isNewParticipantPage =
-    to.path.startsWith('/event/') && to.path.endsWith('/profile/new')
+    /^\/event\/[^/]+\/profile\/new$/.test(to.path)
 
   if (!isLoginPage && !isNewParticipantPage && !pid) {
-    const eventId = getStoredEventId() || 'default'
+    const eventId = getStoredEventId() || to.params.eventId || 'default'
     return next(`/event/${eventId}/login`)
   }
 
