@@ -728,7 +728,7 @@ watch(pid, loadProfile, { immediate: true })
 .page-title::after {
   content: "";
   position: absolute;
-  bottom: -8px;
+  bottom: -6px;
   left: 0;
   width: 72%;
   height: 4px;
