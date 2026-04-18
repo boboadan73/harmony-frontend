@@ -338,82 +338,35 @@ function onAvatarError(e) {
   color: #9aa5aa;
   font-weight: 600;
 }
-.language-switcher {
+.language-box {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(127, 180, 154, 0.28);
-  background: linear-gradient(135deg, #f7fbf8 0%, #edf6f0 100%);
-  box-shadow:
-    0 8px 22px rgba(59, 93, 90, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  gap: 8px;
+
+  background: #eef6f1; /* ירוק בהיר */
+  border: 1px solid #cfe3d8;
+  border-radius: 999px;
+
+  padding: 6px 12px;
   flex-shrink: 0;
 }
 
 .language-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: rgba(127, 180, 154, 0.16);
-  color: #3b5d5a;
   font-size: 15px;
   line-height: 1;
-  flex-shrink: 0;
-}
-
-.language-select-wrap {
-  position: relative;
-  min-width: 128px;
+  color: #3b5d5a;
 }
 
 .language-select {
-  width: 100%;
-  height: 38px;
-  padding: 0 36px 0 12px;
-  border: 1px solid rgba(127, 180, 154, 0.24);
-  border-radius: 12px;
-  background: #ffffff;
-  color: #4f5f65;
+  border: 0;
+  outline: 0;
+  background: transparent;
+
   font-size: 14px;
   font-weight: 600;
-  outline: none;
+  color: #3b5d5a;
+
   cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  box-shadow: 0 1px 3px rgba(59, 93, 90, 0.05);
-}
-
-.language-select:focus {
-  border-color: #7fb49a;
-  box-shadow: 0 0 0 3px rgba(127, 180, 154, 0.16);
-}
-
-.language-arrow {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  font-size: 12px;
-  color: #6d8177;
-}
-
-:dir(rtl) .language-switcher {
-  flex-direction: row-reverse;
-}
-
-:dir(rtl) .language-select {
-  padding: 0 12px 0 36px;
-}
-
-:dir(rtl) .language-arrow {
-  right: auto;
-  left: 12px;
 }
 
 .matches-list {
