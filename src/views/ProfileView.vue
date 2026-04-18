@@ -99,48 +99,47 @@
               />
               <div v-else class="fieldValue breakAll ltrNum">{{ profile.image || t.empty }}</div>
             </div>
+<div class="fieldBlock fullWidth">
+  <label class="fieldLabel">{{ t.academic }}</label>
+  <textarea
+    v-if="isEditing"
+    v-model="form.academic"
+    class="textarea mixedInput"
+    rows="5"
+    dir="auto"
+  />
+  <div v-else class="fieldValue multiline mixedText" dir="auto">
+    {{ formatMixedText(profile.academic || t.empty) }}
+  </div>
+</div>
 
-            <div class="fieldBlock fullWidth">
-              <label class="fieldLabel">{{ t.academic }}</label>
-              <textarea
-                v-if="isEditing"
-                v-model="form.academic"
-                class="textarea"
-                rows="5"
-                dir="auto"
-              </div>
-              </div>
-              
-                <div v-else class="fieldValue multiline mixedText" dir="rtl">
-                        {{ formatMixedText(profile.academic || t.empty) }}
-                </div>
+<div class="fieldBlock fullWidth">
+  <label class="fieldLabel">{{ t.professional }}</label>
+  <textarea
+    v-if="isEditing"
+    v-model="form.professional"
+    class="textarea mixedInput"
+    rows="5"
+    dir="auto"
+  />
+  <div v-else class="fieldValue multiline mixedText" dir="auto">
+    {{ formatMixedText(profile.professional || t.empty) }}
+  </div>
+</div>
 
-            <div class="fieldBlock fullWidth">
-              <label class="fieldLabel">{{ t.professional }}</label>
-              <textarea
-                v-if="isEditing"
-                v-model="form.professional"
-                class="textarea"
-                rows="5"
-                dir="auto"
-                  </div>
-                </div>
-            <div v-else class="fieldValue multiline mixedText" dir="rtl">
-                   {{ formatMixedText(profile.professional || t.empty) }}
-             </div>
-            <div class="fieldBlock fullWidth">
-              <label class="fieldLabel">{{ t.personal }}</label>
-              <textarea
-                v-if="isEditing"
-                v-model="form.personal"
-                class="textarea"
-                rows="5"
-                dir="auto"
-              />
-             <div v-else class="fieldValue multiline mixedText" dir="rtl">
-                 {{ formatMixedText(profile.personal || t.empty) }}
-              </div>
-            </div>
+<div class="fieldBlock fullWidth">
+  <label class="fieldLabel">{{ t.personal }}</label>
+  <textarea
+    v-if="isEditing"
+    v-model="form.personal"
+    class="textarea mixedInput"
+    rows="5"
+    dir="auto"
+  />
+  <div v-else class="fieldValue multiline mixedText" dir="auto">
+    {{ formatMixedText(profile.personal || t.empty) }}
+  </div>
+</div>
           </div>
 
           <div v-if="!isNewParticipant" class="privacyCard">
@@ -397,7 +396,7 @@ function formatMixedText(value) {
   if (!value) return ''
 
   return String(value).replace(
-    /([A-Za-z0-9][A-Za-z0-9\s.,:;()\-_/#+]*[A-Za-z0-9]|[A-Za-z0-9])/g,
+    /([A-Za-z0-9][A-Za-z0-9\s.,:;()\-_/#+&]*[A-Za-z0-9]|[A-Za-z0-9])/g,
     '\u2068$1\u2069'
   )
 }
@@ -886,13 +885,19 @@ watch(pid, loadProfile, { immediate: true })
   line-height: 1.6;
 }
 .mixedText {
-  direction: rtl;
-  text-align: right;
-  unicode-bidi: embed;
+  direction: inherit;
+  text-align: start;
+  unicode-bidi: plaintext;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: break-word;
   line-height: 1.8;
+}
+
+.mixedInput {
+  direction: inherit;
+  text-align: start;
+  unicode-bidi: plaintext;
 }
 
 .breakAll {
