@@ -845,13 +845,17 @@ watch(pid, loadProfile, { immediate: true })
   padding: 12px;
   color: #5c6a6f;
   font-size: 15px;
-  line-height: 1.55;
+
+  
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   word-break: break-word;
-  box-sizing: border-box;
   unicode-bidi: plaintext;
   text-align: start;
-}
 
+  box-sizing: border-box;
+}
 .input,
 .textarea {
   width: 100%;
