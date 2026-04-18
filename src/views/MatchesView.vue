@@ -662,11 +662,18 @@ function onAvatarError(e) {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #f8f8f6;
-  border: 1px solid #d7dbd6;
+
+  background: linear-gradient(135deg, #eef8f2 0%, #e3f2e8 100%);
+  border: 1px solid rgba(95, 159, 127, 0.25);
+
   border-radius: 999px;
   padding: 7px 12px;
-  flex-shrink: 0;
+
+  box-shadow:
+    0 4px 10px rgba(47, 107, 79, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  transition: all 0.2s ease;
 }
 
 .language-icon {
