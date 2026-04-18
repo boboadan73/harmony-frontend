@@ -760,7 +760,7 @@ function onAvatarError(e) {
   height: 42px;
   border: 1px solid #d3d9d3;
   border-radius: 12px;
-  padding: 0 12px;
+  padding: 0 30px 0 10px;
   font-size: 14px;
   color: #4f5f65;
   background: #fafbf9;
