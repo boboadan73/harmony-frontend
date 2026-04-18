@@ -8,13 +8,14 @@
           <h1 class="page-title">{{ t.title }}</h1>
           <p class="page-subtitle">{{ t.subtitle }}</p>
         </div>
+        
 
         <div class="language-box">
           <span class="language-icon" aria-hidden="true">🌐</span>
           <select class="language-select" v-model="lang">
             <option value="en">English</option>
-            <option value="ar">Arabic</option>
-            <option value="he">Hebrew</option>
+            <option value="ar">العربية</option>
+            <option value="he">עברית</option>
           </select>
         </div>
       </section>
@@ -337,29 +338,82 @@ function onAvatarError(e) {
   color: #9aa5aa;
   font-weight: 600;
 }
-.language-box {
+.language-switcher {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: #f8f8f6;
-  border: 1px solid #d7dbd6;
-  border-radius: 999px;
-  padding: 7px 12px;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(127, 180, 154, 0.28);
+  background: linear-gradient(135deg, #f7fbf8 0%, #edf6f0 100%);
+  box-shadow:
+    0 8px 22px rgba(59, 93, 90, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
   flex-shrink: 0;
 }
 
 .language-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(127, 180, 154, 0.16);
+  color: #3b5d5a;
   font-size: 15px;
   line-height: 1;
+  flex-shrink: 0;
+}
+
+.language-select-wrap {
+  position: relative;
+  min-width: 128px;
 }
 
 .language-select {
-  border: 0;
-  outline: 0;
-  background: transparent;
+  width: 100%;
+  height: 38px;
+  padding: 0 36px 0 12px;
+  border: 1px solid rgba(127, 180, 154, 0.24);
+  border-radius: 12px;
+  background: #ffffff;
+  color: #4f5f65;
   font-size: 14px;
-  color: #5a666b;
+  font-weight: 600;
+  outline: none;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: 0 1px 3px rgba(59, 93, 90, 0.05);
+}
+
+.language-select:focus {
+  border-color: #7fb49a;
+  box-shadow: 0 0 0 3px rgba(127, 180, 154, 0.16);
+}
+
+.language-arrow {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 12px;
+  color: #6d8177;
+}
+
+:dir(rtl) .language-switcher {
+  flex-direction: row-reverse;
+}
+
+:dir(rtl) .language-select {
+  padding: 0 12px 0 36px;
+}
+
+:dir(rtl) .language-arrow {
+  right: auto;
+  left: 12px;
 }
 
 .matches-list {
