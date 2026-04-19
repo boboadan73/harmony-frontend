@@ -139,7 +139,7 @@
       :class="['textarea mixedInput', errors.academic && 'error']"
       rows="5"
       dir="auto"
-    />></textarea>
+    ></textarea>
     <div v-if="errors.academic" class="errorField">
       {{ errors.academic }}
     </div>
@@ -161,7 +161,7 @@
       :class="['textarea mixedInput', errors.professional && 'error']"
       rows="5"
       dir="auto"
-    />></textarea>
+    ></textarea>
     <div v-if="errors.professional" class="errorField">
       {{ errors.professional }}
     </div>
@@ -182,7 +182,7 @@
       :class="['textarea mixedInput', errors.personal && 'error']"
       rows="5"
       dir="auto"
-    />></textarea>
+    ></textarea>
     <div v-if="errors.personal" class="errorField">
       {{ errors.personal }}
     </div>
