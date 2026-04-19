@@ -218,9 +218,10 @@
           <div v-if="successMsg" class="statusText successText">
             {{ successMsg }}
           </div>
-        </template>
       </div>
 
+        </template>
+      
       <div class="spacerBottom"></div>
     </main>
 
