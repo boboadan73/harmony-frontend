@@ -133,7 +133,7 @@
     {{ t.academic }} <span class="required">*</span>
   </label>
 
-  <template v-if="isEditing">
+  <div v-if="isEditing">
     <textarea
       v-model="form.academic"
       :class="['textarea mixedInput', errors.academic && 'error']"
@@ -143,19 +143,18 @@
     <div v-if="errors.academic" class="errorField">
       {{ errors.academic }}
     </div>
-  </template>
+  </div>
 
   <div v-else class="fieldValue multiline mixedText" dir="auto">
     {{ formatMixedText(profile.academic || t.empty) }}
   </div>
 </div>
-
 <div class="fieldBlock fullWidth">
   <label class="fieldLabel">
     {{ t.professional }} <span class="required">*</span>
   </label>
 
-  <template v-if="isEditing">
+  <div v-if="isEditing">
     <textarea
       v-model="form.professional"
       :class="['textarea mixedInput', errors.professional && 'error']"
@@ -165,7 +164,7 @@
     <div v-if="errors.professional" class="errorField">
       {{ errors.professional }}
     </div>
-  </template>
+  </div>
 
   <div v-else class="fieldValue multiline mixedText" dir="auto">
     {{ formatMixedText(profile.professional || t.empty) }}
@@ -176,7 +175,7 @@
     {{ t.personal }} <span class="required">*</span>
   </label>
 
-  <template v-if="isEditing">
+  <div v-if="isEditing">
     <textarea
       v-model="form.personal"
       :class="['textarea mixedInput', errors.personal && 'error']"
@@ -186,7 +185,7 @@
     <div v-if="errors.personal" class="errorField">
       {{ errors.personal }}
     </div>
-  </template>
+  </div>
 
   <div v-else class="fieldValue multiline mixedText" dir="auto">
     {{ formatMixedText(profile.personal || t.empty) }}
