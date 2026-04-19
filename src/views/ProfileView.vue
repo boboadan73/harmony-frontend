@@ -53,70 +53,71 @@
 
         <template v-else>
           <div class="fieldsGrid">
-           <div class="fieldBlock">
-  <label class="fieldLabel">
-    {{ t.name }} <span class="required">*</span>
-  </label>
+            <div class="fieldBlock">
+              <label class="fieldLabel">
+                {{ t.name }} <span class="required">*</span>
+              </label>
 
-  <template v-if="isEditing">
-    <input
-      v-model="form.name"
-      :class="['input', errors.name && 'error']"
-      type="text"
-      dir="auto"
-    />
-    <div v-if="errors.name" class="errorField">
-      {{ errors.name }}
-    </div>
-  </template>
+              <template v-if="isEditing">
+                <input
+                  v-model="form.name"
+                  :class="['input', errors.name && 'error']"
+                  type="text"
+                  dir="auto"
+                />
+                <div v-if="errors.name" class="errorField">
+                  {{ errors.name }}
+                </div>
+              </template>
 
-  <div v-else class="fieldValue" dir="auto">
-    {{ profile.name || t.empty }}
-  </div>
-</div>
-          
+              <div v-else class="fieldValue" dir="auto">
+                {{ profile.name || t.empty }}
+              </div>
+            </div>
 
-        <div class="fieldBlock">
-  <label class="fieldLabel">
-    {{ t.phone }} <span class="required">*</span>
-  </label>
+            <div class="fieldBlock">
+              <label class="fieldLabel">
+                {{ t.phone }} <span class="required">*</span>
+              </label>
 
-  <template v-if="isEditing">
-    <input
-      v-model="form.phone"
-      :class="['input ltrNum', errors.phone && 'error']"
-      type="text"
-    />
-    <div v-if="errors.phone" class="errorField">
-      {{ errors.phone }}
-    </div>
-  </template>
+              <template v-if="isEditing">
+                <input
+                  v-model="form.phone"
+                  :class="['input ltrNum', errors.phone && 'error']"
+                  type="text"
+                />
+                <div v-if="errors.phone" class="errorField">
+                  {{ errors.phone }}
+                </div>
+              </template>
 
-  <div v-else class="fieldValue ltrNum">
-    {{ profile.phone || t.empty }}
-  </div>
-</div>
-          <div class="fieldBlock">
-  <label class="fieldLabel">
-    {{ t.job }} <span class="required">*</span>
-  </label>
+              <div v-else class="fieldValue ltrNum">
+                {{ profile.phone || t.empty }}
+              </div>
+            </div>
 
-  <template v-if="isEditing">
-    <input
-      v-model="form.job"
-      :class="['input', errors.job && 'error']"
-      type="text"
-      dir="auto"
-    />
-    <div v-if="errors.job" class="errorField">
-      {{ errors.job }}
-    </div>
-  </template>
+            <div class="fieldBlock">
+              <label class="fieldLabel">
+                {{ t.job }} <span class="required">*</span>
+              </label>
 
-  <div v-else class="fieldValue" dir="auto">
-    {{ profile.job || t.empty }}
-  </div>
-</div>
+              <template v-if="isEditing">
+                <input
+                  v-model="form.job"
+                  :class="['input', errors.job && 'error']"
+                  type="text"
+                  dir="auto"
+                />
+                <div v-if="errors.job" class="errorField">
+                  {{ errors.job }}
+                </div>
+              </template>
+
+              <div v-else class="fieldValue" dir="auto">
+                {{ profile.job || t.empty }}
+              </div>
+            </div>
+
             <div class="fieldBlock">
               <label class="fieldLabel">{{ t.image }}</label>
               <input
@@ -126,102 +127,107 @@
                 type="text"
                 dir="auto"
               />
-              <div v-else class="fieldValue breakAll ltrNum">{{ profile.image || t.empty }}</div>
-            </div>
-<div class="fieldBlock fullWidth">
-  <label class="fieldLabel">
-    {{ t.academic }} <span class="required">*</span>
-  </label>
-
-  <div v-if="isEditing">
-    <textarea
-      v-model="form.academic"
-      :class="['textarea mixedInput', errors.academic && 'error']"
-      rows="5"
-      dir="auto"
-    ></textarea>
-    <div v-if="errors.academic" class="errorField">
-      {{ errors.academic }}
-    </div>
-  </div>
-
-  <div v-else class="fieldValue multiline mixedText" dir="auto">
-    {{ formatMixedText(profile.academic || t.empty) }}
-  </div>
-</div>
-<div class="fieldBlock fullWidth">
-  <label class="fieldLabel">
-    {{ t.professional }} <span class="required">*</span>
-  </label>
-
-  <div v-if="isEditing">
-    <textarea
-      v-model="form.professional"
-      :class="['textarea mixedInput', errors.professional && 'error']"
-      rows="5"
-      dir="auto"
-    ></textarea>
-    <div v-if="errors.professional" class="errorField">
-      {{ errors.professional }}
-    </div>
-  </div>
-
-  <div v-else class="fieldValue multiline mixedText" dir="auto">
-    {{ formatMixedText(profile.professional || t.empty) }}
-  </div>
-</div>
-<div class="fieldBlock fullWidth">
-  <label class="fieldLabel">
-    {{ t.personal }} <span class="required">*</span>
-  </label>
-
-  <div v-if="isEditing">
-    <textarea
-      v-model="form.personal"
-      :class="['textarea mixedInput', errors.personal && 'error']"
-      rows="5"
-      dir="auto"
-    ></textarea>
-    <div v-if="errors.personal" class="errorField">
-      {{ errors.personal }}
-    </div>
-  </div>
-
-  <div v-else class="fieldValue multiline mixedText" dir="auto">
-    {{ formatMixedText(profile.personal || t.empty) }}
-  </div>
-</div>
-          <div v-if="!isNewParticipant" class="privacyCard">
-            <div class="privacyTitle">{{ t.privacyTitle }}</div>
-            <div class="privacyText">
-              {{ profile.hidden ? t.hiddenNow : t.visibleNow }}
+              <div v-else class="fieldValue breakAll ltrNum">
+                {{ profile.image || t.empty }}
+              </div>
             </div>
 
-            <div class="privacyActions">
-              <button class="btnOutline" :disabled="savingPrivacy" @click="togglePrivacy">
-                {{
-                  savingPrivacy
-                    ? t.saving
-                    : profile.hidden
-                    ? t.unhideProfile
-                    : t.hideProfile
-                }}
-              </button>
+            <div class="fieldBlock fullWidth">
+              <label class="fieldLabel">
+                {{ t.academic }} <span class="required">*</span>
+              </label>
 
-              <button class="btnDanger" :disabled="deleting" @click="deleteMyData">
-                {{ deleting ? t.deleting : t.deleteMyData }}
-              </button>
+              <template v-if="isEditing">
+                <textarea
+                  v-model="form.academic"
+                  :class="['textarea mixedInput', errors.academic && 'error']"
+                  rows="5"
+                  dir="auto"
+                ></textarea>
+                <div v-if="errors.academic" class="errorField">
+                  {{ errors.academic }}
+                </div>
+              </template>
+
+              <div v-else class="fieldValue multiline mixedText" dir="auto">
+                {{ formatMixedText(profile.academic || t.empty) }}
+              </div>
+            </div>
+
+            <div class="fieldBlock fullWidth">
+              <label class="fieldLabel">
+                {{ t.professional }} <span class="required">*</span>
+              </label>
+
+              <template v-if="isEditing">
+                <textarea
+                  v-model="form.professional"
+                  :class="['textarea mixedInput', errors.professional && 'error']"
+                  rows="5"
+                  dir="auto"
+                ></textarea>
+                <div v-if="errors.professional" class="errorField">
+                  {{ errors.professional }}
+                </div>
+              </template>
+
+              <div v-else class="fieldValue multiline mixedText" dir="auto">
+                {{ formatMixedText(profile.professional || t.empty) }}
+              </div>
+            </div>
+
+            <div class="fieldBlock fullWidth">
+              <label class="fieldLabel">
+                {{ t.personal }} <span class="required">*</span>
+              </label>
+
+              <template v-if="isEditing">
+                <textarea
+                  v-model="form.personal"
+                  :class="['textarea mixedInput', errors.personal && 'error']"
+                  rows="5"
+                  dir="auto"
+                ></textarea>
+                <div v-if="errors.personal" class="errorField">
+                  {{ errors.personal }}
+                </div>
+              </template>
+
+              <div v-else class="fieldValue multiline mixedText" dir="auto">
+                {{ formatMixedText(profile.personal || t.empty) }}
+              </div>
+            </div>
+
+            <div v-if="!isNewParticipant" class="privacyCard">
+              <div class="privacyTitle">{{ t.privacyTitle }}</div>
+              <div class="privacyText">
+                {{ profile.hidden ? t.hiddenNow : t.visibleNow }}
+              </div>
+
+              <div class="privacyActions">
+                <button class="btnOutline" :disabled="savingPrivacy" @click="togglePrivacy">
+                  {{
+                    savingPrivacy
+                      ? t.saving
+                      : profile.hidden
+                      ? t.unhideProfile
+                      : t.hideProfile
+                  }}
+                </button>
+
+                <button class="btnDanger" :disabled="deleting" @click="deleteMyData">
+                  {{ deleting ? t.deleting : t.deleteMyData }}
+                </button>
+              </div>
+            </div>
+
+            <div v-if="successMsg" class="statusText successText">
+              {{ successMsg }}
             </div>
           </div>
-
-          <div v-if="successMsg" class="statusText successText">
-            {{ successMsg }}
-          </div>
+        </template>
       </div>
 
-        </template>
-        </div>
-      
       <div class="spacerBottom"></div>
     </main>
 
