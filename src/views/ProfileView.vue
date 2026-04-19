@@ -221,6 +221,7 @@
       </div>
 
         </template>
+        </div>
       
       <div class="spacerBottom"></div>
     </main>
