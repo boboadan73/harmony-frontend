@@ -64,19 +64,25 @@
                 type="text"
                 dir="auto"
               />
+              <div v-if="errors.name" class="errorField">
+               {{ errors.name }}
+              </div>
               <div v-else class="fieldValue" dir="auto">{{ profile.name || t.empty }}</div>
             </div>
 
             <div class="fieldBlock">
               <label class="fieldLabel">
-  {{ t.phone }} <span class="required">*</span>
-</label>
+                 {{ t.phone }} <span class="required">*</span>
+              </label>
               <input
                 v-if="isEditing"
                 v-model="form.phone"
                 class="input ltrNum"
                 type="text"
               />
+                 <div v-if="errors.phone" class="errorField">
+               {{ errors.phone }}
+                 </div>
               <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
             </div>
 
@@ -91,6 +97,9 @@
                 type="text"
                 dir="auto"
               />
+              <div v-if="errors.job" class="errorField">
+                {{ errors.job }}
+               </div>
               <div v-else class="fieldValue" dir="auto">{{ profile.job || t.empty }}</div>
             </div>
 
@@ -118,6 +127,9 @@
     rows="5"
     dir="auto"
   />
+    <div v-if="errors.academic" class="errorField">
+  {{ errors.academic }}
+</div>
   <div v-else class="fieldValue multiline mixedText" dir="auto">
     {{ formatMixedText(profile.academic || t.empty) }}
   </div>
@@ -135,6 +147,9 @@
     rows="5"
     dir="auto"
   />
+    <div v-if="errors.professional" class="errorField">
+   {{ errors.professional }}
+   </div>
   <div v-else class="fieldValue multiline mixedText" dir="auto">
     {{ formatMixedText(profile.professional || t.empty) }}
   </div>
@@ -242,6 +257,14 @@ watch(
   },
   { immediate: true }
 )
+const errors = ref({
+  name: '',
+  phone: '',
+  job: '',
+  academic: '',
+  professional: '',
+  personal: '',
+})
 
 const LANG_KEY = 'harmony_lang'
 const lang = ref(localStorage.getItem(LANG_KEY) || 'en')
@@ -417,13 +440,48 @@ function isFormValid() {
 }
 
 function validateForm() {
-  if (!form.value.name.trim()) return `${t.value.name} ${t.value.required}`
-  if (!form.value.phone.trim()) return `${t.value.phone} ${t.value.required}`
-  if (!form.value.job.trim()) return `${t.value.job} ${t.value.required}`
-  if (!form.value.academic.trim()) return `${t.value.academic} ${t.value.required}`
-  if (!form.value.professional.trim()) return `${t.value.professional} ${t.value.required}`
-  if (!form.value.personal.trim()) return `${t.value.personal} ${t.value.required}`
-  return ''
+  errors.value = {
+    name: '',
+    phone: '',
+    job: '',
+    academic: '',
+    professional: '',
+    personal: '',
+  }
+
+  let isValid = true
+
+  if (!form.value.name.trim()) {
+    errors.value.name = `${t.value.name} ${t.value.required}`
+    isValid = false
+  }
+
+  if (!form.value.phone.trim()) {
+    errors.value.phone = `${t.value.phone} ${t.value.required}`
+    isValid = false
+  }
+
+  if (!form.value.job.trim()) {
+    errors.value.job = `${t.value.job} ${t.value.required}`
+    isValid = false
+  }
+
+  if (!form.value.academic.trim()) {
+    errors.value.academic = `${t.value.academic} ${t.value.required}`
+    isValid = false
+  }
+
+  if (!form.value.professional.trim()) {
+    errors.value.professional = `${t.value.professional} ${t.value.required}`
+    isValid = false
+  }
+
+  if (!form.value.personal.trim()) {
+    errors.value.personal = `${t.value.personal} ${t.value.required}`
+    isValid = false
+  }
+
+  return isValid
 }
 function onAvatarError(event) {
   event.target.src = defaultAvatar
@@ -528,10 +586,8 @@ watch(
 )
 
 async function saveProfile() {
-      const error = validateForm()
-  if (error) {
-    errorMsg.value = error
-    return}
+ const isValid = validateForm()
+      if (!isValid) return
   saving.value = true
   errorMsg.value = ''
   successMsg.value = ''
@@ -938,6 +994,17 @@ watch(pid, loadProfile, { immediate: true })
 .textarea {
   min-height: 120px;
   resize: vertical;
+}
+.errorField {
+  color: #d93025;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.textarea.error {
+  border-color: #d93025;
+  background: #fff5f5;
 }
 
 .multiline {
