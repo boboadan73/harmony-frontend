@@ -74,21 +74,7 @@
     {{ profile.name || t.empty }}
   </div>
 </div>
-            <div class="fieldBlock">
-              <label class="fieldLabel">
-                 {{ t.phone }} <span class="required">*</span>
-              </label>
-              <input
-                v-if="isEditing"
-                v-model="form.phone"
-                class="input ltrNum"
-                type="text"
-              />
-                 <div v-if="errors.phone" class="errorField">
-               {{ errors.phone }}
-                 </div>
-              <div v-else class="fieldValue ltrNum">{{ profile.phone || t.empty }}</div>
-            </div>
+          
 
         <div class="fieldBlock">
   <label class="fieldLabel">
@@ -108,6 +94,27 @@
 
   <div v-else class="fieldValue ltrNum">
     {{ profile.phone || t.empty }}
+  </div>
+</div>
+          <div class="fieldBlock">
+  <label class="fieldLabel">
+    {{ t.job }} <span class="required">*</span>
+  </label>
+
+  <template v-if="isEditing">
+    <input
+      v-model="form.job"
+      :class="['input', errors.job && 'error']"
+      type="text"
+      dir="auto"
+    />
+    <div v-if="errors.job" class="errorField">
+      {{ errors.job }}
+    </div>
+  </template>
+
+  <div v-else class="fieldValue" dir="auto">
+    {{ profile.job || t.empty }}
   </div>
 </div>
             <div class="fieldBlock">
