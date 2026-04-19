@@ -388,7 +388,24 @@ const profileAvatar = computed(() => {
 
   return `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}t=${imageVersion.value}`
 })
+function isFormValid() {
+  return (
+    name.value.trim() &&
+    job.value.trim() &&
+    academicResume.value.trim() &&
+    professionalResume.value.trim() &&
+    personalResume.value.trim()
+  )
+}
 
+function validateForm() {
+  if (!name.value.trim()) return 'Name is required'
+  if (!job.value.trim()) return 'Job is required'
+  if (!academicResume.value.trim()) return 'Academic background is required'
+  if (!professionalResume.value.trim()) return 'Professional background is required'
+  if (!personalResume.value.trim()) return 'Personal background is required'
+  return ''
+}
 function onAvatarError(event) {
   event.target.src = defaultAvatar
 }
@@ -492,6 +509,10 @@ watch(
 )
 
 async function saveProfile() {
+      const error = validateForm()
+  if (error) {
+    errorMessage.value = error
+    return}
   saving.value = true
   errorMsg.value = ''
   successMsg.value = ''
