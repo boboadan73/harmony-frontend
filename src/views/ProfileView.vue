@@ -1029,6 +1029,7 @@ watch(pid, loadProfile, { immediate: true })
   font-weight: 600;
 }
 
+.input.error,
 .textarea.error {
   border-color: #d93025;
   background: #fff5f5;
