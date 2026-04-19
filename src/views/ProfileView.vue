@@ -283,6 +283,7 @@ const TEXTS = {
     generateNow: 'Generate Now',
     generateSuccess: 'Matches generated successfully.',
     generateError: 'Failed to generate matches.',
+    required: 'is required',
   },
   ar: {
     title: 'الملف الشخصي',
@@ -319,6 +320,7 @@ const TEXTS = {
     generateNow: 'إنشاء الآن',
     generateSuccess: 'تم إنشاء المطابقات بنجاح.',
     generateError: 'فشل إنشاء المطابقات.',
+    required: 'مطلوب',
   },
   he: {
     title: 'פרופיל',
@@ -355,6 +357,7 @@ const TEXTS = {
     generateNow: 'צור עכשיו',
     generateSuccess: 'ההתאמות נוצרו בהצלחה.',
     generateError: 'יצירת ההתאמות נכשלה.',
+    required: 'שדה חובה',
   },
 }
 
@@ -414,11 +417,12 @@ function isFormValid() {
 }
 
 function validateForm() {
-  if (!name.value.trim()) return 'Name is required'
-  if (!job.value.trim()) return 'Job is required'
-  if (!academicResume.value.trim()) return 'Academic background is required'
-  if (!professionalResume.value.trim()) return 'Professional background is required'
-  if (!personalResume.value.trim()) return 'Personal background is required'
+  if (!form.value.name.trim()) return `${t.value.name} ${t.value.required}`
+  if (!form.value.phone.trim()) return `${t.value.phone} ${t.value.required}`
+  if (!form.value.job.trim()) return `${t.value.job} ${t.value.required}`
+  if (!form.value.academic.trim()) return `${t.value.academic} ${t.value.required}`
+  if (!form.value.professional.trim()) return `${t.value.professional} ${t.value.required}`
+  if (!form.value.personal.trim()) return `${t.value.personal} ${t.value.required}`
   return ''
 }
 function onAvatarError(event) {
@@ -526,7 +530,7 @@ watch(
 async function saveProfile() {
       const error = validateForm()
   if (error) {
-    errorMessage.value = error
+    errorMsg.value = error
     return}
   saving.value = true
   errorMsg.value = ''
