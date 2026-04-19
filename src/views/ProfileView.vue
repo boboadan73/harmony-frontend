@@ -54,7 +54,9 @@
         <template v-else>
           <div class="fieldsGrid">
             <div class="fieldBlock">
-              <label class="fieldLabel">{{ t.name }}</label>
+              <label class="fieldLabel">
+  {{ t.name }} <span class="required">*</span>
+</label>
               <input
                 v-if="isEditing"
                 v-model="form.name"
@@ -66,7 +68,9 @@
             </div>
 
             <div class="fieldBlock">
-              <label class="fieldLabel">{{ t.phone }}</label>
+              <label class="fieldLabel">
+  {{ t.phone }} <span class="required">*</span>
+</label>
               <input
                 v-if="isEditing"
                 v-model="form.phone"
@@ -77,7 +81,9 @@
             </div>
 
             <div class="fieldBlock">
-              <label class="fieldLabel">{{ t.job }}</label>
+              <label class="fieldLabel">
+  {{ t.job }} <span class="required">*</span>
+</label>
               <input
                 v-if="isEditing"
                 v-model="form.job"
@@ -100,7 +106,11 @@
               <div v-else class="fieldValue breakAll ltrNum">{{ profile.image || t.empty }}</div>
             </div>
 <div class="fieldBlock fullWidth">
-  <label class="fieldLabel">{{ t.academic }}</label>
+  <label class="fieldLabel">
+  {{ t.academic }} <span class="required">*</span>
+</label>
+
+
   <textarea
     v-if="isEditing"
     v-model="form.academic"
@@ -114,7 +124,10 @@
 </div>
 
 <div class="fieldBlock fullWidth">
-  <label class="fieldLabel">{{ t.professional }}</label>
+  <label class="fieldLabel">
+  {{ t.professional }} <span class="required">*</span>
+</label>
+
   <textarea
     v-if="isEditing"
     v-model="form.professional"
@@ -128,7 +141,9 @@
 </div>
 
 <div class="fieldBlock fullWidth">
-  <label class="fieldLabel">{{ t.personal }}</label>
+  <label class="fieldLabel">
+  {{ t.personal }} <span class="required">*</span>
+</label>
   <textarea
     v-if="isEditing"
     v-model="form.personal"
@@ -817,6 +832,16 @@ watch(pid, loadProfile, { immediate: true })
 
 .cardGlow {
   display: none;
+}
+.required {
+  color: #d93025;
+  margin-left: 4px;
+  font-weight: 700;
+}
+
+:dir(rtl) .required {
+  margin-left: 0;
+  margin-right: 4px;
 }
 
 .topProfileRow {
